@@ -27,8 +27,8 @@ const Navbar = () => {
         isScrolled && "bg-surface/90 shadow-sm backdrop-blur-md",
       )}
     >
-      <header className="mx-auto grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 px-5 py-5 md:px-10 md:py-6 xl:px-20">
-        <div className="justify-self-start">
+      <header className="mx-auto grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 overflow-visible px-5 py-5 md:px-10 md:py-6 xl:px-20">
+        <div className="justify-self-start overflow-visible">
           <Logo />
         </div>
         <Navication />
