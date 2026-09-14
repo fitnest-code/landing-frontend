@@ -81,6 +81,7 @@ export type Messages = {
     mostPopular: string;
     bestValue: string;
     selectPackage: string;
+    savingsLabel: string;
     planFeatures: Record<string, string[]>;
     paymentEyebrow: string;
     paymentHeading: string;
@@ -539,6 +540,7 @@ const az: Messages = {
     mostPopular: "Ən çox seçilən",
     bestValue: "ƏN SƏRFƏLİ",
     selectPackage: "Paketi seç",
+    savingsLabel: "qənaət",
     planFeatures: {
       bronze: [
         "12 giriş / ay",
@@ -1291,6 +1293,7 @@ const en: Messages = {
     mostPopular: "Most popular",
     bestValue: "BEST VALUE",
     selectPackage: "Choose plan",
+    savingsLabel: "saved",
     planFeatures: {
       bronze: [
         "12 visits / month",
@@ -2055,6 +2058,7 @@ const ru: Messages = {
     mostPopular: "Самый популярный",
     bestValue: "ВЫГОДНЕЕ ВСЕГО",
     selectPackage: "Выбрать пакет",
+    savingsLabel: "экономия",
     planFeatures: {
       bronze: [
         "12 визитов / мес",

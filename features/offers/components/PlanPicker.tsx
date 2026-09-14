@@ -18,11 +18,14 @@ export type PlanDuration = (typeof PLAN_DURATIONS)[number];
 
 const TIER_ORDER: MembershipTier[] = ["bronze", "silver", "gold", "platinum"];
 
-const fallbackPlans: Record<MembershipTier, { price: number }> = {
-  bronze: { price: 47 },
-  silver: { price: 72 },
-  gold: { price: 132 },
-  platinum: { price: 205 },
+const fallbackPlans: Record<
+  MembershipTier,
+  { price: number; original: number }
+> = {
+  bronze: { price: 47, original: 55 },
+  silver: { price: 72, original: 85 },
+  gold: { price: 132, original: 155 },
+  platinum: { price: 205, original: 255 },
 };
 
 const normalizeTier = (name: string): MembershipTier | null => {
@@ -71,15 +74,23 @@ const PlanPicker = ({
       const defaultFeatures =
         t.home.planFeatures[tier] ?? t.home.planFeatures.bronze;
       const months = option?.duration_months ?? duration;
-      const total = option?.price.effective;
+      const effectiveTotal = option?.price.effective;
+      const baseTotal = option?.price.base;
       const pricePerMonth =
-        total != null
-          ? monthlyPrice(total, months)
+        effectiveTotal != null
+          ? monthlyPrice(effectiveTotal, months)
           : fallbackPlans[tier].price;
+      const originalPerMonth =
+        baseTotal != null
+          ? monthlyPrice(baseTotal, months)
+          : fallbackPlans[tier].original;
+      const savings = Math.max(0, originalPerMonth - pricePerMonth);
 
       return {
         tier,
         price: pricePerMonth,
+        original: originalPerMonth,
+        savings,
         features: featuresFromOption(option, defaultFeatures),
         mostPopular: tier === "platinum",
       };
@@ -91,9 +102,15 @@ const PlanPicker = ({
     return addLocaleToPathname(`/offers?type=${tier}&month=${duration}`, locale);
   };
 
+  const gymsHref = addLocaleToPathname("/fitness-centers", locale);
+
   return (
     <div className="flex flex-col items-center">
-      <Stagger className="grid w-full max-w-[640px] grid-cols-4 gap-1 pt-8 sm:gap-4" variant="scale" delay={0.06}>
+      <Stagger
+        className="grid w-full max-w-[640px] grid-cols-4 gap-1 pt-8 sm:gap-4"
+        variant="scale"
+        delay={0.06}
+      >
         {PLAN_DURATIONS.map((month) => {
           const active = duration === month;
           const isYear = month === 12;
@@ -121,53 +138,114 @@ const PlanPicker = ({
         })}
       </Stagger>
 
-      <Stagger className="relative grid w-full grid-cols-1 gap-4 rounded-2xl border border-border-muted p-3 pt-10 sm:grid-cols-2 xl:grid-cols-4" variant="rise" delay={0.1}>
+      <Stagger
+        className="relative grid w-full grid-cols-1 gap-4 rounded-2xl border border-border-muted p-3 pt-10 sm:grid-cols-2 xl:grid-cols-4"
+        variant="rise"
+        delay={0.1}
+      >
         {plans.map((plan) => (
           <TiltCard key={plan.tier} intensity={8} className="h-full">
-          <article
-            className="group relative flex h-full min-w-0 flex-col justify-between gap-7 rounded-2xl border border-border-muted bg-page p-5 transition-all hover:-translate-y-1 hover:border-cyan hover:bg-surface hover:shadow-[0_24px_60px_rgba(0,157,166,0.16)] sm:p-7"
-          >
-            {plan.mostPopular ? (
-              <span className="absolute -top-3 right-4 whitespace-nowrap rounded-full bg-turquoise px-[18px] py-[5px] text-xs font-semibold leading-[18px] text-white">
-                {t.home.mostPopular}
-              </span>
-            ) : null}
-            <div className="flex flex-col gap-3">
-              <MembershipBadge tier={plan.tier} showDiscount={false} />
-              <div className="flex items-baseline gap-2 whitespace-nowrap">
-                <span className="text-[36px] font-bold leading-[52px] text-heading">
-                  {formatManat(plan.price)}
+            <article className="group relative flex h-full min-w-0 flex-col items-start gap-7 rounded-2xl bg-white p-5 outline outline-1 outline-offset-[-1px] outline-transparent transition-all hover:outline-[#00DBDB] sm:p-7 dark:bg-page dark:outline-border-muted dark:hover:outline-cyan">
+              {plan.mostPopular ? (
+                <span className="absolute -top-3 right-4 whitespace-nowrap rounded-full bg-turquoise px-[18px] py-[5px] text-xs font-semibold leading-[18px] text-white">
+                  {t.home.mostPopular}
                 </span>
-                <span className="flex items-center gap-1.5 text-sm font-bold leading-5 text-title">
-                  <span>₼</span>
-                  <span>/ {t.home.monthShort}</span>
-                </span>
+              ) : null}
+
+              <div className="flex w-full flex-col gap-3">
+                <MembershipBadge tier={plan.tier} showDiscount={false} />
+                <div className="flex w-full items-start justify-between gap-3">
+                  <div className="flex min-w-0 flex-col">
+                    {plan.original > plan.price ? (
+                      <>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-lg font-bold leading-7 text-[#214A6E] line-through">
+                            {formatManat(plan.original)}
+                          </span>
+                          <img
+                            src="/icons/subscription/manat.svg"
+                            alt=""
+                            width={12}
+                            height={14}
+                            className="h-3.5 w-3 opacity-90"
+                          />
+                        </div>
+                        {plan.savings > 0 ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-semibold leading-5 text-[#0FAD17]">
+                              {formatManat(plan.savings)}
+                            </span>
+                            <img
+                              src="/icons/subscription/manat-green.svg"
+                              alt=""
+                              width={8}
+                              height={9}
+                              className="h-2.5 w-2"
+                            />
+                            <span className="text-sm font-semibold leading-5 text-[#0FAD17]">
+                              {t.home.savingsLabel}
+                            </span>
+                          </div>
+                        ) : null}
+                      </>
+                    ) : (
+                      <span className="text-sm font-medium leading-5 text-title">
+                        &nbsp;
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <span className="text-[36px] font-bold leading-[52px] text-heading">
+                      {formatManat(plan.price)}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-sm font-bold leading-5 text-title">
+                      <span>₼</span>
+                      <span>/ {t.home.monthShort}</span>
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <ul className="flex flex-1 flex-col gap-2.5">
-              {plan.features.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex min-w-0 items-start gap-2.5 text-sm font-medium leading-5 text-title"
+
+              <ul className="flex w-full flex-1 flex-col gap-2.5">
+                {plan.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex min-w-0 items-center gap-2.5 text-sm font-medium leading-5 text-title"
+                  >
+                    <img
+                      src="/icons/subscription/check.svg"
+                      alt=""
+                      width={14}
+                      height={14}
+                      className="size-3.5 shrink-0"
+                    />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-auto flex w-full flex-col gap-3">
+                <Link
+                  href={gymsHref}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-base font-semibold text-[#00A4A4] transition-colors hover:bg-[#E6FBFB]"
                 >
+                  {t.offers.includedGyms}
                   <img
-                    src="/icons/subscription/check.svg"
+                    src="/icons/subscription/arrow-right.svg"
                     alt=""
-                    width={14}
-                    height={14}
-                    className="size-3.5 shrink-0"
+                    width={24}
+                    height={24}
+                    className="size-6"
                   />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={hrefFor(plan.tier)}
-              className="mt-auto inline-flex h-12 items-center justify-center rounded-lg border border-border-muted bg-surface text-base font-semibold text-ink transition-colors group-hover:border-transparent group-hover:bg-button group-hover:text-white"
-            >
-              {t.home.selectPackage}
-            </Link>
-          </article>
+                </Link>
+                <Link
+                  href={hrefFor(plan.tier)}
+                  className="inline-flex h-12 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white transition-colors hover:bg-[#1c3168] group-hover:bg-button"
+                >
+                  {t.home.selectPackage}
+                </Link>
+              </div>
+            </article>
           </TiltCard>
         ))}
       </Stagger>

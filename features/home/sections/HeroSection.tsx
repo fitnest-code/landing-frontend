@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
 import { getMessages } from "@/lib/i18n/server";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import StoreBadges from "../components/StoreBadges";
 import Reveal from "../components/Reveal";
 import TiltCard from "../components/TiltCard";
+import PhoneScreensCarousel from "../components/PhoneScreensCarousel";
 
 const HeroSection = async () => {
   const { messages, locale } = await getMessages();
@@ -101,61 +101,11 @@ const HeroSection = async () => {
         </div>
         </Reveal>
 
-        <Reveal variant="right" delay={0.12} amount={0.05} className="relative mx-auto mt-8 w-full max-w-[555px] lg:mx-0 lg:ml-auto lg:mt-0">
+        <Reveal variant="right" delay={0.12} amount={0.05} className="relative mx-auto mt-8 w-full max-w-[320px] sm:max-w-[360px] lg:mx-0 lg:ml-auto lg:mt-0 lg:max-w-[380px]">
         <TiltCard intensity={8}>
-        <div className="relative mx-auto w-full max-w-[555px]">
-          <div className="relative aspect-[555/625] w-full">
-            <div className="absolute top-0 left-[22.78%] h-full w-[54.43%]">
-              <img
-                src="/images/home/hero-phone-screen.svg"
-                alt=""
-                className="absolute top-[1.65%] left-[3.9%] h-[96.86%] w-[92.2%] object-contain"
-              />
-              <img
-                src="/images/home/hero-phone-frame.svg"
-                alt="FitNest app"
-                className="absolute inset-0 h-full w-full object-contain"
-              />
-            </div>
-
-            <div className="pointer-events-none absolute top-[13.44%] left-[57.1%] z-10 flex animate-breathe items-center gap-[11px] rounded-2xl border border-[#EAEAEA] bg-white px-4 py-[13px] shadow-[0px_18px_40px_rgba(20,35,75,0.14)] [animation-delay:1.6s]">
-              <div className="flex size-[38px] shrink-0 items-center justify-center rounded-[11px] bg-[#E6FBFB]">
-                <Check
-                  className="size-[19px] text-[#00A4A4]"
-                  strokeWidth={1.9}
-                />
-              </div>
-              <div className="flex flex-col">
-                <p className="text-sm font-bold leading-5 text-[#011729]">
-                  {t.qrSuccessTitle}
-                </p>
-                <p className="text-xs font-normal leading-[18px] text-[#557C9F]">
-                  {t.qrSuccessMeta}
-                </p>
-              </div>
-            </div>
-
-            <div className="pointer-events-none absolute top-[48.64%] left-0 z-10 flex w-[184px] animate-breathe flex-col gap-[5px] rounded-2xl bg-brand px-[17px] py-[14px] shadow-[0px_22px_44px_rgba(13,24,52,0.32)] dark:border dark:border-[#373A41] dark:bg-[#011729]">
-              <p className="text-sm font-bold leading-5 text-desc">
-                {t.activePackage}
-              </p>
-              <div className="flex items-baseline gap-[7px] pb-1">
-                <p className="text-lg font-bold leading-7 text-white">
-                  {t.goldLabel}
-                </p>
-                <p className="text-xs font-normal leading-[18px] text-desc">
-                  {t.visitsPerMonth}
-                </p>
-              </div>
-              <div className="relative h-[5px] w-[150px] rounded-full bg-[#CECFD2]">
-                <div className="absolute inset-y-0 left-0 w-[93px] rounded-full bg-cyan" />
-              </div>
-              <p className="text-xs font-normal leading-[18px] text-desc">
-                {t.visitsUsed}
-              </p>
-            </div>
+          <div className="relative mx-auto aspect-[304/627] w-full">
+            <PhoneScreensCarousel />
           </div>
-        </div>
         </TiltCard>
         </Reveal>
       </div>

@@ -4,6 +4,7 @@ import SectionHeading from "../components/SectionHeading";
 import IconBox from "../components/IconBox";
 import StoreBadges from "../components/StoreBadges";
 import Reveal, { Stagger } from "../components/Reveal";
+import AppPhonesShowcase from "../components/AppPhonesShowcase";
 
 const FEATURE_ICONS = [
   "/icons/home/search.svg",
@@ -43,14 +44,12 @@ const AppSection = async () => {
           </Stagger>
           <StoreBadges dark className="mt-2" />
         </div>
-        <Reveal variant="scale" delay={0.15} className="relative flex h-[320px] w-full max-w-[608px] shrink items-center justify-center sm:h-[420px] lg:h-[538px] lg:max-w-[46%]">
-        <div className="relative flex h-full w-full items-center justify-center">
-          <img
-            src="/images/home/iphones.png"
-            alt="FitNest mobile app"
-            className="h-full w-full object-contain"
-          />
-        </div>
+        <Reveal
+          variant="scale"
+          delay={0.15}
+          className="relative flex h-[320px] w-full max-w-[608px] shrink items-center justify-center sm:h-[420px] lg:h-[538px] lg:max-w-[46%]"
+        >
+          <AppPhonesShowcase />
         </Reveal>
       </Container>
     </section>
