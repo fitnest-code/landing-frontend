@@ -143,7 +143,7 @@ const PlanPicker = ({
       >
         {plans.map((plan) => (
           <TiltCard key={plan.tier} intensity={8} className="h-full">
-            <article className="group relative flex h-full min-w-0 flex-col items-start gap-7 rounded-2xl bg-white p-5 outline outline-1 outline-offset-[-1px] outline-transparent transition-all hover:outline-[#00DBDB] sm:p-7 dark:bg-page dark:outline-border-muted dark:hover:outline-cyan">
+            <article className="group relative flex h-full min-w-0 flex-col items-start gap-7 rounded-2xl bg-[#F4F8FA] p-5 outline outline-1 outline-offset-[-1px] outline-transparent transition-all hover:bg-white hover:outline-[#00DBDB] sm:p-7 dark:bg-page dark:outline-border-muted dark:hover:bg-page dark:hover:outline-cyan">
               {plan.mostPopular ? (
                 <span className="absolute -top-3 right-4 whitespace-nowrap rounded-full bg-turquoise px-[18px] py-[5px] text-xs font-semibold leading-[18px] text-white">
                   {t.home.mostPopular}
