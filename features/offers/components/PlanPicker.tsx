@@ -102,8 +102,6 @@ const PlanPicker = ({
     return addLocaleToPathname(`/offers?type=${tier}&month=${duration}`, locale);
   };
 
-  const gymsHref = addLocaleToPathname("/fitness-centers", locale);
-
   return (
     <div className="flex flex-col items-center">
       <Stagger
@@ -226,7 +224,10 @@ const PlanPicker = ({
 
               <div className="mt-auto flex w-full flex-col gap-3">
                 <Link
-                  href={gymsHref}
+                  href={addLocaleToPathname(
+                    `/fitness-centers?membership=${plan.tier}`,
+                    locale,
+                  )}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-base font-semibold text-[#00A4A4] transition-colors hover:bg-[#E6FBFB]"
                 >
                   {t.offers.includedGyms}
@@ -240,7 +241,7 @@ const PlanPicker = ({
                 </Link>
                 <Link
                   href={hrefFor(plan.tier)}
-                  className="inline-flex h-12 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white transition-colors hover:bg-[#1c3168] group-hover:bg-button"
+                  className="inline-flex h-12 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white transition-colors hover:bg-[#FF6A42]"
                 >
                   {t.home.selectPackage}
                 </Link>

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Container from "@/components/common/Container";
 import { getMessages } from "@/lib/i18n/server";
 import {
@@ -20,7 +21,9 @@ const FitnessCentersPage = async () => {
         gymCount={stats?.gymCount ?? (gymsPage.items.length || null)}
       />
       <Container className="flex flex-col gap-10 pb-16 pt-6 md:pb-24 md:pt-8">
-        <FitnessCentersListSection gyms={gymsPage.items} />
+        <Suspense fallback={null}>
+          <FitnessCentersListSection gyms={gymsPage.items} />
+        </Suspense>
       </Container>
     </div>
   );

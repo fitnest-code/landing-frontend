@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const SCREENS = [
@@ -21,12 +22,11 @@ type PhoneScreensCarouselProps = {
 
 const PhoneScreensCarousel = ({
   className,
-  intervalMs = 3200,
+  intervalMs = 3600,
   alt = "FitNest app",
 }: PhoneScreensCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [ready, setReady] = useState(false);
-  const [spinning, setSpinning] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -40,9 +40,7 @@ const PhoneScreensCarousel = ({
         }),
     );
     void Promise.all(preload).then(() => {
-      if (cancelled) return;
-      setReady(true);
-      setSpinning(false);
+      if (!cancelled) setReady(true);
     });
     return () => {
       cancelled = true;
@@ -52,41 +50,45 @@ const PhoneScreensCarousel = ({
   useEffect(() => {
     if (!ready) return;
     const id = window.setInterval(() => {
-      setSpinning(true);
-      window.setTimeout(() => {
-        setIndex((prev) => (prev + 1) % SCREENS.length);
-        setSpinning(false);
-      }, 280);
+      setIndex((prev) => (prev + 1) % SCREENS.length);
     }, intervalMs);
     return () => window.clearInterval(id);
   }, [ready, intervalMs]);
 
   return (
-    <div className={cn("relative h-full w-full", className)}>
-      {SCREENS.map((src, i) => (
-        <img
-          key={src}
-          src={src}
-          alt={i === index ? alt : ""}
-          aria-hidden={i !== index}
-          className={cn(
-            "absolute inset-0 h-full w-full object-contain transition-opacity duration-300",
-            i === index && !spinning ? "opacity-100" : "opacity-0",
-          )}
+    <div className={cn("relative h-full w-full overflow-hidden", className)}>
+      {/* Crossfade: keep both screens stacked so there is no blank gap */}
+      <AnimatePresence initial={false}>
+        <motion.img
+          key={SCREENS[index]}
+          src={SCREENS[index]}
+          alt={alt}
+          className="absolute inset-0 h-full w-full object-contain"
+          initial={{ opacity: 0, y: 12, scale: 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -8, scale: 1.01 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         />
-      ))}
-      <div
-        className={cn(
-          "pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-[#011729]/15 backdrop-blur-[1px] transition-opacity duration-200",
-          spinning || !ready ? "opacity-100" : "opacity-0",
-        )}
-      >
-        <img
-          src="/Loading.gif"
-          alt=""
-          className="h-16 w-16 object-contain sm:h-20 sm:w-20"
-        />
-      </div>
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!ready ? (
+          <motion.div
+            key="spinner"
+            className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-[#011729]/10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <img
+              src="/Loading.gif"
+              alt=""
+              className="h-16 w-16 object-contain sm:h-20 sm:w-20"
+            />
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };

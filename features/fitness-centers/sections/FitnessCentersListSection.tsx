@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
 import type { LandingGym } from "@/lib/api/landing";
@@ -10,6 +11,8 @@ import FiltersSection, { type GymsFiltersValue } from "./FiltersSection";
 import { Stagger, TiltCard } from "@/components/animation";
 
 const PAGE_SIZE = 12;
+
+const MEMBERSHIP_VALUES = new Set(["bronze", "silver", "gold", "platinum"]);
 
 const emptyFilters: GymsFiltersValue = {
   query: "",
@@ -41,8 +44,25 @@ type FitnessCentersListSectionProps = {
 
 const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => {
   const { t, locale } = useI18n();
-  const [filters, setFilters] = useState<GymsFiltersValue>(emptyFilters);
+  const searchParams = useSearchParams();
+  const membershipParam = searchParams.get("membership")?.toLowerCase() ?? "";
+  const initialMembership = MEMBERSHIP_VALUES.has(membershipParam)
+    ? membershipParam
+    : "";
+
+  const [filters, setFilters] = useState<GymsFiltersValue>(() => ({
+    ...emptyFilters,
+    membership: initialMembership,
+  }));
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setFilters((current) => {
+      if (current.membership === initialMembership) return current;
+      return { ...current, membership: initialMembership };
+    });
+    setVisibleCount(PAGE_SIZE);
+  }, [initialMembership]);
 
   const cities = useMemo(() => uniqueSorted(gyms.map((gym) => gym.city)), [gyms]);
   const categories = useMemo(
