@@ -101,12 +101,20 @@ const HeroSection = async () => {
         </div>
         </Reveal>
 
-        <Reveal variant="right" delay={0.12} amount={0.05} className="relative mx-auto mt-8 w-full max-w-[320px] sm:max-w-[360px] lg:mx-0 lg:ml-auto lg:mt-0 lg:max-w-[380px]">
-        <TiltCard intensity={8}>
-          <div className="relative mx-auto aspect-[304/627] w-full">
-            <PhoneScreensCarousel />
-          </div>
-        </TiltCard>
+        <Reveal
+          variant="right"
+          delay={0.12}
+          amount={0.05}
+          className="relative mx-auto mt-8 w-full max-w-[555px] lg:mx-0 lg:ml-auto lg:mt-0"
+        >
+          <TiltCard intensity={6}>
+            {/* Composition stage: phone sits inset like the original hero mockup */}
+            <div className="relative mx-auto aspect-[555/625] w-full max-w-[555px]">
+              <div className="absolute top-0 left-[22.78%] h-full w-[54.43%]">
+                <PhoneScreensCarousel />
+              </div>
+            </div>
+          </TiltCard>
         </Reveal>
       </div>
     </section>

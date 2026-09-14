@@ -18,12 +18,12 @@ const SCREENS = [
   "/images/home/iphone/screen.svg",
 ] as const;
 
-/** Screen inset inside the frame: (304-279)/2 and (627-606)/2. */
+/** Screen inset inside the frame — matched to the transparent hole / prior hero mockup. */
 const SCREEN_INSET = {
-  left: `${(12.5 / 304) * 100}%`,
-  top: `${(10.5 / 627) * 100}%`,
-  width: `${(279 / 304) * 100}%`,
-  height: `${(606 / 627) * 100}%`,
+  left: "3.9%",
+  top: "1.65%",
+  width: "92.2%",
+  height: "96.86%",
 } as const;
 
 type PhoneScreensCarouselProps = {
@@ -69,10 +69,7 @@ const PhoneScreensCarousel = ({
   }, [ready, intervalMs]);
 
   return (
-    <div
-      className={cn("relative h-full w-full", className)}
-      style={{ aspectRatio: "304 / 627" }}
-    >
+    <div className={cn("relative h-full w-full", className)}>
       {/* Inner UI pages — behind the transparent screen hole */}
       <div
         className="absolute z-0 overflow-hidden"
@@ -81,7 +78,7 @@ const PhoneScreensCarousel = ({
           top: SCREEN_INSET.top,
           width: SCREEN_INSET.width,
           height: SCREEN_INSET.height,
-          borderRadius: "12.5% / 6%",
+          borderRadius: "12% / 5.5%",
         }}
       >
         <AnimatePresence initial={false}>

@@ -21,7 +21,7 @@ const SidePhone = ({
     <img
       src={screenSrc}
       alt=""
-      className="absolute left-[4.11%] top-[1.67%] h-[96.65%] w-[91.78%] rounded-[12%/6%] object-cover"
+      className="absolute left-[3.9%] top-[1.65%] h-[96.86%] w-[92.2%] rounded-[12%/5.5%] object-cover"
       draggable={false}
     />
     <img
