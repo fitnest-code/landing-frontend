@@ -4,15 +4,27 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+/** Outer device chrome — stays fixed while screens crossfade inside. */
+const PHONE_FRAME = "/images/home/iphone/frame.svg";
+
+/** Inner UI pages only (279×606 inside 304×627 frame). */
 const SCREENS = [
-  "/images/home/iphone-screens/screen-1.svg",
-  "/images/home/iphone-screens/screen-2.svg",
-  "/images/home/iphone-screens/screen-3.svg",
-  "/images/home/iphone-screens/screen-4.svg",
-  "/images/home/iphone-screens/screen-5.svg",
-  "/images/home/iphone-screens/screen-6.svg",
-  "/images/home/iphone-screens/screen-7.svg",
+  "/images/home/iphone/screen-1.svg",
+  "/images/home/iphone/screen-2.svg",
+  "/images/home/iphone/screen-3.svg",
+  "/images/home/iphone/screen-4.svg",
+  "/images/home/iphone/screen-5.svg",
+  "/images/home/iphone/screen-6.svg",
+  "/images/home/iphone/screen.svg",
 ] as const;
+
+/** Screen inset inside the frame: (304-279)/2 and (627-606)/2. */
+const SCREEN_INSET = {
+  left: `${(12.5 / 304) * 100}%`,
+  top: `${(10.5 / 627) * 100}%`,
+  width: `${(279 / 304) * 100}%`,
+  height: `${(606 / 627) * 100}%`,
+} as const;
 
 type PhoneScreensCarouselProps = {
   className?: string;
@@ -30,7 +42,8 @@ const PhoneScreensCarousel = ({
 
   useEffect(() => {
     let cancelled = false;
-    const preload = SCREENS.map(
+    const sources = [PHONE_FRAME, ...SCREENS];
+    const preload = sources.map(
       (src) =>
         new Promise<void>((resolve) => {
           const img = new Image();
@@ -56,42 +69,65 @@ const PhoneScreensCarousel = ({
   }, [ready, intervalMs]);
 
   return (
-    <div className={cn("relative h-full w-full overflow-hidden", className)}>
-      {/* Crossfade: keep both screens stacked so there is no blank gap */}
-      <AnimatePresence initial={false}>
-        <motion.img
-          key={SCREENS[index]}
-          src={SCREENS[index]}
-          alt={alt}
-          className="absolute inset-0 h-full w-full object-contain"
-          initial={{ opacity: 0, y: 12, scale: 0.985 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -8, scale: 1.01 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        />
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {!ready ? (
-          <motion.div
-            key="spinner"
-            className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-[#011729]/10"
+    <div
+      className={cn("relative h-full w-full", className)}
+      style={{ aspectRatio: "304 / 627" }}
+    >
+      {/* Inner UI pages — behind the transparent screen hole */}
+      <div
+        className="absolute z-0 overflow-hidden"
+        style={{
+          left: SCREEN_INSET.left,
+          top: SCREEN_INSET.top,
+          width: SCREEN_INSET.width,
+          height: SCREEN_INSET.height,
+          borderRadius: "12.5% / 6%",
+        }}
+      >
+        <AnimatePresence initial={false}>
+          <motion.img
+            key={SCREENS[index]}
+            src={SCREENS[index]}
+            alt={alt}
+            className="absolute inset-0 h-full w-full object-cover"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <img
-              src="/Loading.gif"
-              alt=""
-              className="h-16 w-16 object-contain sm:h-20 sm:w-20"
-            />
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {!ready ? (
+            <motion.div
+              key="spinner"
+              className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-[#011729]/15"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              <img
+                src="/Loading.gif"
+                alt=""
+                className="h-14 w-14 object-contain sm:h-16 sm:w-16"
+              />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
+
+      {/* Static iPhone frame on top — never animates */}
+      <img
+        src={PHONE_FRAME}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-10 h-full w-full object-contain"
+        draggable={false}
+      />
     </div>
   );
 };
 
 export default PhoneScreensCarousel;
-export { SCREENS as PHONE_SCREENS };
+export { PHONE_FRAME, SCREENS as PHONE_SCREENS };
