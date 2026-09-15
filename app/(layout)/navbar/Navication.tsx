@@ -12,9 +12,7 @@ const Navication = () => {
   const normalizedPathname = stripLocaleFromPathname(pathname || "/");
   const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
-  const [hash, setHash] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
-  const homePath = addLocaleToPathname("/", locale);
   const hallsPath = addLocaleToPathname("/fitness-centers", locale);
   const fitStorePath = addLocaleToPathname("/fit-market", locale);
   const plansPath = addLocaleToPathname("/offers", locale);
@@ -31,20 +29,6 @@ const Navication = () => {
 
   const isHallsMenu =
     isRouteActive(hallsPath) || isRouteActive(fitStorePath);
-  const isHome = normalizedPathname === "/";
-  const isHowItWorks = isHome && hash === "#how-it-works";
-
-  useEffect(() => {
-    const syncHash = () => {
-      setHash(window.location.hash);
-      if (typeof window !== "undefined" && window.scrollX !== 0) {
-        window.scrollTo({ left: 0 });
-      }
-    };
-    syncHash();
-    window.addEventListener("hashchange", syncHash);
-    return () => window.removeEventListener("hashchange", syncHash);
-  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -73,13 +57,6 @@ const Navication = () => {
 
   return (
     <nav className="hidden min-w-0 w-full items-center justify-center gap-5 xl:flex 2xl:gap-8">
-      <Link
-        href={`${homePath}#how-it-works`}
-        className={linkClass(isHowItWorks)}
-      >
-        {t.nav.howItWorks}
-      </Link>
-
       <div className="relative" ref={menuRef}>
         <button
           type="button"

@@ -12,13 +12,10 @@ import DownloadAppModal from "@/components/common/DownloadAppModal";
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
   const [downloadModalOpen, setDownloadModalOpen] = useState(false);
-  const [hash, setHash] = useState("");
   const pathname = usePathname();
   const normalizedPathname = stripLocaleFromPathname(pathname || "/");
   const { t, locale } = useI18n();
-  const homePath = addLocaleToPathname("/", locale);
   const navLinks = [
-    { name: t.nav.howItWorks, href: `${homePath}#how-it-works` },
     { name: t.nav.halls, href: addLocaleToPathname("/fitness-centers", locale) },
     { name: t.footer.fitStore, href: addLocaleToPathname("/fit-market", locale) },
     { name: t.nav.plans, href: addLocaleToPathname("/offers", locale) },
@@ -28,13 +25,6 @@ const HamburgerMenu = () => {
 
   useEffect(() => {
     setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    const syncHash = () => setHash(window.location.hash);
-    syncHash();
-    window.addEventListener("hashchange", syncHash);
-    return () => window.removeEventListener("hashchange", syncHash);
   }, [pathname]);
 
   useEffect(() => {
@@ -53,9 +43,6 @@ const HamburgerMenu = () => {
 
   const isActive = (href: string) => {
     const path = stripLocaleFromPathname(href).split("#")[0] || "/";
-    if (href.includes("#how-it-works")) {
-      return normalizedPathname === "/" && hash === "#how-it-works";
-    }
     return (
       normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)
     );
