@@ -7,6 +7,52 @@ type AppPhonesShowcaseProps = {
   className?: string;
 };
 
+/** Transparent screen hole inside the iPhone PNGs (1350×2760). */
+const SCREEN_INSET = {
+  left: "5.33%",
+  top: "7.97%",
+  width: "89.26%",
+  height: "86.67%",
+} as const;
+
+type PhoneProps = {
+  frameSrc: string;
+  screenSrc: string;
+  className?: string;
+  alt?: string;
+};
+
+const Phone = ({ frameSrc, screenSrc, className, alt = "" }: PhoneProps) => (
+  <div className={cn("absolute w-[41.5%]", className)}>
+    <div className="relative aspect-[1350/2760] w-full">
+      <div
+        className="absolute z-0 overflow-hidden"
+        style={{
+          left: SCREEN_INSET.left,
+          top: SCREEN_INSET.top,
+          width: SCREEN_INSET.width,
+          height: SCREEN_INSET.height,
+          borderRadius: "18% / 9%",
+        }}
+      >
+        <img
+          src={screenSrc}
+          alt={alt}
+          className="h-full w-full object-cover object-top"
+          draggable={false}
+        />
+      </div>
+      <img
+        src={frameSrc}
+        alt=""
+        aria-hidden
+        className="pointer-events-none relative z-10 h-auto w-full select-none"
+        draggable={false}
+      />
+    </div>
+  </div>
+);
+
 const ThemePhones = ({
   theme,
   className,
@@ -18,39 +64,20 @@ const ThemePhones = ({
 
   return (
     <div className={cn("absolute inset-0", className)}>
-      {/* Left phone — Deep Blue, tilted -12deg */}
-      <div className="absolute left-[-1.6%] top-[11.8%] h-[96.8%] w-[41.4%] origin-top-left -rotate-12">
-        <img
-          src={`${base}/screen-left.svg`}
-          alt=""
-          className="absolute left-[4.9%] top-[2.5%] h-[94.9%] w-[90.2%] object-cover"
-          draggable={false}
-        />
-        <img
-          src={`${base}/frame-left.svg`}
-          alt=""
-          aria-hidden
-          className="relative z-10 h-full w-full object-contain"
-          draggable={false}
-        />
-      </div>
-
-      {/* Right phone — Cosmic Orange, tilted 7deg */}
-      <div className="absolute left-[60.7%] top-[-5%] h-[96.8%] w-[41.4%] origin-top-left rotate-[7deg]">
-        <img
-          src={`${base}/screen-right.svg`}
-          alt=""
-          className="absolute left-[5.2%] top-[2.9%] h-[94.1%] w-[89.6%] object-cover"
-          draggable={false}
-        />
-        <img
-          src={`${base}/frame-right.svg`}
-          alt=""
-          aria-hidden
-          className="relative z-10 h-full w-full object-contain"
-          draggable={false}
-        />
-      </div>
+      {/* Deep Blue — left, -12deg */}
+      <Phone
+        frameSrc={`${base}/iphone-deep-blue.png`}
+        screenSrc={`${base}/screen-gyms.png`}
+        className="left-[-1.6%] top-[11.8%] origin-top-left -rotate-12"
+        alt="FitNest nearby gyms"
+      />
+      {/* Cosmic Orange — right, +7deg */}
+      <Phone
+        frameSrc={`${base}/iphone-cosmic-orange.png`}
+        screenSrc={`${base}/screen-detail.png`}
+        className="left-[60.7%] top-[-5%] origin-top-left rotate-[7deg]"
+        alt="FitNest gym details"
+      />
     </div>
   );
 };
@@ -59,7 +86,7 @@ const AppPhonesShowcase = ({ className }: AppPhonesShowcaseProps) => {
   return (
     <div
       className={cn(
-        "relative mx-auto aspect-[608/538] w-full max-w-[608px]",
+        "relative mx-auto aspect-[608/538] w-full max-w-[608px] overflow-visible",
         className,
       )}
     >

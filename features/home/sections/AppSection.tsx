@@ -78,7 +78,7 @@ const AppSection = async () => {
         <Reveal
           variant="scale"
           delay={0.15}
-          className="relative w-full max-w-[608px] shrink lg:max-w-[46%]"
+          className="relative w-full max-w-[608px] shrink overflow-visible lg:max-w-[46%]"
         >
           <AppPhonesShowcase />
         </Reveal>
