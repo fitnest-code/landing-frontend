@@ -9,6 +9,7 @@ import PhoneScreensCarousel from "../components/PhoneScreensCarousel";
 const HeroSection = async () => {
   const { messages, locale } = await getMessages();
   const t = messages.home;
+  const homePath = addLocaleToPathname("/", locale);
 
   return (
     <section className="relative overflow-hidden bg-page">
@@ -71,10 +72,10 @@ const HeroSection = async () => {
                 </div>
               </div>
               <Link
-                href={addLocaleToPathname("/offers", locale)}
+                href={`${homePath}#how-it-works`}
                 className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-lg bg-button px-4 text-base font-bold text-white transition-colors hover:bg-[#FF6A42]"
               >
-                {t.viewPackages}
+                {messages.nav.howItWorks}
                 <img
                   src="/icons/home/arrow-right.svg"
                   alt=""
