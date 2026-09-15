@@ -7,52 +7,6 @@ type AppPhonesShowcaseProps = {
   className?: string;
 };
 
-/** Transparent screen hole inside the iPhone PNGs (1350×2760). */
-const SCREEN_INSET = {
-  left: "5.33%",
-  top: "7.97%",
-  width: "89.26%",
-  height: "86.67%",
-} as const;
-
-type PhoneProps = {
-  frameSrc: string;
-  screenSrc: string;
-  className?: string;
-  alt?: string;
-};
-
-const Phone = ({ frameSrc, screenSrc, className, alt = "" }: PhoneProps) => (
-  <div className={cn("absolute w-[41.5%]", className)}>
-    <div className="relative aspect-[1350/2760] w-full">
-      <div
-        className="absolute z-0 overflow-hidden"
-        style={{
-          left: SCREEN_INSET.left,
-          top: SCREEN_INSET.top,
-          width: SCREEN_INSET.width,
-          height: SCREEN_INSET.height,
-          borderRadius: "18% / 9%",
-        }}
-      >
-        <img
-          src={screenSrc}
-          alt={alt}
-          className="h-full w-full object-cover object-top"
-          draggable={false}
-        />
-      </div>
-      <img
-        src={frameSrc}
-        alt=""
-        aria-hidden
-        className="pointer-events-none relative z-10 h-auto w-full select-none"
-        draggable={false}
-      />
-    </div>
-  </div>
-);
-
 const ThemePhones = ({
   theme,
   className,
@@ -64,19 +18,20 @@ const ThemePhones = ({
 
   return (
     <div className={cn("absolute inset-0", className)}>
-      {/* Deep Blue — left, -12deg */}
-      <Phone
-        frameSrc={`${base}/iphone-deep-blue.png`}
-        screenSrc={`${base}/screen-gyms.png`}
-        className="left-[-1.6%] top-[11.8%] origin-top-left -rotate-12"
-        alt="FitNest nearby gyms"
+      {/* Deep Blue — left, -12deg (composite SVG with screen inside) */}
+      <img
+        src={`${base}/iphone-deep-blue.svg`}
+        alt="FitNest app"
+        className="absolute left-[-1.6%] top-[8%] w-[55%] origin-top-left -rotate-12 select-none"
+        draggable={false}
       />
       {/* Cosmic Orange — right, +7deg */}
-      <Phone
-        frameSrc={`${base}/iphone-cosmic-orange.png`}
-        screenSrc={`${base}/screen-detail.png`}
-        className="left-[60.7%] top-[-5%] origin-top-left rotate-[7deg]"
-        alt="FitNest gym details"
+      <img
+        src={`${base}/iphone-cosmic-orange.svg`}
+        alt=""
+        aria-hidden
+        className="absolute left-[52%] top-[-5%] w-[49%] origin-top-left rotate-[7deg] select-none"
+        draggable={false}
       />
     </div>
   );
