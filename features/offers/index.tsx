@@ -1,7 +1,6 @@
 import Container from "@/components/common/Container";
 import { getMessages } from "@/lib/i18n/server";
 import { getSubscriptionPackagesServerCached } from "@/features/offers/api/subscription-packages";
-import OffersHero from "@/features/offers/components/OffersHero";
 import OffersDurationsSection from "@/features/offers/components/OffersDurationsSection";
 import OffersActivateBanner from "@/features/offers/components/OffersActivateBanner";
 import PlanPicker, {
@@ -40,9 +39,8 @@ const OffersPage = async ({ searchParams }: OffersPageProps) => {
 
   return (
     <div className="bg-page text-ink">
-      <OffersHero />
       <Reveal variant="scale">
-      <section className="bg-surface pb-16 pt-10 md:pb-20">
+      <section className="bg-surface pb-16 pt-10 md:pb-20 md:pt-16">
         <Container>
           <PlanPicker
             packages={packages}

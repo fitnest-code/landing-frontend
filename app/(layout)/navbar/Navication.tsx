@@ -15,15 +15,11 @@ const Navication = () => {
   const [hash, setHash] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
   const homePath = addLocaleToPathname("/", locale);
-  const corporatePath = addLocaleToPathname("/corporate", locale);
-  const partnerPath = addLocaleToPathname("/partner", locale);
   const hallsPath = addLocaleToPathname("/fitness-centers", locale);
+  const fitStorePath = addLocaleToPathname("/fit-market", locale);
   const plansPath = addLocaleToPathname("/offers", locale);
-  const isCorporate = normalizedPathname === "/corporate";
-  const isPartner = normalizedPathname === "/partner";
-  const isBusiness = isCorporate || isPartner;
-  const isHome = normalizedPathname === "/";
-  const isHowItWorks = isHome && hash === "#how-it-works";
+  const bmiPath = addLocaleToPathname("/bmi", locale);
+  const partnerPath = addLocaleToPathname("/partner", locale);
 
   const isRouteActive = (href: string) => {
     const path = stripLocaleFromPathname(href).split("#")[0] || "/";
@@ -32,6 +28,11 @@ const Navication = () => {
       normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)
     );
   };
+
+  const isHallsMenu =
+    isRouteActive(hallsPath) || isRouteActive(fitStorePath);
+  const isHome = normalizedPathname === "/";
+  const isHowItWorks = isHome && hash === "#how-it-works";
 
   useEffect(() => {
     const syncHash = () => {
@@ -61,12 +62,6 @@ const Navication = () => {
     };
   }, [open]);
 
-  const navLinks = [
-    { name: t.nav.howItWorks, href: `${homePath}#how-it-works`, active: isHowItWorks },
-    { name: t.nav.halls, href: hallsPath, active: isRouteActive(hallsPath) },
-    { name: t.nav.plans, href: plansPath, active: isRouteActive(plansPath) },
-  ];
-
   const linkClass = (active: boolean) =>
     cn(
       "relative whitespace-nowrap text-base font-medium leading-7 text-ink transition-colors hover:text-turquoise 2xl:text-lg",
@@ -78,11 +73,13 @@ const Navication = () => {
 
   return (
     <nav className="hidden min-w-0 w-full items-center justify-center gap-5 xl:flex 2xl:gap-8">
-      {navLinks.map((item) => (
-        <Link key={item.name} href={item.href} className={linkClass(item.active)}>
-          {item.name}
-        </Link>
-      ))}
+      <Link
+        href={`${homePath}#how-it-works`}
+        className={linkClass(isHowItWorks)}
+      >
+        {t.nav.howItWorks}
+      </Link>
+
       <div className="relative" ref={menuRef}>
         <button
           type="button"
@@ -91,10 +88,10 @@ const Navication = () => {
           aria-haspopup="menu"
           className={cn(
             "inline-flex cursor-pointer items-center gap-1.5",
-            linkClass(isBusiness),
+            linkClass(isHallsMenu),
           )}
         >
-          {t.nav.business}
+          {t.nav.halls}
           <ChevronDown
             className={cn(
               "size-4 transition-transform duration-200",
@@ -108,28 +105,41 @@ const Navication = () => {
             className="absolute top-full left-1/2 z-20 mt-3 min-w-[200px] -translate-x-1/2 rounded-xl border border-border-muted bg-surface p-2 shadow-lg"
           >
             <Link
-              href={corporatePath}
+              href={hallsPath}
               onClick={() => setOpen(false)}
               className={cn(
                 "block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-page hover:text-turquoise",
-                isCorporate ? "text-turquoise" : "text-ink",
+                isRouteActive(hallsPath) ? "text-turquoise" : "text-ink",
               )}
             >
-              {t.nav.corporate}
+              {t.nav.halls}
             </Link>
             <Link
-              href={partnerPath}
+              href={fitStorePath}
               onClick={() => setOpen(false)}
               className={cn(
                 "block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-page hover:text-turquoise",
-                isPartner ? "text-turquoise" : "text-ink",
+                isRouteActive(fitStorePath) ? "text-turquoise" : "text-ink",
               )}
             >
-              {t.nav.becomePartner}
+              {t.footer.fitStore}
             </Link>
           </div>
         ) : null}
       </div>
+
+      <Link href={plansPath} className={linkClass(isRouteActive(plansPath))}>
+        {t.nav.plans}
+      </Link>
+      <Link href={bmiPath} className={linkClass(isRouteActive(bmiPath))}>
+        {t.nav.bmi}
+      </Link>
+      <Link
+        href={partnerPath}
+        className={linkClass(isRouteActive(partnerPath))}
+      >
+        {t.nav.becomePartner}
+      </Link>
     </nav>
   );
 };

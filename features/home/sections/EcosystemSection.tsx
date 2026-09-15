@@ -16,49 +16,24 @@ const EcosystemSection = async () => {
     <section id="business" className="scroll-mt-28 bg-surface py-16 md:py-20 dark:bg-[#012438]">
       <Container className="flex flex-col gap-10">
         <SectionHeading eyebrow={t.ecoEyebrow} title={t.ecoHeading} />
-        <Stagger className="grid grid-cols-1 gap-[22px] md:grid-cols-2" variant="scale" delay={0.12}>
+        <Stagger className="grid grid-cols-1 gap-[22px]" variant="scale" delay={0.12}>
           <TiltCard intensity={7}>
-          <Link
-            href={addLocaleToPathname("/corporate", locale)}
-            className="flex h-full min-h-0 flex-col rounded-3xl bg-brand-navy-800 p-6 sm:min-h-[300px] sm:p-8"
-          >
-            <IconBox tone="navy">
-              <img
-                src="/icons/home/briefcase.svg"
-                alt=""
-                width={22}
-                height={22}
-              />
-            </IconBox>
-            <h3 className="pt-[22px] font-manrope text-2xl font-extrabold leading-9 text-white">
-              {t.corporateTitle}
-            </h3>
-            <p className="pt-2.5 text-sm leading-5 text-desc">
-              {t.corporateDesc}
-            </p>
-            <span className="mt-auto inline-flex items-center gap-2 pt-6 text-base font-bold text-cyan">
-              {t.corporateCta}
-              <HomeArrow className="size-5" />
-            </span>
-          </Link>
-          </TiltCard>
-          <TiltCard intensity={7}>
-          <Link
-            href={addLocaleToPathname("/partner", locale)}
-            className="flex h-full min-h-0 flex-col rounded-3xl border border-border-muted bg-surface p-6 transition-all hover:border-cyan hover:shadow-[0px_18px_40px_rgba(0,157,166,0.16)] sm:min-h-[300px] sm:p-8"
-          >
-            <IconBox>
-              <img src="/icons/home/house.svg" alt="" width={22} height={22} />
-            </IconBox>
-            <h3 className="pt-[22px] font-manrope text-2xl font-extrabold leading-9 text-ink">
-              {t.partnerTitle}
-            </h3>
-            <p className="pt-2.5 text-sm leading-5 text-title">{t.partnerDesc}</p>
-            <span className="mt-auto inline-flex items-center gap-2 pt-6 text-base font-bold text-turquoise">
-              {t.partnerCta}
-              <HomeArrow className="size-5" />
-            </span>
-          </Link>
+            <Link
+              href={addLocaleToPathname("/partner", locale)}
+              className="flex h-full min-h-0 flex-col rounded-3xl border border-border-muted bg-surface p-6 transition-all hover:border-cyan hover:shadow-[0px_18px_40px_rgba(0,157,166,0.16)] sm:min-h-[300px] sm:p-8 md:max-w-[640px]"
+            >
+              <IconBox>
+                <img src="/icons/home/house.svg" alt="" width={22} height={22} />
+              </IconBox>
+              <h3 className="pt-[22px] font-manrope text-2xl font-extrabold leading-9 text-ink">
+                {t.partnerTitle}
+              </h3>
+              <p className="pt-2.5 text-sm leading-5 text-title">{t.partnerDesc}</p>
+              <span className="mt-auto inline-flex items-center gap-2 pt-6 text-base font-bold text-turquoise">
+                {t.partnerCta}
+                <HomeArrow className="size-5" />
+              </span>
+            </Link>
           </TiltCard>
         </Stagger>
       </Container>
