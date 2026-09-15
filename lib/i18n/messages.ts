@@ -575,25 +575,25 @@ const az: Messages = {
     mobileHeading: "Sağlam həyat tərzinə bir addım da yaxınlaş",
     mobileDescription: "ilə bədənini, zehnini və motivasiyanı balansda saxla.",
     appEyebrow: "FitNest tətbiqi",
-    appHeading: "Bütün fitness\nhəyatın - cibində",
+    appHeading: "Hərəkət et, kəşf et -\nFitNest-lə yaşa",
     appDescription:
-      "Mərkəz kəşfiyyatından QR girişə, paket idarəçiliyindən\nFitMarket alış-verişinə qədər hər şey bir tətbiqdə.",
+      "Fitnessdən yoga və pilatesə, üzgüçülükdən wellness-ə — aktiv həyat üçün ehtiyacın olan hər şey bir tətbiqdə.",
     appFeatures: [
       {
-        title: "Kəşf et",
-        desc: "139 mərkəzi səviyyə, aktivlik və məsafəyə görə filtrlə.",
+        title: "Öz məkanını tap",
+        desc: "139 mərkəz arasından fəaliyyət növünə, məsafəyə və abunəliyinə uyğun seçim et.",
       },
       {
-        title: "QR ilə giriş",
-        desc: "Resepşnda gözləmə yox — kodu oxut, birbaşa məşqə keç.",
+        title: "QR-la rahat daxil ol",
+        desc: "Növbə gözləmə, kodu oxut və məşqə başla.",
       },
       {
-        title: "FitMarket",
-        desc: "Tərəfdaş mağazalardan endirimlə protein, geyim və aksesuar.",
+        title: "FitStore fürsətlərini kəşf et",
+        desc: "Tərəfdaş mağazalardan idman qidalarını, idman geyim və aksessuarları xüsusi endirimlə əldə et.",
       },
       {
-        title: "İzlə və inkişaf et",
-        desc: "Giriş tarixçən və qalan limitlərin həmişə göz önündə.",
+        title: "Nəticələrini izlə",
+        desc: "Ziyarətlərini, aktivliyini və qalan istifadə limitlərini istənilən vaxt yoxla.",
       },
     ],
     ecoEyebrow: "Birlikdə böyüyək",
@@ -1329,25 +1329,25 @@ const en: Messages = {
     mobileDescription:
       "to keep your body, mindset and motivation in balance.",
     appEyebrow: "FitNest app",
-    appHeading: "Your whole fitness life —\nin your pocket",
+    appHeading: "Move, explore -\nlive with FitNest",
     appDescription:
-      "From discovering centers to QR check-in, plan management\nand FitMarket shopping — all in one app.",
+      "From fitness to yoga and pilates, swimming to wellness — everything you need for an active life in one app.",
     appFeatures: [
       {
-        title: "Discover",
-        desc: "Filter 139 centers by level, activity and distance.",
+        title: "Find your place",
+        desc: "Choose among 139 centers by activity type, distance, and membership.",
       },
       {
-        title: "QR check-in",
-        desc: "No waiting at reception — scan and go straight to training.",
+        title: "Easy QR check-in",
+        desc: "Skip the queue, scan the code, and start training.",
       },
       {
-        title: "FitMarket",
-        desc: "Protein, apparel and accessories from partner stores, with discounts.",
+        title: "Discover FitStore deals",
+        desc: "Get sports nutrition, apparel, and accessories from partner stores at special discounts.",
       },
       {
-        title: "Track and grow",
-        desc: "Your visit history and remaining limits stay in view.",
+        title: "Track your results",
+        desc: "Check your visits, activity, and remaining usage limits anytime.",
       },
     ],
     ecoEyebrow: "Grow with us",
@@ -2093,25 +2093,25 @@ const ru: Messages = {
     mobileHeading: "Станьте ближе к здоровому образу жизни",
     mobileDescription: "чтобы держать в балансе тело, мысли и мотивацию.",
     appEyebrow: "Приложение FitNest",
-    appHeading: "Вся фитнес-жизнь —\nв кармане",
+    appHeading: "Двигайся, открывай -\nживи с FitNest",
     appDescription:
-      "От поиска центров до QR-входа, управления пакетом\nи покупок в FitMarket — всё в одном приложении.",
+      "От фитнеса до йоги и пилатеса, от плавания до wellness — всё для активного образа жизни в одном приложении.",
     appFeatures: [
       {
-        title: "Открывайте",
-        desc: "Фильтруйте 139 центров по уровню, активности и расстоянию.",
+        title: "Найди своё место",
+        desc: "Выбирай среди 139 центров по типу активности, расстоянию и подписке.",
       },
       {
-        title: "Вход по QR",
-        desc: "Без очереди на ресепшене — сканируйте код и сразу к тренировке.",
+        title: "Удобный вход по QR",
+        desc: "Без очереди: отсканируй код и начинай тренировку.",
       },
       {
-        title: "FitMarket",
-        desc: "Протеин, одежда и аксессуары у партнёров со скидкой.",
+        title: "Открой предложения FitStore",
+        desc: "Спортивное питание, одежду и аксессуары у партнёров — со специальными скидками.",
       },
       {
-        title: "Следите и растите",
-        desc: "История визитов и оставшиеся лимиты всегда под рукой.",
+        title: "Отслеживай результаты",
+        desc: "Проверяй визиты, активность и оставшиеся лимиты в любой момент.",
       },
     ],
     ecoEyebrow: "Растём вместе",
