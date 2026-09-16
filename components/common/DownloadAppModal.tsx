@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import { APP_STORE_URL, GOOGLE_PLAY_URL } from "@/lib/constants/app-links";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/lock-body-scroll";
 
 interface DownloadAppModalProps {
   isOpen: boolean;
@@ -19,12 +20,11 @@ const DownloadAppModal = ({ isOpen, onClose }: DownloadAppModalProps) => {
       }
     };
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    lockBodyScroll();
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      unlockBodyScroll();
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -36,18 +36,15 @@ const DownloadAppModal = ({ isOpen, onClose }: DownloadAppModalProps) => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="download-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
     >
-      {/* Backdrop */}
       <div
         onClick={onClose}
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         aria-hidden="true"
       />
 
-      {/* Modal Card */}
       <div className="relative z-10 w-full max-w-[760px] overflow-hidden rounded-xl border border-[#EAEAEA] bg-[#F4F8FA] p-6 shadow-2xl transition-all sm:p-7 md:p-8 dark:border-[#22262F] dark:bg-[#081D2E]">
-        {/* Close button */}
         <button
           type="button"
           onClick={onClose}
@@ -58,7 +55,6 @@ const DownloadAppModal = ({ isOpen, onClose }: DownloadAppModalProps) => {
         </button>
 
         <div className="flex flex-col items-center justify-center gap-6 pt-3 sm:flex-row sm:gap-10 sm:pt-2">
-          {/* Store Badges */}
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
               href={GOOGLE_PLAY_URL}
@@ -93,10 +89,8 @@ const DownloadAppModal = ({ isOpen, onClose }: DownloadAppModalProps) => {
             </a>
           </div>
 
-          {/* Divider */}
           <div className="hidden h-[34px] w-0.5 bg-[#F0F0F1] sm:block dark:bg-[#22262F]" />
 
-          {/* QR Code Section */}
           <div className="flex items-center gap-3">
             <div className="relative size-[55px] shrink-0 overflow-hidden rounded-xs bg-white p-1 dark:bg-[#011729]">
               <img

@@ -31,34 +31,47 @@ const HowItWorks = async () => {
             return (
               <TiltCard key={item.title} intensity={8}>
               <article
-                className={`flex min-h-0 flex-col gap-1 rounded-[20px] px-5 py-6 sm:min-h-[216px] sm:px-[26px] sm:py-7 ${
+                className={`group flex min-h-0 flex-col gap-1 rounded-[20px] px-5 py-6 transition-all duration-300 sm:min-h-[216px] sm:px-[26px] sm:py-7 ${
                   isLast
-                    ? "bg-energy text-white"
-                    : "border border-border-muted bg-surface transition-shadow hover:shadow-[0px_18px_40px_rgba(0,157,166,0.16)]"
+                    ? "bg-brand-navy text-white hover:bg-energy hover:shadow-[0px_18px_40px_rgba(255,106,66,0.28)] dark:bg-[#F4F7FB] dark:text-brand-navy dark:hover:bg-energy dark:hover:text-white"
+                    : "border border-border-muted bg-surface hover:shadow-[0px_18px_40px_rgba(0,157,166,0.16)]"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <IconBox tone={isLast ? "light" : "cyan"}>
+                  <IconBox
+                    tone={isLast ? "light" : "cyan"}
+                    className={
+                      isLast
+                        ? "transition-colors duration-300 group-hover:bg-white/20 group-hover:text-white dark:bg-cyan/15 dark:text-turquoise dark:group-hover:bg-white/20 dark:group-hover:text-white"
+                        : undefined
+                    }
+                  >
                     <img src={STEP_ICONS[index]} alt="" width={22} height={22} />
                   </IconBox>
                   <span
-                    className={`text-[15px] font-extrabold ${
-                      isLast ? "text-white" : "text-[#85888E] dark:text-title"
+                    className={`text-[15px] font-extrabold transition-colors duration-300 ${
+                      isLast
+                        ? "text-white/70 group-hover:text-white dark:text-[#85888E] dark:group-hover:text-white"
+                        : "text-[#85888E] dark:text-title"
                     }`}
                   >
                     {index + 1}
                   </span>
                 </div>
                 <h3
-                  className={`pt-3 font-manrope text-xl font-extrabold leading-[30px] ${
-                    isLast ? "text-white" : "text-ink"
+                  className={`pt-3 font-manrope text-xl font-extrabold leading-[30px] transition-colors duration-300 ${
+                    isLast
+                      ? "text-white group-hover:text-white dark:text-brand-navy dark:group-hover:text-white"
+                      : "text-ink"
                   }`}
                 >
                   {item.title}
                 </h3>
                 <p
-                  className={`whitespace-pre-line text-sm leading-5 ${
-                    isLast ? "text-white" : "text-title"
+                  className={`whitespace-pre-line text-sm leading-5 transition-colors duration-300 ${
+                    isLast
+                      ? "text-white/85 group-hover:text-white dark:text-title dark:group-hover:text-white"
+                      : "text-title"
                   }`}
                 >
                   {item.desc}

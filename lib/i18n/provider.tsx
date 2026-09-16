@@ -44,6 +44,7 @@ export const I18nProvider = ({ initialLocale, children }: I18nProviderProps) => 
     (nextLocale: Locale) => {
       if (nextLocale === locale) return;
 
+      const scrollY = window.scrollY;
       setLocaleState(nextLocale);
       document.cookie = `${localeCookieName}=${nextLocale}; path=/; max-age=31536000; samesite=lax`;
 
@@ -51,8 +52,14 @@ export const I18nProvider = ({ initialLocale, children }: I18nProviderProps) => 
       const queryString = searchParams.toString();
       const nextUrl = queryString ? `${localizedPath}?${queryString}` : localizedPath;
 
-      router.replace(nextUrl);
+      router.replace(nextUrl, { scroll: false });
       router.refresh();
+
+      // Keep viewport position after locale swap / refresh.
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY);
+        requestAnimationFrame(() => window.scrollTo(0, scrollY));
+      });
     },
     [locale, pathname, router, searchParams],
   );

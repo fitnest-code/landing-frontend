@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n/provider";
 import { addLocaleToPathname, stripLocaleFromPathname } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 import DownloadAppModal from "@/components/common/DownloadAppModal";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/lock-body-scroll";
 
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
@@ -29,14 +30,13 @@ const HamburgerMenu = () => {
 
   useEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    lockBodyScroll();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
     document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = previous;
+      unlockBodyScroll();
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);

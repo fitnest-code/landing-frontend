@@ -13,6 +13,7 @@ const Navication = () => {
   const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hallsPath = addLocaleToPathname("/fitness-centers", locale);
   const fitStorePath = addLocaleToPathname("/fit-market", locale);
   const plansPath = addLocaleToPathname("/offers", locale);
@@ -29,6 +30,27 @@ const Navication = () => {
 
   const isHallsMenu =
     isRouteActive(hallsPath) || isRouteActive(fitStorePath);
+
+  const clearCloseTimer = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const openMenu = () => {
+    clearCloseTimer();
+    setOpen(true);
+  };
+
+  const scheduleClose = () => {
+    clearCloseTimer();
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
+  };
+
+  useEffect(() => {
+    return () => clearCloseTimer();
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -57,10 +79,16 @@ const Navication = () => {
 
   return (
     <nav className="hidden min-w-0 w-full items-center justify-center gap-5 xl:flex 2xl:gap-8">
-      <div className="relative" ref={menuRef}>
+      <div
+        className="relative"
+        ref={menuRef}
+        onMouseEnter={openMenu}
+        onMouseLeave={scheduleClose}
+      >
         <button
           type="button"
           onClick={() => setOpen((prev) => !prev)}
+          onFocus={openMenu}
           aria-expanded={open}
           aria-haspopup="menu"
           className={cn(
@@ -79,28 +107,30 @@ const Navication = () => {
         {open ? (
           <div
             role="menu"
-            className="absolute top-full left-1/2 z-20 mt-3 min-w-[200px] -translate-x-1/2 rounded-xl border border-border-muted bg-surface p-2 shadow-lg"
+            className="absolute top-full left-1/2 z-20 w-max min-w-[200px] -translate-x-1/2 pt-3"
           >
-            <Link
-              href={hallsPath}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-page hover:text-turquoise",
-                isRouteActive(hallsPath) ? "text-turquoise" : "text-ink",
-              )}
-            >
-              {t.nav.halls}
-            </Link>
-            <Link
-              href={fitStorePath}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-page hover:text-turquoise",
-                isRouteActive(fitStorePath) ? "text-turquoise" : "text-ink",
-              )}
-            >
-              {t.footer.fitStore}
-            </Link>
+            <div className="rounded-xl border border-border-muted bg-surface p-2 shadow-lg">
+              <Link
+                href={hallsPath}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-page hover:text-turquoise",
+                  isRouteActive(hallsPath) ? "text-turquoise" : "text-ink",
+                )}
+              >
+                {t.nav.halls}
+              </Link>
+              <Link
+                href={fitStorePath}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-page hover:text-turquoise",
+                  isRouteActive(fitStorePath) ? "text-turquoise" : "text-ink",
+                )}
+              >
+                {t.footer.fitStore}
+              </Link>
+            </div>
           </div>
         ) : null}
       </div>

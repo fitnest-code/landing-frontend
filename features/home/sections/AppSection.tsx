@@ -1,6 +1,6 @@
 import { getMessages } from "@/lib/i18n/server";
 import Container from "@/components/common/Container";
-import Reveal, { Stagger } from "../components/Reveal";
+import { Stagger } from "../components/Reveal";
 import AppPhonesShowcase, {
   AppStoreRow,
 } from "../components/AppPhonesShowcase";
@@ -75,13 +75,9 @@ const AppSection = async () => {
           />
         </div>
 
-        <Reveal
-          variant="scale"
-          delay={0.15}
-          className="relative w-full max-w-[608px] shrink overflow-visible lg:max-w-[46%]"
-        >
+        <div className="w-full max-w-[608px] shrink lg:max-w-[46%]">
           <AppPhonesShowcase />
-        </Reveal>
+        </div>
       </Container>
     </section>
   );

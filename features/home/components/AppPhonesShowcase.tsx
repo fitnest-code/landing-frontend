@@ -7,47 +7,14 @@ type AppPhonesShowcaseProps = {
   className?: string;
 };
 
-const ThemePhones = ({
-  theme,
-  className,
-}: {
-  theme: "light" | "dark";
-  className?: string;
-}) => {
-  const base = `/images/home/fitnest-app/${theme}`;
-
-  return (
-    <div className={cn("absolute inset-0", className)}>
-      {/* Deep Blue — left, -12deg (composite SVG with screen inside) */}
-      <img
-        src={`${base}/iphone-deep-blue.svg`}
-        alt="FitNest app"
-        className="absolute left-[-1.6%] top-[8%] w-[55%] origin-top-left -rotate-12 select-none"
-        draggable={false}
-      />
-      {/* Cosmic Orange — right, +7deg */}
-      <img
-        src={`${base}/iphone-cosmic-orange.svg`}
-        alt=""
-        aria-hidden
-        className="absolute left-[52%] top-[-5%] w-[49%] origin-top-left rotate-[7deg] select-none"
-        draggable={false}
-      />
-    </div>
-  );
-};
-
 const AppPhonesShowcase = ({ className }: AppPhonesShowcaseProps) => {
   return (
-    <div
-      className={cn(
-        "relative mx-auto aspect-[608/538] w-full max-w-[608px] overflow-visible",
-        className,
-      )}
-    >
-      <ThemePhones theme="light" className="dark:hidden" />
-      <ThemePhones theme="dark" className="hidden dark:block" />
-    </div>
+    <img
+      src="/images/home/fitnest-app/Container.png"
+      alt="FitNest app"
+      className={cn("h-auto w-full", className)}
+      draggable={false}
+    />
   );
 };
 
