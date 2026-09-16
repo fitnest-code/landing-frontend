@@ -19,6 +19,7 @@ interface BmiGoalsCardProps {
   gender: Gender;
   bmiResult: number | null;
   initialGoals?: GoalItem[];
+  initialLocale?: string;
 }
 
 const fieldClass =
@@ -31,9 +32,13 @@ const BmiGoalsCard = ({
   gender,
   bmiResult,
   initialGoals,
+  initialLocale,
 }: BmiGoalsCardProps) => {
   const { t, locale } = useI18n();
-  const { data: apiGoals = [], isLoading } = useGoals(locale, initialGoals);
+  const { data: apiGoals = [], isLoading } = useGoals(locale, {
+    initialGoals,
+    initialLocale,
+  });
   const [goalId, setGoalId] = useState<string | null>(null);
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);

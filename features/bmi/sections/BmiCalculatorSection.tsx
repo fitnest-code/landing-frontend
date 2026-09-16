@@ -12,9 +12,10 @@ import { Reveal } from "@/components/animation";
 
 interface BmiCalculatorSectionProps {
   initialGoals?: GoalItem[];
+  initialLocale?: string;
 }
 
-const BmiCalculatorSection = ({ initialGoals }: BmiCalculatorSectionProps) => {
+const BmiCalculatorSection = ({ initialGoals, initialLocale }: BmiCalculatorSectionProps) => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
@@ -77,6 +78,7 @@ const BmiCalculatorSection = ({ initialGoals }: BmiCalculatorSectionProps) => {
           gender={gender}
           bmiResult={bmiResult}
           initialGoals={initialGoals}
+          initialLocale={initialLocale}
         />
       </Reveal>
     </div>

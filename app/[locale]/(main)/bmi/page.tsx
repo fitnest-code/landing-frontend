@@ -27,5 +27,5 @@ export default async function LocaleBmiPage({ params }: PageProps) {
   const { locale: localeParam } = await params;
   const locale = parseRouteLocale(localeParam);
   const initialGoals = await getGoalsServer(locale);
-  return <BmiPage initialGoals={initialGoals} />;
+  return <BmiPage initialGoals={initialGoals} initialLocale={locale} />;
 }

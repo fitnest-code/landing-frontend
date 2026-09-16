@@ -7,12 +7,21 @@ export const goalsKeys = {
   list: (locale: string) => ["goals", locale] as const,
 };
 
-export function useGoals(locale: string, initialData?: GoalItem[]) {
+type UseGoalsOptions = {
+  initialGoals?: GoalItem[];
+  initialLocale?: string;
+};
+
+export function useGoals(locale: string, options: UseGoalsOptions = {}) {
+  const seeded =
+    Boolean(options.initialGoals?.length) && options.initialLocale === locale;
+
   return useQuery({
     queryKey: goalsKeys.list(locale),
     queryFn: () => getGoals(locale),
-    initialData: initialData && initialData.length > 0 ? initialData : undefined,
-    staleTime: 5 * 60 * 1000,
+    initialData: seeded ? options.initialGoals : undefined,
+    staleTime: 30 * 1000,
+    refetchOnMount: "always",
     retry: 1,
   });
 }

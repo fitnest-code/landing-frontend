@@ -10,7 +10,6 @@ export function isAllowedProxyPath(segments: string[]): boolean {
     return true;
   }
   if (joined === "bmi/calculate" || joined.startsWith("bmi/calculate/")) return true;
-  if (joined === "goals" || joined.startsWith("goals/")) return true;
   return false;
 }
 
@@ -23,9 +22,6 @@ export function proxyRateLimitKey(method: string, joinedPath: string): { key: st
     return { key: "bmi", limit: 20 };
   }
   if (method === "GET" && path.startsWith("public/landing/")) {
-    return { key: "landing-read", limit: 120 };
-  }
-  if (method === "GET" && (path === "goals" || path.startsWith("goals/"))) {
     return { key: "landing-read", limit: 120 };
   }
   return { key: "other", limit: 60 };

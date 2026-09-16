@@ -36,9 +36,11 @@ export function resolveGoalImageUrl(imageUrl: string | null | undefined): string
     }
   }
 
-  const match = pathname.match(/\/(?:api\/v1\/)?goals\/images\/([^/?]+)/);
+  const match = pathname.match(
+    /\/(?:api\/v1\/)?(?:public\/landing\/)?goals\/images\/([^/?]+)/,
+  );
   if (match?.[1]) {
-    return `/api/proxy/goals/images/${match[1]}`;
+    return `/api/proxy/public/landing/goals/images/${match[1]}`;
   }
   return null;
 }
