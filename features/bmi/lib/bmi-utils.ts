@@ -9,6 +9,12 @@ export const normalizeDecimalInput = (value: string) =>
 export const normalizeAgeInput = (value: string) =>
   value.replace(/\D/g, "").slice(0, 3);
 
+export const normalizePhoneInput = (value: string) =>
+  value.replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "").slice(0, 16);
+
+export const isValidPhone = (value: string) =>
+  value.replace(/\D/g, "").length >= 9;
+
 export const birthDateFromAge = (age: number) => {
   const date = new Date();
   date.setFullYear(date.getFullYear() - age);

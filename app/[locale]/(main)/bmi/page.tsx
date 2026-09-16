@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BmiPage from "@/features/bmi";
+import { getGoalsServer } from "@/features/bmi/api/goals";
 import { parseRouteLocale } from "@/lib/i18n/route-locale";
 import { createPageMetadata } from "@/lib/seo";
 import { getSeoContent } from "@/lib/seo-content";
@@ -22,6 +23,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-export default function LocaleBmiPage() {
-  return <BmiPage />;
+export default async function LocaleBmiPage({ params }: PageProps) {
+  const { locale: localeParam } = await params;
+  const locale = parseRouteLocale(localeParam);
+  const initialGoals = await getGoalsServer(locale);
+  return <BmiPage initialGoals={initialGoals} />;
 }

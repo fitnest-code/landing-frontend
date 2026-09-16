@@ -1,15 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import BmiFactsSidebar from "../components/BmiFactsSidebar";
 import BmiForm from "../components/BmiForm";
+import BmiGoalsCard from "../components/BmiGoalsCard";
 import BmiResultCard from "../components/BmiResultCard";
+import type { GoalItem } from "../api/types";
 import type { Gender } from "../lib/bmi-utils";
 import { birthDateFromAge } from "../lib/bmi-utils";
 import { useCalculateBmi } from "../hooks/use-calculate-bmi";
 import { Reveal } from "@/components/animation";
 
-const BmiCalculatorSection = () => {
+interface BmiCalculatorSectionProps {
+  initialGoals?: GoalItem[];
+}
+
+const BmiCalculatorSection = ({ initialGoals }: BmiCalculatorSectionProps) => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
@@ -46,8 +51,8 @@ const BmiCalculatorSection = () => {
 
   return (
     <div className="flex flex-col items-stretch gap-6 xl:flex-row">
-      <Reveal variant="blur" duration={0.7} className="w-full xl:w-auto xl:flex-1">
-        <div className="flex flex-col items-center justify-between gap-8 rounded-xl border border-border-muted bg-surface p-6 md:flex-row xl:h-[539px] xl:w-[737px]">
+      <Reveal variant="blur" duration={0.7} className="h-auto w-full xl:w-[512px] xl:shrink-0 xl:self-stretch">
+        <div className="flex h-full flex-col gap-9 rounded-xl border border-border-muted bg-surface p-6">
           <BmiForm
             weight={weight}
             height={height}
@@ -64,8 +69,15 @@ const BmiCalculatorSection = () => {
         </div>
       </Reveal>
 
-      <Reveal variant="blur" duration={0.7} delay={0.15} className="w-full xl:w-auto">
-        <BmiFactsSidebar />
+      <Reveal variant="blur" duration={0.7} delay={0.15} className="w-full min-w-0 flex-1">
+        <BmiGoalsCard
+          weight={weight}
+          height={height}
+          age={age}
+          gender={gender}
+          bmiResult={bmiResult}
+          initialGoals={initialGoals}
+        />
       </Reveal>
     </div>
   );

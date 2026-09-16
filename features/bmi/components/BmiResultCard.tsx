@@ -31,7 +31,7 @@ const BmiResultCard = ({ bmiResult }: BmiResultCardProps) => {
   }, [bmiResult]);
 
   return (
-    <div className="flex h-[489px] w-full flex-col items-center justify-center rounded-2xl border border-[#CECFD2] dark:border-[#4A4E56] md:w-[284px]">
+    <div className="flex min-h-[280px] w-full flex-1 flex-col items-center justify-center rounded-2xl border border-[#CECFD2] md:min-h-[403px] dark:border-[#4A4E56]">
       {hasResult && bmiMeta ? (
         <div className="flex flex-col items-center gap-8">
           <div className="flex w-[182px] flex-col items-center gap-2">

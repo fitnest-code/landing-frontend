@@ -1,14 +1,19 @@
 import Container from "@/components/common/Container";
+import type { GoalItem } from "./api/types";
 import BmiCalculatorSection from "./sections/BmiCalculatorSection";
 import BmiHeroSection from "./sections/BmiHeroSection";
 import BmiTipsSection from "./sections/BmiTipsSection";
 
-const BmiPage = () => {
+interface BmiPageProps {
+  initialGoals?: GoalItem[];
+}
+
+const BmiPage = ({ initialGoals }: BmiPageProps) => {
   return (
     <div className="overflow-x-clip bg-page text-ink">
       <BmiHeroSection />
       <Container className="flex flex-col gap-6 pb-16 pt-8 md:pb-24">
-        <BmiCalculatorSection />
+        <BmiCalculatorSection initialGoals={initialGoals} />
         <BmiTipsSection />
       </Container>
     </div>

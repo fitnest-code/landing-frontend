@@ -404,12 +404,24 @@ export type Messages = {
     obesity: string;
     noResult: string;
     facts: string;
+    goalsTitle: string;
+    goalsDescription: string;
+    goals: { id: string; title: string; description: string }[];
+    phone: string;
+    phonePlaceholder: string;
+    consent: string;
+    contactCta: string;
+    contactSuccess: string;
+    contactError: string;
+    contactSending: string;
+    privacy: string;
+    phoneError: string;
+    formError: string;
     metaMessages: Record<
       "underweight" | "normal" | "overweight" | "obesity",
       string
     >;
-    infoItems: { title: string; description: string }[];
-    tips: { title: string; description: string }[];
+    infoItems: { id: string; title: string; description: string }[];
   };
   payment: {
     success: string;
@@ -1124,7 +1136,49 @@ const az: Messages = {
     obesity: "Piylənmə",
     noResult:
       'Nəticəni görmək üçün parametrləri daxil edib "Hesabla" düyməsini sıxın.',
-    facts: "Faktlar & tövsiyyələr",
+    facts: "Faktlar və tövsiyələr",
+    goalsTitle: "Hədəfinə uyğun ilk addımı at",
+    goalsDescription:
+      "Hədəfini seç, nömrəni qeyd et. Fərdi məşq və qidalanma proqramları, eləcə də FitNest imkanları barədə səninlə əlaqə saxlayaq.",
+    goals: [
+      {
+        id: "muscle",
+        title: "Əzələ qazanmaq",
+        description: "Güc və əzələ kütləsini artırmaq.",
+      },
+      {
+        id: "endurance",
+        title: "Dözümlülüyü artırmaq",
+        description: "Enerji və davamlılığı yüksəltmək",
+      },
+      {
+        id: "lifestyle",
+        title: "Sağlam həyat tərzi",
+        description:
+          "Ümumi sağlamlığınızı yaxşılaşdırmaq , enerji və davamlılığı yüksəltmək.",
+      },
+      {
+        id: "shape",
+        title: "Formada qalmaq",
+        description: "Mövcud fiziki formanı qorumaq.",
+      },
+      {
+        id: "weight-loss",
+        title: "Çəki itirmək",
+        description: "Daha fit bədən quruluşuna çatmaq.",
+      },
+    ],
+    phone: "Mobil nömrə",
+    phonePlaceholder: "+994 xxxxxxxxx",
+    consent:
+      "Məlumatlarımın müraciətim üzrə istifadə edilməsinə və FitNest komandasının mənimlə əlaqə saxlamasına razıyam.",
+    contactCta: "Mənimlə əlaqə saxlayın",
+    contactSuccess: "Müraciətiniz qəbul olundu. Tezliklə sizinlə əlaqə saxlayacağıq.",
+    contactError: "Müraciət göndərilmədi. Bir az sonra yenidən cəhd edin.",
+    contactSending: "Göndərilir...",
+    privacy: "Məxfilik siyasəti",
+    phoneError: "Düzgün mobil nömrə daxil edin",
+    formError: "Hədəf seçin, nömrəni daxil edin və razılıq verin.",
     metaMessages: {
       underweight: "Tövsiyə: qidalanma və məşq planını balanslaşdırın.",
       normal: "Təbriklər! Çəkiniz idealdır. Bu formanı qoruyub saxlayın.",
@@ -1133,29 +1187,26 @@ const az: Messages = {
     },
     infoItems: [
       {
-        title: "BKİ Nədir?",
-        description:
-          "(BKİ) boyunuza görə çəkinizin uyğun olub-olmadığını qiymətləndirən sadə bir ölçüdür.",
-      },
-      {
+        id: "risks",
         title: "Risklər",
         description:
           "Yüksək BKİ ürək xəstəlikləri, diabet və digər sağlamlıq problemləri riskini artıra bilər.",
       },
       {
-        title: "Sağlam Aralıq",
+        id: "what",
+        title: "BKİ nədir?",
+        description:
+          "BKİ boyunuza görə çəkinizin uyğun olub-olmadığını qiymətləndirən sadə bir ölçüdür.",
+      },
+      {
+        id: "range",
+        title: "Sağlam aralıq",
         description:
           "18.5 - 24.9 arası BKİ normal hesab olunur. Bu aralıqda qalmaq uzunömürlülüyü artırır.",
       },
-    ],
-    tips: [
       {
-        title: "Fiziki aktivlik",
-        description:
-          "Həftədə ən azı 150 dəqiqə orta intensivlikli fiziki fəaliyyət ürək sağlamlığını qorumağa kömək edir.",
-      },
-      {
-        title: "Balanslı Qidalanma",
+        id: "nutrition",
+        title: "Balanslı qidalanma",
         description:
           "Gündəlik rasionunuzda zülal, karbohidrat və yağların balansını qorumaq çəkinizi nəzarətdə saxlamaq üçün vacibdir.",
       },
@@ -1888,7 +1939,48 @@ const en: Messages = {
     overweight: "Overweight",
     obesity: "Obesity",
     noResult: 'Enter your parameters and press "Calculate" to see the result.',
-    facts: "Facts & tips",
+    facts: "Facts and recommendations",
+    goalsTitle: "Take the first step toward your goal",
+    goalsDescription:
+      "Choose your goal and leave your number. We will contact you about personal training, nutrition programs, and FitNest options.",
+    goals: [
+      {
+        id: "muscle",
+        title: "Build muscle",
+        description: "Increase strength and muscle mass.",
+      },
+      {
+        id: "endurance",
+        title: "Improve endurance",
+        description: "Boost energy and stamina",
+      },
+      {
+        id: "lifestyle",
+        title: "Healthy lifestyle",
+        description: "Improve overall health, energy, and stamina.",
+      },
+      {
+        id: "shape",
+        title: "Stay in shape",
+        description: "Maintain your current physical form.",
+      },
+      {
+        id: "weight-loss",
+        title: "Lose weight",
+        description: "Reach a fitter body composition.",
+      },
+    ],
+    phone: "Mobile number",
+    phonePlaceholder: "+994 xxxxxxxxx",
+    consent:
+      "I agree that my data may be used for this request and that the FitNest team may contact me.",
+    contactCta: "Contact me",
+    contactSuccess: "Your request was received. We will contact you soon.",
+    contactError: "The request could not be sent. Please try again later.",
+    contactSending: "Sending...",
+    privacy: "Privacy policy",
+    phoneError: "Enter a valid mobile number",
+    formError: "Choose a goal, enter your number, and accept the consent.",
     metaMessages: {
       underweight: "Tip: balance your nutrition and workout routine.",
       normal: "Great job! Your weight is ideal. Keep this form.",
@@ -1898,28 +1990,25 @@ const en: Messages = {
     },
     infoItems: [
       {
-        title: "What is BMI?",
-        description:
-          "BMI is a simple measure of whether your weight is appropriate for your height.",
-      },
-      {
+        id: "risks",
         title: "Risks",
         description:
           "A high BMI can increase the risk of heart disease, diabetes, and other health problems.",
       },
       {
+        id: "what",
+        title: "What is BMI?",
+        description:
+          "BMI is a simple measure of whether your weight is appropriate for your height.",
+      },
+      {
+        id: "range",
         title: "Healthy range",
         description:
           "A BMI between 18.5 and 24.9 is considered normal. Staying in this range supports longevity.",
       },
-    ],
-    tips: [
       {
-        title: "Physical activity",
-        description:
-          "At least 150 minutes of moderate-intensity activity per week helps protect heart health.",
-      },
-      {
+        id: "nutrition",
         title: "Balanced nutrition",
         description:
           "Keeping protein, carbs, and fats in balance in your daily diet is key to managing your weight.",
@@ -2639,6 +2728,47 @@ const ru: Messages = {
     noResult:
       'Введите параметры и нажмите "Рассчитать", чтобы увидеть результат.',
     facts: "Факты и рекомендации",
+    goalsTitle: "Сделайте первый шаг к своей цели",
+    goalsDescription:
+      "Выберите цель и оставьте номер. Мы свяжемся с вами по персональным тренировкам, питанию и возможностям FitNest.",
+    goals: [
+      {
+        id: "muscle",
+        title: "Набрать мышцы",
+        description: "Увеличить силу и мышечную массу.",
+      },
+      {
+        id: "endurance",
+        title: "Повысить выносливость",
+        description: "Поднять энергию и выносливость",
+      },
+      {
+        id: "lifestyle",
+        title: "Здоровый образ жизни",
+        description: "Улучшить общее здоровье, энергию и выносливость.",
+      },
+      {
+        id: "shape",
+        title: "Оставаться в форме",
+        description: "Сохранить текущую физическую форму.",
+      },
+      {
+        id: "weight-loss",
+        title: "Снизить вес",
+        description: "Достичь более подтянутого телосложения.",
+      },
+    ],
+    phone: "Мобильный номер",
+    phonePlaceholder: "+994 xxxxxxxxx",
+    consent:
+      "Я согласен(на), что мои данные будут использованы по этой заявке и команда FitNest может со мной связаться.",
+    contactCta: "Свяжитесь со мной",
+    contactSuccess: "Заявка получена. Мы скоро свяжемся с вами.",
+    contactError: "Не удалось отправить заявку. Попробуйте позже.",
+    contactSending: "Отправка...",
+    privacy: "Политика конфиденциальности",
+    phoneError: "Введите корректный мобильный номер",
+    formError: "Выберите цель, укажите номер и подтвердите согласие.",
     metaMessages: {
       underweight: "Совет: сбалансируйте питание и тренировки.",
       normal: "Отлично! Ваш вес идеален. Сохраняйте эту форму.",
@@ -2647,28 +2777,25 @@ const ru: Messages = {
     },
     infoItems: [
       {
-        title: "Что такое ИМТ?",
-        description:
-          "ИМТ — простой показатель того, соответствует ли вес вашему росту.",
-      },
-      {
+        id: "risks",
         title: "Риски",
         description:
           "Высокий ИМТ может повысить риск болезней сердца, диабета и других проблем со здоровьем.",
       },
       {
+        id: "what",
+        title: "Что такое ИМТ?",
+        description:
+          "ИМТ — простой показатель того, соответствует ли вес вашему росту.",
+      },
+      {
+        id: "range",
         title: "Здоровый диапазон",
         description:
           "ИМТ 18.5–24.9 считается нормой. Этот диапазон связан с большей продолжительностью жизни.",
       },
-    ],
-    tips: [
       {
-        title: "Физическая активность",
-        description:
-          "Не менее 150 минут умеренной активности в неделю помогает защитить сердце.",
-      },
-      {
+        id: "nutrition",
         title: "Сбалансированное питание",
         description:
           "Баланс белков, углеводов и жиров в ежедневном рационе важен для контроля веса.",

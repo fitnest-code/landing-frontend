@@ -22,7 +22,7 @@ interface BmiFormProps {
 }
 
 const fieldClass =
-  "flex items-center gap-3 self-stretch rounded-xl border border-border-muted bg-surface p-4";
+  "flex items-center gap-3 self-stretch overflow-hidden rounded-xl border border-border-muted bg-surface p-4";
 
 const labelClass = "text-sm font-medium leading-5 text-desc-2";
 
@@ -43,12 +43,12 @@ const BmiForm = ({
 }: BmiFormProps) => {
   const { t } = useI18n();
   const selectedGender =
-    "flex h-10 items-center justify-center rounded-lg bg-brand px-3 text-base font-medium leading-6 text-white dark:bg-cyan";
+    "flex h-10 w-[90px] cursor-pointer items-center justify-center rounded-lg bg-brand px-3 text-base font-medium leading-6 text-white dark:bg-cyan";
   const idleGender =
-    "flex h-10 w-20 items-center justify-center text-base font-medium leading-6 text-ink";
+    "flex h-10 w-20 cursor-pointer items-center justify-center text-base font-medium leading-6 text-ink";
 
   return (
-    <div className="flex w-full flex-col gap-8 md:w-[370px]">
+    <div className="flex w-full flex-col gap-8">
       <h2 className="text-[30px] font-medium leading-[46px] text-ink">
         {t.bmi.params}
       </h2>
@@ -86,8 +86,8 @@ const BmiForm = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex w-[180px] flex-col gap-2">
+        <div className="grid grid-cols-2 items-end gap-3">
+          <div className="flex min-w-0 flex-col gap-2">
             <label className={labelClass}>{t.bmi.age}</label>
             <div className={fieldClass}>
               <BmiThemeIcon name="age" className="size-5 shrink-0" />
@@ -103,22 +103,20 @@ const BmiForm = ({
             </div>
           </div>
 
-          <div className="flex w-[180px] flex-col gap-2">
+          <div className="flex min-w-0 flex-col gap-2">
             <label className={labelClass}>{t.bmi.gender}</label>
-            <div className="flex h-14 items-center justify-center overflow-hidden rounded-xl border border-border-muted bg-surface px-1">
+            <div className="flex h-14 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-border-muted bg-surface px-1">
               <button
                 type="button"
                 onClick={() => onGenderChange("male")}
-                className={gender === "male" ? `${selectedGender} w-[90px]` : idleGender}
+                className={gender === "male" ? selectedGender : idleGender}
               >
                 {t.bmi.male}
               </button>
               <button
                 type="button"
                 onClick={() => onGenderChange("female")}
-                className={
-                  gender === "female" ? `${selectedGender} w-[90px]` : idleGender
-                }
+                className={gender === "female" ? selectedGender : idleGender}
               >
                 {t.bmi.female}
               </button>
@@ -131,10 +129,10 @@ const BmiForm = ({
         type="button"
         onClick={onCalculate}
         disabled={!isFormValid}
-        className={`h-11 w-full rounded-lg text-base font-semibold leading-6 text-white transition ${
+        className={`h-11 w-full rounded-lg text-base font-semibold leading-6 text-white transition-all duration-300 ${
           isFormValid
-            ? "bg-brand dark:bg-cyan dark:text-brand-navy"
-            : "cursor-not-allowed bg-[#CECFD2] dark:bg-[#4A4E56]"
+            ? "cursor-pointer bg-button hover:scale-[1.02] hover:bg-[#FF6A42] hover:text-white hover:shadow-[0_8px_20px_rgba(20,35,75,0.25)] active:scale-[0.98] dark:text-[#011729] dark:hover:text-white dark:hover:shadow-[0_8px_20px_rgba(0,219,219,0.25)]"
+            : "cursor-not-allowed bg-[#CECFD2]"
         }`}
       >
         {t.bmi.calculate}

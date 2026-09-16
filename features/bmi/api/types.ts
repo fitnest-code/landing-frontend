@@ -9,3 +9,10 @@ export interface BmiCalculateResponse {
   bmi: number;
   category: string;
 }
+
+export interface GoalItem {
+  code: string;
+  title: string;
+  subtitle: string | null;
+  imageUrl: string | null;
+}
