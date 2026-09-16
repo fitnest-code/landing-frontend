@@ -118,7 +118,7 @@ const Navication = () => {
                   isRouteActive(hallsPath) ? "text-turquoise" : "text-ink",
                 )}
               >
-                {t.nav.halls}
+                {t.nav.hallsDropdown}
               </Link>
               <Link
                 href={fitStorePath}

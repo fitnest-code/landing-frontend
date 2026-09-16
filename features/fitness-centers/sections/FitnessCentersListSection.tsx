@@ -19,7 +19,6 @@ const emptyFilters: GymsFiltersValue = {
   city: "",
   category: "",
   membership: "",
-  audience: "",
 };
 
 const toTier = (membership: LandingGym["membership"]): MembershipTier => {
@@ -69,21 +68,12 @@ const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => 
     () => uniqueSorted(gyms.map((gym) => gym.category)),
     [gyms],
   );
-  const audiences: string[] = [];
-
   const filtered = useMemo(() => {
     const query = filters.query.trim().toLocaleLowerCase("az");
     return gyms.filter((gym) => {
       if (filters.city && gym.city !== filters.city) return false;
       if (filters.category && gym.category !== filters.category) return false;
       if (filters.membership && gym.membership !== filters.membership) return false;
-      if (
-        filters.audience &&
-        filters.audience !== t.centers.allOption &&
-        !(gym.category ?? "").includes(filters.audience)
-      ) {
-        return false;
-      }
       if (!query) return true;
       const haystack = [gym.name, gym.location, gym.city, gym.category]
         .filter(Boolean)
@@ -91,7 +81,7 @@ const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => 
         .toLocaleLowerCase("az");
       return haystack.includes(query);
     });
-  }, [filters, gyms, t.centers.allOption]);
+  }, [filters, gyms]);
 
   const visible = filtered.slice(0, visibleCount);
 
@@ -101,7 +91,6 @@ const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => 
         value={filters}
         cities={cities}
         categories={categories}
-        audiences={audiences}
         onChange={(next) => {
           setFilters(next);
           setVisibleCount(PAGE_SIZE);

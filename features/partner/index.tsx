@@ -2,7 +2,6 @@ import Container from "@/components/common/Container";
 import type { Locale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
 import { Reveal, Stagger, TiltCard } from "@/components/animation";
-import PartnerCalculator from "./PartnerCalculator";
 import PartnerForm from "./PartnerForm";
 
 type PartnerPageProps = {
@@ -39,8 +38,8 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
                 {t.heroCta}
               </a>
             </Reveal>
-            <Reveal variant="right" duration={0.8} delay={0.15} className="w-full max-w-[540px]">
-              <PartnerCalculator />
+            <Reveal variant="right" duration={0.8} delay={0.15} className="w-full max-w-[684px]">
+              <PartnerForm />
             </Reveal>
           </div>
         </Container>
@@ -68,13 +67,6 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
         </Container>
       </section>
 
-      <section className="bg-surface py-16 md:py-20">
-        <Container className="flex justify-center">
-          <Reveal variant="scale" duration={0.8} className="w-full max-w-[670px]">
-            <PartnerForm />
-          </Reveal>
-        </Container>
-      </section>
     </div>
   );
 };

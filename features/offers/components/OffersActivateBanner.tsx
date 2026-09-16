@@ -17,21 +17,21 @@ const OffersActivateBanner = async () => {
               {messages.offers.ctaDescription}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="size-[55px] overflow-hidden rounded-sm border border-white/20 bg-white p-1">
+          <div className="flex items-center gap-4">
+            <div className="size-[96px] shrink-0 overflow-hidden rounded-md border border-white/20 bg-white p-2 sm:size-[112px] sm:p-2.5">
               <img
                 src="/icons/home/app-qr.svg"
                 alt=""
-                width={47}
-                height={47}
+                width={96}
+                height={96}
                 className="size-full object-contain"
               />
             </div>
-            <div className="flex flex-col gap-0.5">
-              <p className="text-sm font-bold leading-5 text-white">
+            <div className="flex flex-col gap-1">
+              <p className="text-base font-bold leading-6 text-white sm:text-lg sm:leading-7">
                 {messages.home.qrDownloadTitle}
               </p>
-              <p className="text-sm font-medium leading-5 text-desc">
+              <p className="text-sm font-medium leading-5 text-desc sm:text-base sm:leading-6">
                 {messages.home.qrDownloadSubtitle}
               </p>
             </div>

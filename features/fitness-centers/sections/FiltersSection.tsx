@@ -85,14 +85,12 @@ export type GymsFiltersValue = {
   city: string;
   category: string;
   membership: string;
-  audience: string;
 };
 
 type FiltersSectionProps = {
   value: GymsFiltersValue;
   cities: string[];
   categories: string[];
-  audiences: string[];
   onChange: (value: GymsFiltersValue) => void;
   onReset: () => void;
 };
@@ -101,12 +99,10 @@ const FiltersSection = ({
   value,
   cities,
   categories,
-  audiences,
   onChange,
   onReset,
 }: FiltersSectionProps) => {
   const { t } = useI18n();
-  const all = t.centers.allOption;
 
   return (
     <div className="flex flex-col gap-3 border-b border-border-muted pb-3 lg:flex-row lg:items-center lg:justify-between">
@@ -159,20 +155,6 @@ const FiltersSection = ({
             { value: "silver", label: "Silver" },
             { value: "gold", label: "Gold" },
             { value: "platinum", label: "Platinum" },
-          ]}
-        />
-        <FilterSelect
-          label={t.centers.forWhom}
-          value={value.audience}
-          onChange={(audience) => onChange({ ...value, audience })}
-          options={[
-            { value: "", label: t.centers.forWhom },
-            ...(audiences.length
-              ? audiences.map((audience) => ({
-                  value: audience,
-                  label: audience,
-                }))
-              : [{ value: all, label: all }]),
           ]}
         />
         <button

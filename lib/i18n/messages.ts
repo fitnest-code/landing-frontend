@@ -3,6 +3,7 @@ import type { Locale } from "./config";
 export type Messages = {
   nav: {
     halls: string;
+    hallsDropdown: string;
     plans: string;
     market: string;
     faq: string;
@@ -216,7 +217,6 @@ export type Messages = {
     cityDistrict: string;
     trainingTypes: string;
     membership: string;
-    forWhom: string;
     loadMore: string;
     allOption: string;
     reset: string;
@@ -425,6 +425,7 @@ export type Messages = {
 const az: Messages = {
   nav: {
     halls: "Fitness mərkəzləri",
+    hallsDropdown: "Zallar",
     plans: "Abunəlik",
     market: "Fit market",
     faq: "FAQ",
@@ -844,9 +845,8 @@ const az: Messages = {
       "Zallar, hovuzlar, yoqa, pilates studiyaları, boks klubları. Paket səviyyəsinə görə filtrlə, sənə yaxınını tap.",
     searchPlace: "Məkan axtar",
     cityDistrict: "Şəhər",
-    trainingTypes: "Məşq növləri",
+    trainingTypes: "Kateqoriya",
     membership: "Abunəlik",
-    forWhom: "Kimlər üçün",
     loadMore: "Daha çox",
     allOption: "Hamısı",
     reset: "Sıfırla",
@@ -1176,6 +1176,7 @@ const en: Messages = {
   ...az,
   nav: {
     halls: "Fitness centers",
+    hallsDropdown: "Gyms",
     plans: "Plans",
     market: "Fit Market",
     faq: "FAQ",
@@ -1607,9 +1608,8 @@ const en: Messages = {
       "Gyms, pools, yoga and pilates studios, boxing clubs. Filter by package and find one near you.",
     searchPlace: "Search location",
     cityDistrict: "City",
-    trainingTypes: "Training types",
+    trainingTypes: "Category",
     membership: "Membership",
-    forWhom: "For whom",
     loadMore: "Load more",
     allOption: "All",
     reset: "Reset",
@@ -1941,6 +1941,7 @@ const ru: Messages = {
   ...en,
   nav: {
     halls: "Фитнес-центры",
+    hallsDropdown: "Залы",
     plans: "Подписка",
     market: "Fit market",
     faq: "FAQ",
@@ -2357,9 +2358,8 @@ const ru: Messages = {
       "Залы, бассейны, студии йоги и пилатеса, бокс-клубы. Фильтруйте по пакету и найдите ближайший.",
     searchPlace: "Поиск места",
     cityDistrict: "Город",
-    trainingTypes: "Виды тренировок",
+    trainingTypes: "Категория",
     membership: "Подписка",
-    forWhom: "Для кого",
     loadMore: "Ещё",
     allOption: "Все",
     reset: "Сброс",
