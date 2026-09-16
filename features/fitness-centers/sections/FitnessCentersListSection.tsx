@@ -8,7 +8,7 @@ import type { LandingGym } from "@/lib/api/landing";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
 import FitnessCenterCard from "../components/FitnessCenterCard";
 import FiltersSection, { type GymsFiltersValue } from "./FiltersSection";
-import { Stagger, TiltCard } from "@/components/animation";
+import { Stagger } from "@/components/animation";
 
 const PAGE_SIZE = 12;
 
@@ -119,17 +119,16 @@ const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => 
         delay={0.06}
       >
         {visible.map((gym) => (
-          <TiltCard key={gym.gymId} intensity={7}>
-            <FitnessCenterCard
-              name={gym.name}
-              location={gym.location || gym.city || "—"}
-              phone={gym.phone || ""}
-              image={gym.coverImageUrl || ""}
-              category={gym.category || ""}
-              membership={toTier(gym.membership)}
-              href={addLocaleToPathname(`/fitness-centers/${gym.gymId}`, locale)}
-            />
-          </TiltCard>
+          <FitnessCenterCard
+            key={gym.gymId}
+            name={gym.name}
+            location={gym.location || gym.city || "—"}
+            phone={gym.phone || ""}
+            image={gym.coverImageUrl || ""}
+            category={gym.category || ""}
+            membership={toTier(gym.membership)}
+            href={addLocaleToPathname(`/fitness-centers/${gym.gymId}`, locale)}
+          />
         ))}
       </Stagger>
 
