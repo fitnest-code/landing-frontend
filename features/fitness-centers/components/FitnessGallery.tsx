@@ -51,7 +51,7 @@ const FitnessGallery = ({
                   fill
                   className="object-cover"
                   priority={index === 0}
-                  sizes="(max-width: 768px) 100vw, 1232px"
+                  sizes="(max-width: 1024px) 100vw, 596px"
                 />
               </div>
             </SwiperSlide>
@@ -63,40 +63,44 @@ const FitnessGallery = ({
               type="button"
               onClick={() => swiperInstance?.slidePrev()}
               aria-label={previousLabel}
-              className="absolute left-4 top-1/2 z-10 flex size-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white"
+              className="absolute left-4 top-1/2 z-10 flex h-[58px] w-7 -translate-y-1/2 items-center justify-center rounded-[43px] bg-white"
             >
               <img
                 src="/icons/gym-details/chevron-left.svg"
                 alt=""
                 width={24}
                 height={24}
+                className="size-6"
               />
             </button>
             <button
               type="button"
               onClick={() => swiperInstance?.slideNext()}
               aria-label={nextLabel}
-              className="absolute right-4 top-1/2 z-10 flex size-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white"
+              className="absolute right-4 top-1/2 z-10 flex h-[58px] w-7 -translate-y-1/2 items-center justify-center rounded-[43px] bg-white"
             >
               <img
                 src="/icons/gym-details/chevron-right.svg"
                 alt=""
                 width={24}
                 height={24}
+                className="size-6"
               />
             </button>
           </>
         ) : null}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+      <div className="flex gap-6 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {slides.map((image, index) => (
           <button
             key={`thumb-${image}-${index}`}
             type="button"
             onClick={() => swiperInstance?.slideTo(index)}
-            className={`relative h-[110px] overflow-hidden rounded-xl md:h-[185px] ${
-              activeIndex === index ? "ring-2 ring-turquoise" : "opacity-80 hover:opacity-100"
+            className={`relative h-[110px] w-[160px] shrink-0 overflow-hidden rounded-xl md:h-[185px] md:w-[302px] ${
+              activeIndex === index
+                ? "ring-2 ring-turquoise"
+                : "opacity-80 hover:opacity-100"
             }`}
           >
             <RemoteImage
@@ -104,7 +108,7 @@ const FitnessGallery = ({
               alt={`${name} thumbnail ${index + 1}`}
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 50vw, 302px"
+              sizes="302px"
             />
           </button>
         ))}

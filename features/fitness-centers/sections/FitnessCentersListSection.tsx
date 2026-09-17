@@ -39,9 +39,15 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
 
 type FitnessCentersListSectionProps = {
   gyms: LandingGym[];
+  cities?: string[];
+  categories?: string[];
 };
 
-const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => {
+const FitnessCentersListSection = ({
+  gyms,
+  cities: citiesFromApi,
+  categories: categoriesFromApi,
+}: FitnessCentersListSectionProps) => {
   const { t, locale } = useI18n();
   const searchParams = useSearchParams();
   const membershipParam = searchParams.get("membership")?.toLowerCase() ?? "";
@@ -63,16 +69,33 @@ const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => 
     setVisibleCount(PAGE_SIZE);
   }, [initialMembership]);
 
-  const cities = useMemo(() => uniqueSorted(gyms.map((gym) => gym.city)), [gyms]);
+  const cities = useMemo(
+    () =>
+      citiesFromApi && citiesFromApi.length > 0
+        ? [...citiesFromApi].sort((a, b) => a.localeCompare(b, "az"))
+        : uniqueSorted(gyms.map((gym) => gym.city)),
+    [citiesFromApi, gyms],
+  );
   const categories = useMemo(
-    () => uniqueSorted(gyms.map((gym) => gym.category)),
-    [gyms],
+    () =>
+      categoriesFromApi && categoriesFromApi.length > 0
+        ? [...categoriesFromApi].sort((a, b) => a.localeCompare(b, "az"))
+        : uniqueSorted(gyms.flatMap((gym) => gym.categories)),
+    [categoriesFromApi, gyms],
   );
   const filtered = useMemo(() => {
     const query = filters.query.trim().toLocaleLowerCase("az");
     return gyms.filter((gym) => {
       if (filters.city && gym.city !== filters.city) return false;
-      if (filters.category && gym.category !== filters.category) return false;
+      if (filters.category) {
+        const names =
+          gym.categories.length > 0
+            ? gym.categories
+            : gym.category
+              ? [gym.category]
+              : [];
+        if (!names.includes(filters.category)) return false;
+      }
       if (filters.membership && gym.membership !== filters.membership) return false;
       if (!query) return true;
       const haystack = [gym.name, gym.location, gym.city, gym.category]

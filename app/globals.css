@@ -20,6 +20,7 @@ html {
 @theme {
   --color-brand: #14234b;
   --color-brand-navy: #011729;
+  --color-brand-navy-200: #10334d;
   --color-brand-navy-800: #031e36;
   --color-turquoise: var(--fn-turquoise);
   --color-cyan: #00dbdb;

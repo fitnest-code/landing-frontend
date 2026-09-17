@@ -17,6 +17,7 @@ export type LandingGym = {
   city: string | null;
   phone: string | null;
   category: string | null;
+  categories: string[];
   membership: MembershipTier;
 };
 
@@ -28,6 +29,13 @@ export type LandingGymDetail = LandingGym & {
   accessMemberships: MembershipTier[];
   description: string | null;
   amenities: string[];
+  categories: string[];
+};
+
+export type LandingGymFilters = {
+  cities: string[];
+  categories: string[];
+  memberships: MembershipTier[];
 };
 
 export type LandingStore = {
@@ -151,9 +159,13 @@ const emptyGymsPage = (
 });
 
 function mapGymCard(gym: LandingGym): LandingGym {
+  const categories = gym.categories?.filter(Boolean) ?? [];
   return {
     ...gym,
     coverImageUrl: gymImageSrc(gym.coverImageUrl),
+    categories,
+    category:
+      categories.length > 0 ? categories.join(" & ") : (gym.category ?? null),
   };
 }
 
@@ -175,11 +187,27 @@ export async function getLandingGymsPageServer(
   locale: string,
   page = 1,
   pageSize = 12,
+  filters?: {
+    q?: string;
+    city?: string;
+    category?: string;
+    membership?: string;
+  },
 ): Promise<LandingPage<LandingGym>> {
   try {
     const { data } = await serverApiClient.get<LandingPage<LandingGym>>(
       `${LANDING}/gyms`,
-      { ...withLocale(locale), params: { page, page_size: pageSize } },
+      {
+        ...withLocale(locale),
+        params: {
+          page,
+          page_size: pageSize,
+          ...(filters?.q ? { q: filters.q } : {}),
+          ...(filters?.city ? { city: filters.city } : {}),
+          ...(filters?.category ? { category: filters.category } : {}),
+          ...(filters?.membership ? { membership: filters.membership } : {}),
+        },
+      },
     );
     return {
       items: (data.items ?? []).map(mapGymCard),
@@ -198,6 +226,30 @@ export async function getLandingGymsServer(
   pageSize = 12,
 ): Promise<LandingGym[]> {
   return (await getLandingGymsPageServer(locale, page, pageSize)).items;
+}
+
+export async function getLandingGymFiltersServer(
+  locale: string,
+): Promise<LandingGymFilters> {
+  try {
+    const { data } = await serverApiClient.get<LandingGymFilters>(
+      `${LANDING}/gyms/filters`,
+      withLocale(locale),
+    );
+    return {
+      cities: data.cities ?? [],
+      categories: data.categories ?? [],
+      memberships: (data.memberships ?? []).filter(
+        (value): value is MembershipTier =>
+          value === "bronze" ||
+          value === "silver" ||
+          value === "gold" ||
+          value === "platinum",
+      ),
+    };
+  } catch {
+    return { cities: [], categories: [], memberships: [] };
+  }
 }
 
 export async function getLandingGymServer(
@@ -221,6 +273,12 @@ export async function getLandingGymServer(
       workHours: data.workHours ?? [],
       accessMemberships: data.accessMemberships ?? [],
       amenities: data.amenities ?? [],
+      categories: data.categories ?? [],
+      description: data.description ?? null,
+      category:
+        data.categories && data.categories.length > 0
+          ? data.categories.join(" & ")
+          : data.category ?? null,
       latitude: data.latitude ?? null,
       longitude: data.longitude ?? null,
     };
