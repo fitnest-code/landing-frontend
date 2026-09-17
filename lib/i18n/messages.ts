@@ -1169,7 +1169,7 @@ const az: Messages = {
       },
     ],
     phone: "Mobil nömrə",
-    phonePlaceholder: "+994 xxxxxxxxx",
+    phonePlaceholder: "xxxxxxxxx",
     consent:
       "Məlumatlarımın müraciətim üzrə istifadə edilməsinə və FitNest komandasının mənimlə əlaqə saxlamasına razıyam.",
     contactCta: "Mənimlə əlaqə saxlayın",
@@ -1971,7 +1971,7 @@ const en: Messages = {
       },
     ],
     phone: "Mobile number",
-    phonePlaceholder: "+994 xxxxxxxxx",
+    phonePlaceholder: "xxxxxxxxx",
     consent:
       "I agree that my data may be used for this request and that the FitNest team may contact me.",
     contactCta: "Contact me",
@@ -2759,7 +2759,7 @@ const ru: Messages = {
       },
     ],
     phone: "Мобильный номер",
-    phonePlaceholder: "+994 xxxxxxxxx",
+    phonePlaceholder: "xxxxxxxxx",
     consent:
       "Я согласен(на), что мои данные будут использованы по этой заявке и команда FitNest может со мной связаться.",
     contactCta: "Свяжитесь со мной",

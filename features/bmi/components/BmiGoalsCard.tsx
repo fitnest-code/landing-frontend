@@ -8,7 +8,12 @@ import { useI18n } from "@/lib/i18n/provider";
 import type { GoalItem } from "../api/types";
 import { useGoals } from "../hooks/use-goals";
 import type { Gender } from "../lib/bmi-utils";
-import { isValidPhone, normalizePhoneInput } from "../lib/bmi-utils";
+import {
+  PHONE_PREFIX,
+  formatFullPhone,
+  isValidPhone,
+  normalizePhoneInput,
+} from "../lib/bmi-utils";
 import { mapApiGoal, goalIconName, type DisplayGoal } from "../lib/goal-display";
 import BmiThemeIcon from "./BmiThemeIcon";
 
@@ -55,6 +60,7 @@ const BmiGoalsCard = ({
         description: goal.description,
         imageSrc: null,
         iconName: goalIconName(goal.id),
+        fromApi: false,
       })),
     [t.bmi.goals],
   );
@@ -76,7 +82,7 @@ const BmiGoalsCard = ({
     const message = [
       `Source: BMI page`,
       `Goal: ${selectedGoal?.title ?? goalId}`,
-      `Phone: ${phone.trim()}`,
+      `Phone: ${formatFullPhone(phone)}`,
       weight ? `Weight: ${weight} kg` : null,
       height ? `Height: ${height} cm` : null,
       age ? `Age: ${age}` : null,
@@ -89,7 +95,7 @@ const BmiGoalsCard = ({
     setSubmitting(true);
     setStatus("idle");
     const ok = await submitLandingContactMessage({
-      name: phone.trim().slice(0, 80) || "BMI",
+      name: formatFullPhone(phone).slice(0, 80) || "BMI",
       email: "bmi.lead@fitnest.az",
       topic: "other",
       message,
@@ -131,7 +137,7 @@ const BmiGoalsCard = ({
                   key={goal.id}
                   type="button"
                   onClick={() => setGoalId(goal.id)}
-                  className={`flex w-full cursor-pointer flex-col items-start gap-2 rounded-3xl border px-4 py-3 text-left transition-colors ${
+                  className={`relative flex w-full cursor-pointer flex-col items-start gap-2 rounded-3xl border px-4 py-3 pr-12 text-left transition-colors ${
                     selected
                       ? "border-turquoise bg-cyan/10"
                       : "border-border-muted hover:border-turquoise/50"
@@ -150,6 +156,8 @@ const BmiGoalsCard = ({
                           }))
                         }
                       />
+                    ) : goal.fromApi ? (
+                      <span className="size-6 shrink-0" aria-hidden />
                     ) : (
                       <BmiThemeIcon
                         name={goal.iconName}
@@ -165,6 +173,12 @@ const BmiGoalsCard = ({
                       {goal.description}
                     </span>
                   ) : null}
+                  {selected ? (
+                    <BmiThemeIcon
+                      name="tick-circle"
+                      className="absolute right-4 top-3 size-6"
+                    />
+                  ) : null}
                 </button>
               );
             })}
@@ -177,6 +191,9 @@ const BmiGoalsCard = ({
           </label>
           <div className={fieldClass}>
             <BmiThemeIcon name="phone" className="size-5 shrink-0" />
+            <span className="shrink-0 text-base leading-6 text-[#94979C] dark:text-[#A6A6A6]">
+              {PHONE_PREFIX}
+            </span>
             <input
               value={phone}
               onChange={(event) =>
@@ -205,7 +222,10 @@ const BmiGoalsCard = ({
               consent ? "bg-cyan/20" : ""
             }`}
           >
-            <BmiThemeIcon name="tick-square" className="size-4" />
+            <BmiThemeIcon
+              name={consent ? "tick-square" : "square"}
+              className="size-4"
+            />
           </span>
           <span className="text-xs leading-[18px] text-ink">{t.bmi.consent}</span>
         </button>
@@ -221,21 +241,22 @@ const BmiGoalsCard = ({
         <p className="text-sm leading-5 text-energy">{t.bmi.contactError}</p>
       ) : null}
 
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={submitting}
-        className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-button px-4 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#FF6A42] hover:text-white hover:shadow-[0_8px_20px_rgba(20,35,75,0.25)] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-[#011729] dark:hover:text-white dark:hover:shadow-[0_8px_20px_rgba(0,219,219,0.25)]"
-      >
-        {submitting ? t.bmi.contactSending : t.bmi.contactCta}
-      </button>
-
-      <Link
-        href={addLocaleToPathname("/privacy", locale)}
-        className="w-fit text-xs font-medium leading-[18px] text-turquoise underline"
-      >
-        {t.bmi.privacy}
-      </Link>
+      <div className="flex flex-col gap-3">
+        <Link
+          href={addLocaleToPathname("/privacy", locale)}
+          className="w-fit text-xs font-medium leading-[18px] text-turquoise underline"
+        >
+          {t.bmi.privacy}
+        </Link>
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={submitting}
+          className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-button px-4 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#FF6A42] hover:text-white hover:shadow-[0_8px_20px_rgba(20,35,75,0.25)] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-[#011729] dark:hover:text-white dark:hover:shadow-[0_8px_20px_rgba(0,219,219,0.25)]"
+        >
+          {submitting ? t.bmi.contactSending : t.bmi.contactCta}
+        </button>
+      </div>
     </div>
   );
 };

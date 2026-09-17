@@ -3,27 +3,45 @@ import type { GoalItem } from "./types";
 
 const ENDPOINT = "/public/landing/goals";
 
-function isGoalItem(value: unknown): value is GoalItem {
-  if (!value || typeof value !== "object") return false;
-  const item = value as Record<string, unknown>;
-  return typeof item.code === "string" && typeof item.title === "string";
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object"
+    ? (value as Record<string, unknown>)
+    : null;
+}
+
+function pickString(...values: unknown[]): string | null {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+  return null;
+}
+
+function toGoalItem(value: unknown): GoalItem | null {
+  const item = asRecord(value);
+  if (!item || typeof item.code !== "string" || typeof item.title !== "string") {
+    return null;
+  }
+  return {
+    code: item.code,
+    title: item.title,
+    subtitle: pickString(item.subtitle),
+    imageUrl: pickString(
+      item.imageUrl,
+      item.image_url,
+      item.iconUrl,
+      item.icon_url,
+    ),
+  };
 }
 
 export function normalizeGoals(payload: unknown): GoalItem[] {
+  const wrapped = asRecord(payload);
   const source = Array.isArray(payload)
     ? payload
-    : payload && typeof payload === "object"
-      ? ((payload as { data?: unknown; items?: unknown }).data ??
-        (payload as { items?: unknown }).items)
-      : null;
+    : (wrapped?.data ?? wrapped?.items);
 
   if (!Array.isArray(source)) return [];
-  return source.filter(isGoalItem).map((item) => ({
-    code: item.code,
-    title: item.title,
-    subtitle: item.subtitle ?? null,
-    imageUrl: item.imageUrl ?? null,
-  }));
+  return source.map(toGoalItem).filter((item): item is GoalItem => item !== null);
 }
 
 function languageParams(locale?: string) {

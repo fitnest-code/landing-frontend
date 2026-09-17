@@ -9,11 +9,22 @@ export const normalizeDecimalInput = (value: string) =>
 export const normalizeAgeInput = (value: string) =>
   value.replace(/\D/g, "").slice(0, 3);
 
-export const normalizePhoneInput = (value: string) =>
-  value.replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "").slice(0, 16);
+export const PHONE_COUNTRY_CODE = "994";
+export const PHONE_PREFIX = `+${PHONE_COUNTRY_CODE}`;
+
+export const normalizePhoneInput = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  const local = digits.startsWith(PHONE_COUNTRY_CODE)
+    ? digits.slice(PHONE_COUNTRY_CODE.length)
+    : digits;
+  return local.slice(0, 9);
+};
 
 export const isValidPhone = (value: string) =>
-  value.replace(/\D/g, "").length >= 9;
+  normalizePhoneInput(value).length === 9;
+
+export const formatFullPhone = (value: string) =>
+  `${PHONE_PREFIX}${normalizePhoneInput(value)}`;
 
 export const birthDateFromAge = (age: number) => {
   const date = new Date();
