@@ -10,7 +10,7 @@ import Image, { StaticImageData } from "next/image"
 function Select({
     ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
-    return <SelectPrimitive.Root data-slot="select" {...props} />
+    return <SelectPrimitive.Root data-slot="select" {...props} modal={false} />
 }
 
 function SelectGroup({

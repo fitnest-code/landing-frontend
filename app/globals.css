@@ -10,6 +10,7 @@ body {
 
 html {
   scroll-behavior: smooth;
+  --fn-navbar-height: 5.5rem;
 }
 
 @utility font-manrope {

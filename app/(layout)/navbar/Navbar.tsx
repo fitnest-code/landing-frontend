@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import Logo from "./Logo";
 import NavbarRight from "./NavbarRight";
@@ -8,6 +8,7 @@ import Navication from "./Navication";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
+  const navRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -20,10 +21,28 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const node = navRef.current;
+    if (!node) return;
+
+    const syncHeight = () => {
+      document.documentElement.style.setProperty(
+        "--fn-navbar-height",
+        `${node.offsetHeight}px`,
+      );
+    };
+
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={navRef}
       className={cn(
-        "sticky inset-x-0 top-0 z-50 border-b border-border-muted bg-surface transition-[box-shadow,background-color] duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b border-border-muted bg-surface transition-[box-shadow,background-color] duration-300",
         isScrolled && "bg-surface/90 shadow-sm backdrop-blur-md",
       )}
     >
