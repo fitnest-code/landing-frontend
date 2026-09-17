@@ -111,7 +111,11 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
               <h1 className="text-[32px] font-semibold leading-[44px] text-heading md:text-[44px] md:leading-[66px]">
                 {name}
               </h1>
-              <MembershipBadge tier={toTier(gym.membership)} size="lg" />
+              <MembershipBadge
+                tier={toTier(gym.membership)}
+                size="lg"
+                showDiscount={false}
+              />
             </div>
             {gym.category ? (
               <p className="text-2xl font-bold leading-9 text-turquoise">
@@ -238,7 +242,11 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
                   {index > 0 ? (
                     <span className="size-1 rounded-full bg-white" />
                   ) : null}
-                  <MembershipBadge tier={tier} variant="gradient" />
+                  <MembershipBadge
+                    tier={tier}
+                    variant="gradient"
+                    showDiscount={false}
+                  />
                 </span>
               ))}
             </div>

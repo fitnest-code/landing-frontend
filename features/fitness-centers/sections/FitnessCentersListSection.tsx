@@ -112,7 +112,6 @@ const FitnessCentersListSection = ({ gyms }: FitnessCentersListSectionProps) => 
             key={gym.gymId}
             name={gym.name}
             location={gym.location || gym.city || "—"}
-            phone={gym.phone || ""}
             image={gym.coverImageUrl || ""}
             category={gym.category || ""}
             membership={toTier(gym.membership)}
