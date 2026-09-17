@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { submitLandingContactMessage } from "@/lib/api/landing";
+import { submitBmiLead } from "../api/bmi-request";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
 import type { GoalItem } from "../api/types";
@@ -35,7 +35,7 @@ const BmiGoalsCard = ({
   height,
   age,
   gender,
-  bmiResult,
+  bmiResult: _bmiResult,
   initialGoals,
   initialLocale,
 }: BmiGoalsCardProps) => {
@@ -71,34 +71,35 @@ const BmiGoalsCard = ({
     return fallbackGoals;
   }, [apiGoals, fallbackGoals, isLoading]);
 
+  const heightCm = Number.parseFloat(height.replace(",", "."));
+  const weightKg = Number.parseFloat(weight.replace(",", "."));
+  const ageValue = Number.parseInt(age, 10);
+  const metricsValid =
+    Number.isFinite(heightCm) &&
+    heightCm >= 80 &&
+    heightCm <= 250 &&
+    Number.isFinite(weightKg) &&
+    weightKg >= 25 &&
+    weightKg <= 300;
   const phoneValid = isValidPhone(phone);
-  const isFormValid = Boolean(goalId) && phoneValid && consent;
+  const isFormValid = Boolean(goalId) && phoneValid && consent && metricsValid;
 
   const handleSubmit = async () => {
     setShowErrors(true);
-    if (!isFormValid || submitting) return;
+    if (!isFormValid || submitting || !goalId) return;
 
     const selectedGoal = goals.find((goal) => goal.id === goalId);
-    const message = [
-      `Source: BMI page`,
-      `Goal: ${selectedGoal?.title ?? goalId}`,
-      `Phone: ${formatFullPhone(phone)}`,
-      weight ? `Weight: ${weight} kg` : null,
-      height ? `Height: ${height} cm` : null,
-      age ? `Age: ${age}` : null,
-      `Gender: ${gender}`,
-      bmiResult !== null ? `BMI: ${bmiResult}` : null,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
     setSubmitting(true);
     setStatus("idle");
-    const ok = await submitLandingContactMessage({
-      name: formatFullPhone(phone).slice(0, 80) || "BMI",
-      email: "bmi.lead@fitnest.az",
-      topic: "other",
-      message,
+    const ok = await submitBmiLead({
+      phone: formatFullPhone(phone),
+      goalCode: selectedGoal?.id ?? goalId,
+      goalTitle: selectedGoal?.title ?? goalId,
+      heightCm,
+      weightKg,
+      age: Number.isFinite(ageValue) ? ageValue : undefined,
+      gender,
+      consent: true,
     });
     setSubmitting(false);
 

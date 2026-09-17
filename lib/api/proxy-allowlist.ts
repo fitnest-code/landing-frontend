@@ -18,6 +18,9 @@ export function proxyRateLimitKey(method: string, joinedPath: string): { key: st
   if (method === "POST" && path.startsWith("public/landing/contact-messages")) {
     return { key: "contact", limit: 8 };
   }
+  if (method === "POST" && path.startsWith("public/landing/bmi-requests")) {
+    return { key: "bmi-lead", limit: 5 };
+  }
   if (method === "POST" && path.startsWith("bmi/calculate")) {
     return { key: "bmi", limit: 20 };
   }
