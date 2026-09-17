@@ -416,6 +416,9 @@ export type Messages = {
     contactSending: string;
     privacy: string;
     phoneError: string;
+    metricsError: string;
+    goalError: string;
+    consentError: string;
     formError: string;
     metaMessages: Record<
       "underweight" | "normal" | "overweight" | "obesity",
@@ -1178,7 +1181,10 @@ const az: Messages = {
     contactSending: "Göndərilir...",
     privacy: "Məxfilik siyasəti",
     phoneError: "Düzgün mobil nömrə daxil edin",
-    formError: "Hədəf seçin, nömrəni daxil edin və razılıq verin.",
+    metricsError: "Əvvəlcə soldakı formada boy, çəki və yaşı daxil edib BMİ-ni hesabla.",
+    goalError: "Hədəf seçin.",
+    consentError: "Razılığı təsdiqləyin.",
+    formError: "Boy və çəkini daxil edib BMİ-ni hesabla, hədəf seç, nömrəni yaz və razılıq ver.",
     metaMessages: {
       underweight: "Tövsiyə: qidalanma və məşq planını balanslaşdırın.",
       normal: "Təbriklər! Çəkiniz idealdır. Bu formanı qoruyub saxlayın.",
@@ -1980,7 +1986,10 @@ const en: Messages = {
     contactSending: "Sending...",
     privacy: "Privacy policy",
     phoneError: "Enter a valid mobile number",
-    formError: "Choose a goal, enter your number, and accept the consent.",
+    metricsError: "First enter your height, weight, and age on the left and calculate BMI.",
+    goalError: "Choose a goal.",
+    consentError: "Please accept the consent.",
+    formError: "Calculate BMI, choose a goal, enter your number, and accept the consent.",
     metaMessages: {
       underweight: "Tip: balance your nutrition and workout routine.",
       normal: "Great job! Your weight is ideal. Keep this form.",
@@ -2768,7 +2777,10 @@ const ru: Messages = {
     contactSending: "Отправка...",
     privacy: "Политика конфиденциальности",
     phoneError: "Введите корректный мобильный номер",
-    formError: "Выберите цель, укажите номер и подтвердите согласие.",
+    metricsError: "Сначала укажите рост, вес и возраст слева и рассчитайте ИМТ.",
+    goalError: "Выберите цель.",
+    consentError: "Подтвердите согласие.",
+    formError: "Рассчитайте ИМТ, выберите цель, укажите номер и подтвердите согласие.",
     metaMessages: {
       underweight: "Совет: сбалансируйте питание и тренировки.",
       normal: "Отлично! Ваш вес идеален. Сохраняйте эту форму.",

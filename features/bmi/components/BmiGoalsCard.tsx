@@ -35,7 +35,7 @@ const BmiGoalsCard = ({
   height,
   age,
   gender,
-  bmiResult: _bmiResult,
+  bmiResult,
   initialGoals,
   initialLocale,
 }: BmiGoalsCardProps) => {
@@ -81,8 +81,15 @@ const BmiGoalsCard = ({
     Number.isFinite(weightKg) &&
     weightKg >= 25 &&
     weightKg <= 300;
+  const bmiCalculated = bmiResult !== null;
   const phoneValid = isValidPhone(phone);
-  const isFormValid = Boolean(goalId) && phoneValid && consent && metricsValid;
+  const isFormValid =
+    Boolean(goalId) && phoneValid && consent && metricsValid && bmiCalculated;
+  const formErrors = [
+    !metricsValid || !bmiCalculated ? t.bmi.metricsError : null,
+    !goalId ? t.bmi.goalError : null,
+    !consent ? t.bmi.consentError : null,
+  ].filter((message): message is string => Boolean(message));
 
   const handleSubmit = async () => {
     setShowErrors(true);
@@ -232,8 +239,14 @@ const BmiGoalsCard = ({
         </button>
       </div>
 
-      {showErrors && !isFormValid ? (
-        <p className="text-sm leading-5 text-energy">{t.bmi.formError}</p>
+      {showErrors && formErrors.length > 0 ? (
+        <div className="flex flex-col gap-1">
+          {formErrors.map((message) => (
+            <p key={message} className="text-sm leading-5 text-energy">
+              {message}
+            </p>
+          ))}
+        </div>
       ) : null}
       {status === "success" ? (
         <p className="text-sm leading-5 text-turquoise">{t.bmi.contactSuccess}</p>

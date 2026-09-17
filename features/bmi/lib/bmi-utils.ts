@@ -20,8 +20,10 @@ export const normalizePhoneInput = (value: string) => {
   return local.slice(0, 9);
 };
 
+const AZ_MOBILE = /^(10|50|51|55|60|70|77|99)\d{7}$/;
+
 export const isValidPhone = (value: string) =>
-  normalizePhoneInput(value).length === 9;
+  AZ_MOBILE.test(normalizePhoneInput(value));
 
 export const formatFullPhone = (value: string) =>
   `${PHONE_PREFIX}${normalizePhoneInput(value)}`;
