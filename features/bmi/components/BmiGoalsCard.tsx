@@ -11,6 +11,7 @@ import type { Gender } from "../lib/bmi-utils";
 import {
   PHONE_PREFIX,
   formatFullPhone,
+  isValidOptionalEmail,
   isValidPhone,
   normalizePhoneInput,
 } from "../lib/bmi-utils";
@@ -46,6 +47,7 @@ const BmiGoalsCard = ({
   });
   const [goalId, setGoalId] = useState<string | null>(null);
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [submitting, setSubmitting] = useState(false);
@@ -83,8 +85,14 @@ const BmiGoalsCard = ({
     weightKg <= 300;
   const bmiCalculated = bmiResult !== null;
   const phoneValid = isValidPhone(phone);
+  const emailValid = isValidOptionalEmail(email);
   const isFormValid =
-    Boolean(goalId) && phoneValid && consent && metricsValid && bmiCalculated;
+    Boolean(goalId) &&
+    phoneValid &&
+    emailValid &&
+    consent &&
+    metricsValid &&
+    bmiCalculated;
   const formErrors = [
     !metricsValid || !bmiCalculated ? t.bmi.metricsError : null,
     !goalId ? t.bmi.goalError : null,
@@ -100,6 +108,7 @@ const BmiGoalsCard = ({
     setStatus("idle");
     const ok = await submitBmiLead({
       phone: formatFullPhone(phone),
+      email: email.trim() || undefined,
       goalCode: selectedGoal?.id ?? goalId,
       goalTitle: selectedGoal?.title ?? goalId,
       heightCm,
@@ -113,6 +122,7 @@ const BmiGoalsCard = ({
     if (ok) {
       setGoalId(null);
       setPhone("");
+      setEmail("");
       setConsent(false);
       setShowErrors(false);
       setStatus("success");
@@ -245,6 +255,26 @@ const BmiGoalsCard = ({
           </div>
           {showErrors && !phoneValid ? (
             <span className="text-sm text-energy">{t.bmi.phoneError}</span>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium leading-5 text-desc-2">
+            {t.bmi.email}
+          </label>
+          <div className={fieldClass}>
+            <input
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder={t.bmi.emailPlaceholder}
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              className="h-6 w-full bg-transparent text-base leading-6 text-ink outline-none placeholder:text-[#94979C] dark:placeholder:text-[#A6A6A6]"
+            />
+          </div>
+          {showErrors && !emailValid ? (
+            <span className="text-sm text-energy">{t.bmi.emailError}</span>
           ) : null}
         </div>
 

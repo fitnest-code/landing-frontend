@@ -414,6 +414,8 @@ export type Messages = {
     goals: { id: string; title: string; description: string }[];
     phone: string;
     phonePlaceholder: string;
+    email: string;
+    emailPlaceholder: string;
     consent: string;
     contactCta: string;
     contactSuccess: string;
@@ -423,6 +425,7 @@ export type Messages = {
     contactSending: string;
     privacy: string;
     phoneError: string;
+    emailError: string;
     metricsError: string;
     goalError: string;
     consentError: string;
@@ -1185,6 +1188,8 @@ const az: Messages = {
     ],
     phone: "Mobil nömrə",
     phonePlaceholder: "xxxxxxxxx",
+    email: "E-poçt (istəyə bağlı)",
+    emailPlaceholder: "E-poçt",
     consent:
       "Məlumatlarımın müraciətim üzrə istifadə edilməsinə və FitNest komandasının mənimlə əlaqə saxlamasına razıyam.",
     contactCta: "Mənimlə əlaqə saxlayın",
@@ -1195,6 +1200,7 @@ const az: Messages = {
     contactSending: "Göndərilir...",
     privacy: "Məxfilik siyasəti",
     phoneError: "Düzgün mobil nömrə daxil edin",
+    emailError: "Düzgün email ünvanı daxil edin",
     metricsError: "Əvvəlcə soldakı formada boy, çəki və yaşı daxil edib BMİ-ni hesabla.",
     goalError: "Hədəf seçin.",
     consentError: "Razılığı təsdiqləyin.",
@@ -1997,6 +2003,8 @@ const en: Messages = {
     ],
     phone: "Mobile number",
     phonePlaceholder: "xxxxxxxxx",
+    email: "Email (optional)",
+    emailPlaceholder: "Email",
     consent:
       "I agree that my data may be used for this request and that the FitNest team may contact me.",
     contactCta: "Contact me",
@@ -2007,6 +2015,7 @@ const en: Messages = {
     contactSending: "Sending...",
     privacy: "Privacy policy",
     phoneError: "Enter a valid mobile number",
+    emailError: "Enter a valid email address",
     metricsError: "First enter your height, weight, and age on the left and calculate BMI.",
     goalError: "Choose a goal.",
     consentError: "Please accept the consent.",
@@ -2795,6 +2804,8 @@ const ru: Messages = {
     ],
     phone: "Мобильный номер",
     phonePlaceholder: "xxxxxxxxx",
+    email: "Эл. почта (необязательно)",
+    emailPlaceholder: "Эл. почта",
     consent:
       "Я согласен(на), что мои данные будут использованы по этой заявке и команда FitNest может со мной связаться.",
     contactCta: "Свяжитесь со мной",
@@ -2805,6 +2816,7 @@ const ru: Messages = {
     contactSending: "Отправка...",
     privacy: "Политика конфиденциальности",
     phoneError: "Введите корректный мобильный номер",
+    emailError: "Введите корректный email",
     metricsError: "Сначала укажите рост, вес и возраст слева и рассчитайте ИМТ.",
     goalError: "Выберите цель.",
     consentError: "Подтвердите согласие.",

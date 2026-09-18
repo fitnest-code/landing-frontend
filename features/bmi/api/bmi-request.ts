@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api";
 
 export type BmiLeadPayload = {
   phone: string;
+  email?: string;
   goalCode: string;
   goalTitle: string;
   heightCm: number;
@@ -15,6 +16,7 @@ export async function submitBmiLead(input: BmiLeadPayload): Promise<boolean> {
   try {
     await apiClient.post("/public/landing/bmi-requests", {
       phone: input.phone,
+      email: input.email?.trim() || undefined,
       goalCode: input.goalCode,
       goalTitle: input.goalTitle,
       heightCm: input.heightCm,

@@ -28,6 +28,12 @@ export const isValidPhone = (value: string) =>
 export const formatFullPhone = (value: string) =>
   `${PHONE_PREFIX}${normalizePhoneInput(value)}`;
 
+export const isValidOptionalEmail = (value: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+};
+
 export const birthDateFromAge = (age: number) => {
   const date = new Date();
   date.setFullYear(date.getFullYear() - age);
