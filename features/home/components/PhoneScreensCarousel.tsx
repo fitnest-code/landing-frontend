@@ -7,23 +7,22 @@ import { cn } from "@/lib/utils";
 /** Outer device chrome — stays fixed while screens crossfade inside. */
 const PHONE_FRAME = "/images/home/iphone/frame.svg";
 
-/** Inner UI pages only (279×606 inside 304×627 frame). */
+/** Inner UI pages only (279×606 inside 304×627 frame). Home first; skip the oversized welcome-coin popup. */
 const SCREENS = [
-  "/images/home/iphone/screen-1.svg",
   "/images/home/iphone/screen-2.svg",
+  "/images/home/iphone/screen-6.svg",
   "/images/home/iphone/screen-3.svg",
   "/images/home/iphone/screen-4.svg",
   "/images/home/iphone/screen-5.svg",
-  "/images/home/iphone/screen-6.svg",
   "/images/home/iphone/screen.svg",
 ] as const;
 
-/** Screen inset inside the frame — matched to the transparent hole / prior hero mockup. */
+/** Screen inset inside the frame — 12.5×10.5 padding on the 304×627 chrome. */
 const SCREEN_INSET = {
-  left: "3.9%",
-  top: "1.65%",
-  width: "92.2%",
-  height: "96.86%",
+  left: "4.11%",
+  top: "1.67%",
+  width: "91.78%",
+  height: "96.65%",
 } as const;
 
 type PhoneScreensCarouselProps = {
@@ -86,7 +85,7 @@ const PhoneScreensCarousel = ({
             key={SCREENS[index]}
             src={SCREENS[index]}
             alt={alt}
-            className="absolute inset-0 h-full w-full origin-top object-contain object-top max-md:scale-[0.86]"
+            className="absolute inset-0 h-full w-full object-cover"
             initial={{ x: "-28%", opacity: 0.4 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "28%", opacity: 0 }}

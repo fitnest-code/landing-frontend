@@ -32,22 +32,22 @@ export const AppStoreRow = ({
     return (
       <div
         className={cn(
-          "flex w-full max-w-[601px] flex-col gap-4 sm:flex-row sm:items-center sm:justify-between",
+          "flex w-full max-w-[601px] flex-col items-center gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
           extraClass,
           className,
         )}
       >
-        <div className="flex items-center gap-3">
-          <div className="size-[55px] overflow-hidden rounded-sm border border-[#EAEAEA] dark:border-[#22262F]">
+        <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:text-left">
+          <div className="size-[148px] overflow-hidden rounded-md border border-[#EAEAEA] bg-white p-2 dark:border-[#22262F] dark:bg-[#011729] sm:size-[72px] sm:p-0">
             <img
               src={`${base}/qr.svg`}
               alt=""
-              width={55}
-              height={55}
+              width={148}
+              height={148}
               className="size-full object-contain"
             />
           </div>
-          <div className="flex w-[169px] flex-col gap-0.5">
+          <div className="flex max-w-[220px] flex-col gap-0.5 sm:w-[169px]">
             <p className="text-sm font-bold leading-5 text-white dark:text-[#011729]">
               {qrTitle}
             </p>
@@ -56,7 +56,7 @@ export const AppStoreRow = ({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center gap-3">
           <a
             href={GOOGLE_PLAY_URL}
             target="_blank"
