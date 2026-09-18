@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, type ReactNode } from "react";
+import { Children, isValidElement, type ReactNode } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { APPLE_EASE, type RevealVariant } from "./Reveal";
 import { cn } from "@/lib/utils";
@@ -34,6 +34,8 @@ export type StaggerProps = {
   initialDelay?: number;
   amount?: number;
   once?: boolean;
+  /** When false, items animate on mount so load-more cards are not left hidden. */
+  whenInView?: boolean;
 };
 
 export const Stagger = ({
@@ -45,6 +47,7 @@ export const Stagger = ({
   initialDelay = 0.04,
   amount = 0.12,
   once = true,
+  whenInView = true,
 }: StaggerProps) => {
   const reduceMotion = useReducedMotion();
 
@@ -70,16 +73,21 @@ export const Stagger = ({
     <motion.div
       className={className}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount }}
+      animate={whenInView ? undefined : "visible"}
+      whileInView={whenInView ? "visible" : undefined}
+      viewport={whenInView ? { once, amount } : undefined}
       variants={container}
     >
       {Children.map(children, (child, index) => {
         if (!child) return null;
+        const childKey =
+          isValidElement(child) && child.key != null ? child.key : index;
         return (
           <motion.div
-            key={index}
+            key={childKey}
             variants={item}
+            initial={whenInView ? undefined : "hidden"}
+            animate={whenInView ? undefined : "visible"}
             className={cn("h-full min-w-0", itemClassName)}
           >
             {child}

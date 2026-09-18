@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
-import { cityMatches } from "@/lib/constants/az-cities";
-import type { LandingGym } from "@/lib/api/landing";
+import {
+  LANDING_GYMS_PAGE_SIZE,
+  getLandingGymsPage,
+  type LandingGym,
+  type LandingListFilters,
+} from "@/lib/api/landing";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
 import FitnessCenterCard from "../components/FitnessCenterCard";
 import FiltersSection, { type GymsFiltersValue } from "./FiltersSection";
 import { Stagger } from "@/components/animation";
-
-const PAGE_SIZE = 12;
 
 const MEMBERSHIP_VALUES = new Set(["bronze", "silver", "gold", "platinum"]);
 
@@ -38,42 +40,38 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
     (a, b) => a.localeCompare(b, "az"),
   );
 
-const isOtherCategory = (name: string) => {
-  const normalized = name.trim().toLocaleLowerCase("az").replaceAll("ə", "e");
-  return normalized === "diger" || normalized === "other" || normalized === "другое";
-};
+const toApiFilters = (filters: GymsFiltersValue): LandingListFilters => ({
+  q: filters.query.trim() || undefined,
+  city: filters.city || undefined,
+  category: filters.category || undefined,
+  membership: filters.membership || undefined,
+});
 
-const sortCategoriesByGymCount = (names: string[], gyms: LandingGym[]) => {
-  const counts = new Map<string, number>();
-  for (const gym of gyms) {
-    const values =
-      gym.categories.length > 0
-        ? gym.categories
-        : gym.category
-          ? [gym.category]
-          : [];
-    for (const name of new Set(values.map((value) => value.trim()).filter(Boolean))) {
-      counts.set(name, (counts.get(name) ?? 0) + 1);
-    }
+const mergeById = (current: LandingGym[], incoming: LandingGym[]) => {
+  const seen = new Set(current.map((gym) => gym.gymId));
+  const next = [...current];
+  for (const gym of incoming) {
+    if (seen.has(gym.gymId)) continue;
+    seen.add(gym.gymId);
+    next.push(gym);
   }
-  return [...names].sort((left, right) => {
-    if (isOtherCategory(left) !== isOtherCategory(right)) {
-      return isOtherCategory(left) ? 1 : -1;
-    }
-    const diff = (counts.get(right) ?? 0) - (counts.get(left) ?? 0);
-    if (diff !== 0) return diff;
-    return left.localeCompare(right, "az");
-  });
+  return next;
 };
 
 type FitnessCentersListSectionProps = {
   gyms: LandingGym[];
+  total: number;
+  page: number;
+  pageSize?: number;
   cities?: string[];
   categories?: string[];
 };
 
 const FitnessCentersListSection = ({
-  gyms,
+  gyms: initialGyms,
+  total: initialTotal,
+  page: initialPage,
+  pageSize = LANDING_GYMS_PAGE_SIZE,
   cities: citiesFromApi,
   categories: categoriesFromApi,
 }: FitnessCentersListSectionProps) => {
@@ -88,57 +86,86 @@ const FitnessCentersListSection = ({
     ...emptyFilters,
     membership: initialMembership,
   }));
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [debouncedQuery, setDebouncedQuery] = useState(filters.query);
+  const [items, setItems] = useState(initialGyms);
+  const [page, setPage] = useState(initialPage);
+  const [total, setTotal] = useState(initialTotal);
+  const [loading, setLoading] = useState(false);
+  const skipFirstFetch = useRef(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedQuery(filters.query), 350);
+    return () => window.clearTimeout(timer);
+  }, [filters.query]);
 
   useEffect(() => {
     setFilters((current) => {
       if (current.membership === initialMembership) return current;
       return { ...current, membership: initialMembership };
     });
-    setVisibleCount(PAGE_SIZE);
   }, [initialMembership]);
 
-  const cities = useMemo(() => {
-    const fromGyms = uniqueSorted(gyms.map((gym) => gym.city));
-    if (citiesFromApi && citiesFromApi.length > 0) {
-      const existing = citiesFromApi.filter((city) =>
-        gyms.some((gym) => cityMatches(gym.city, city)),
-      );
-      if (existing.length > 0) return existing;
+  useEffect(() => {
+    const apiFilters = toApiFilters({ ...filters, query: debouncedQuery });
+    if (skipFirstFetch.current) {
+      skipFirstFetch.current = false;
+      if (!apiFilters.q && !apiFilters.city && !apiFilters.category && !apiFilters.membership) {
+        return;
+      }
     }
-    return fromGyms;
-  }, [citiesFromApi, gyms]);
-  const categories = useMemo(() => {
-    const names =
+
+    let cancelled = false;
+    setLoading(true);
+    getLandingGymsPage(locale, 1, pageSize, apiFilters)
+      .then((data) => {
+        if (cancelled) return;
+        setItems(data.items);
+        setPage(data.page);
+        setTotal(data.total);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery, filters.city, filters.category, filters.membership, locale, pageSize]);
+
+  const cities = useMemo(
+    () =>
+      citiesFromApi && citiesFromApi.length > 0
+        ? citiesFromApi
+        : uniqueSorted(items.map((gym) => gym.city)),
+    [citiesFromApi, items],
+  );
+  const categories = useMemo(
+    () =>
       categoriesFromApi && categoriesFromApi.length > 0
         ? categoriesFromApi
-        : uniqueSorted(gyms.flatMap((gym) => gym.categories));
-    return sortCategoriesByGymCount(names, gyms);
-  }, [categoriesFromApi, gyms]);
-  const filtered = useMemo(() => {
-    const query = filters.query.trim().toLocaleLowerCase("az");
-    return gyms.filter((gym) => {
-      if (filters.city && !cityMatches(gym.city, filters.city)) return false;
-      if (filters.category) {
-        const names =
-          gym.categories.length > 0
-            ? gym.categories
-            : gym.category
-              ? [gym.category]
-              : [];
-        if (!names.includes(filters.category)) return false;
-      }
-      if (filters.membership && gym.membership !== filters.membership) return false;
-      if (!query) return true;
-      const haystack = [gym.name, gym.location, gym.city, gym.category]
-        .filter(Boolean)
-        .join(" ")
-        .toLocaleLowerCase("az");
-      return haystack.includes(query);
-    });
-  }, [filters, gyms]);
+        : uniqueSorted(items.flatMap((gym) => gym.categories)),
+    [categoriesFromApi, items],
+  );
 
-  const visible = filtered.slice(0, visibleCount);
+  const hasMore = page * pageSize < total;
+
+  const loadMore = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const data = await getLandingGymsPage(
+        locale,
+        page + 1,
+        pageSize,
+        toApiFilters({ ...filters, query: debouncedQuery }),
+      );
+      setItems((current) => mergeById(current, data.items));
+      setPage(data.page);
+      setTotal(data.total);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-10">
@@ -146,23 +173,18 @@ const FitnessCentersListSection = ({
         value={filters}
         cities={cities}
         categories={categories}
-        onChange={(next) => {
-          setFilters(next);
-          setVisibleCount(PAGE_SIZE);
-        }}
-        onReset={() => {
-          setFilters(emptyFilters);
-          setVisibleCount(PAGE_SIZE);
-        }}
+        onChange={setFilters}
+        onReset={() => setFilters(emptyFilters)}
       />
 
       <Stagger
-        key={`${filters.city}-${filters.category}-${filters.membership}-${filters.query}`}
+        key={`${filters.city}-${filters.category}-${filters.membership}-${debouncedQuery}`}
         className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
         variant="rise"
         delay={0.06}
+        whenInView={false}
       >
-        {visible.map((gym) => (
+        {items.map((gym) => (
           <FitnessCenterCard
             key={gym.gymId}
             name={gym.name}
@@ -176,12 +198,13 @@ const FitnessCentersListSection = ({
         ))}
       </Stagger>
 
-      {visibleCount < filtered.length ? (
+      {hasMore ? (
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-            className="inline-flex h-12 min-w-[194px] items-center justify-center rounded-[32px] border border-border-muted bg-surface px-4 text-base font-semibold leading-6 text-ink"
+            disabled={loading}
+            onClick={loadMore}
+            className="inline-flex h-12 min-w-[194px] cursor-pointer items-center justify-center rounded-[32px] border border-border-muted bg-surface px-4 text-base font-semibold leading-6 text-ink transition-colors hover:border-cyan hover:text-turquoise disabled:cursor-wait disabled:opacity-70"
           >
             {t.centers.loadMore}
           </button>

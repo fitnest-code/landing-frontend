@@ -45,6 +45,19 @@ export type LandingGymFilters = {
   memberships: MembershipTier[];
 };
 
+export type LandingStoreFilters = {
+  cities: string[];
+  categories: string[];
+  memberships: string[];
+};
+
+export type LandingListFilters = {
+  q?: string;
+  city?: string;
+  category?: string;
+  membership?: string;
+};
+
 export type LandingStore = {
   storeId: number;
   name: string;
@@ -201,30 +214,66 @@ export async function getHomeGymsServer(
   }
 }
 
+export const LANDING_GYMS_PAGE_SIZE = 12;
+export const LANDING_STORES_PAGE_SIZE = 9;
+const LANDING_MAX_PAGE_SIZE = 50;
+
+function clampPageSize(pageSize: number) {
+  return Math.min(Math.max(pageSize, 1), LANDING_MAX_PAGE_SIZE);
+}
+
+function landingListParams(
+  page: number,
+  pageSize: number,
+  filters?: LandingListFilters,
+) {
+  return {
+    page: Math.max(page, 1),
+    page_size: clampPageSize(pageSize),
+    ...(filters?.q?.trim() ? { q: filters.q.trim() } : {}),
+    ...(filters?.city?.trim() ? { city: filters.city.trim() } : {}),
+    ...(filters?.category?.trim() ? { category: filters.category.trim() } : {}),
+    ...(filters?.membership?.trim() ? { membership: filters.membership.trim() } : {}),
+  };
+}
+
 export async function getLandingGymsPageServer(
   locale: string,
   page = 1,
-  pageSize = 12,
-  filters?: {
-    q?: string;
-    city?: string;
-    category?: string;
-    membership?: string;
-  },
+  pageSize = LANDING_GYMS_PAGE_SIZE,
+  filters?: LandingListFilters,
 ): Promise<LandingPage<LandingGym>> {
   try {
     const { data } = await serverApiClient.get<LandingPage<LandingGym>>(
       `${LANDING}/gyms`,
       {
         ...withLocale(locale),
-        params: {
-          page,
-          page_size: pageSize,
-          ...(filters?.q ? { q: filters.q } : {}),
-          ...(filters?.city ? { city: filters.city } : {}),
-          ...(filters?.category ? { category: filters.category } : {}),
-          ...(filters?.membership ? { membership: filters.membership } : {}),
-        },
+        params: landingListParams(page, pageSize, filters),
+      },
+    );
+    return {
+      items: (data.items ?? []).map(mapGymCard),
+      total: data.total ?? data.items?.length ?? 0,
+      page: data.page ?? page,
+      pageSize: data.pageSize ?? pageSize,
+    };
+  } catch {
+    return emptyGymsPage(page, pageSize);
+  }
+}
+
+export async function getLandingGymsPage(
+  locale: string,
+  page = 1,
+  pageSize = LANDING_GYMS_PAGE_SIZE,
+  filters?: LandingListFilters,
+): Promise<LandingPage<LandingGym>> {
+  try {
+    const { data } = await apiClient.get<LandingPage<LandingGym>>(
+      `${LANDING}/gyms`,
+      {
+        headers: localeHeaders(locale),
+        params: landingListParams(page, pageSize, filters),
       },
     );
     return {
@@ -241,7 +290,7 @@ export async function getLandingGymsPageServer(
 export async function getLandingGymsServer(
   locale: string,
   page = 1,
-  pageSize = 12,
+  pageSize = LANDING_GYMS_PAGE_SIZE,
 ): Promise<LandingGym[]> {
   return (await getLandingGymsPageServer(locale, page, pageSize)).items;
 }
@@ -345,12 +394,41 @@ export async function getHomeStoresServer(
 export async function getLandingStoresPageServer(
   locale: string,
   page = 1,
-  pageSize = 12,
+  pageSize = LANDING_STORES_PAGE_SIZE,
+  filters?: LandingListFilters,
 ): Promise<LandingPage<LandingStore>> {
   try {
     const { data } = await serverApiClient.get<LandingPage<LandingStore>>(
       `${LANDING}/stores`,
-      { ...withLocale(locale), params: { page, page_size: pageSize } },
+      {
+        ...withLocale(locale),
+        params: landingListParams(page, pageSize, filters),
+      },
+    );
+    return {
+      items: (data.items ?? []).map(mapLandingStore),
+      total: data.total ?? data.items?.length ?? 0,
+      page: data.page ?? page,
+      pageSize: data.pageSize ?? pageSize,
+    };
+  } catch {
+    return emptyStoresPage(page, pageSize);
+  }
+}
+
+export async function getLandingStoresPage(
+  locale: string,
+  page = 1,
+  pageSize = LANDING_STORES_PAGE_SIZE,
+  filters?: LandingListFilters,
+): Promise<LandingPage<LandingStore>> {
+  try {
+    const { data } = await apiClient.get<LandingPage<LandingStore>>(
+      `${LANDING}/stores`,
+      {
+        headers: localeHeaders(locale),
+        params: landingListParams(page, pageSize, filters),
+      },
     );
     return {
       items: (data.items ?? []).map(mapLandingStore),
@@ -366,9 +444,27 @@ export async function getLandingStoresPageServer(
 export async function getLandingStoresServer(
   locale: string,
   page = 1,
-  pageSize = 12,
+  pageSize = LANDING_STORES_PAGE_SIZE,
 ): Promise<LandingStore[]> {
   return (await getLandingStoresPageServer(locale, page, pageSize)).items;
+}
+
+export async function getLandingStoreFiltersServer(
+  locale: string,
+): Promise<LandingStoreFilters> {
+  try {
+    const { data } = await serverApiClient.get<LandingStoreFilters>(
+      `${LANDING}/stores/filters`,
+      withLocale(locale),
+    );
+    return {
+      cities: data.cities ?? [],
+      categories: data.categories ?? [],
+      memberships: data.memberships ?? [],
+    };
+  } catch {
+    return { cities: [], categories: [], memberships: [] };
+  }
 }
 
 export async function getLandingStoreServer(

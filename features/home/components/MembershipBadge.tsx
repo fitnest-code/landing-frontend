@@ -42,6 +42,7 @@ type MembershipBadgeProps = {
   variant?: "solid" | "gradient";
   className?: string;
   showDiscount?: boolean;
+  discountLabel?: string;
 };
 
 const MembershipBadge = ({
@@ -50,9 +51,10 @@ const MembershipBadge = ({
   variant = "solid",
   className,
   showDiscount = true,
+  discountLabel,
 }: MembershipBadgeProps) => {
   const label = showDiscount
-    ? `${MEMBERSHIP_LABELS[tier]} ${MEMBERSHIP_DISCOUNTS[tier]}`
+    ? `${MEMBERSHIP_LABELS[tier]} ${discountLabel ?? MEMBERSHIP_DISCOUNTS[tier]}`
     : MEMBERSHIP_LABELS[tier];
 
   return (

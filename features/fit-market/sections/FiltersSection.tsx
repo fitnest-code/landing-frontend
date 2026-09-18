@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
+import { storeDiscountLabel } from "../components/DiscountBadges";
 
 type FilterSelectProps = {
   label: string;
@@ -164,7 +165,7 @@ const FiltersSection = ({
             { value: "", label: t.centers.membership },
             ...memberships.map((membership) => ({
               value: membership,
-              label: membership,
+              label: storeDiscountLabel(membership),
             })),
           ]}
         />

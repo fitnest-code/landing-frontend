@@ -75,47 +75,49 @@ const FitStoreSection = async () => {
           </Link>
         </div>
         <Stagger className="grid w-full min-w-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" variant="rise" delay={0.09}>
-          {items.map((item) => (
-            <TiltCard key={item.key} intensity={8}>
-            <article className="relative flex h-full flex-col gap-5 rounded-2xl border border-border-muted bg-surface p-5 dark:bg-[#012438]">
-              <div className="relative h-[156px] overflow-hidden rounded-xl">
-                <RemoteImage
-                  src={item.image}
-                  fallback="/images/first.png"
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 280px"
-                />
-                {item.href ? (
-                  item.external ? (
+          {items.map((item) => {
+            const cardClassName =
+              "group flex h-full flex-col gap-5 rounded-2xl border border-border-muted bg-surface p-5 transition-colors duration-200 hover:border-cyan hover:shadow-[0px_18px_40px_rgba(0,157,166,0.16)] dark:bg-[#012438]";
+            const cardBody = (
+              <>
+                <div className="relative h-[156px] overflow-hidden rounded-xl">
+                  <RemoteImage
+                    src={item.image}
+                    fallback="/images/first.png"
+                    alt={item.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 280px"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-base font-bold leading-6 text-ink">
+                    {item.name}
+                  </h3>
+                  <p className="text-xs leading-[18px] text-title">{item.subtitle}</p>
+                </div>
+              </>
+            );
+
+            return (
+              <TiltCard key={item.key} intensity={8}>
+                {item.external ? (
                   <a
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="absolute right-2 top-2 z-10 inline-flex h-8 items-center rounded-lg bg-button px-3 text-xs font-semibold text-white hover:bg-[#FF6A42]"
+                    className={cardClassName}
                   >
-                    {messages.fitMarket.visitShort}
+                    {cardBody}
                   </a>
-                  ) : (
-                  <Link
-                    href={item.href}
-                    className="absolute right-2 top-2 z-10 inline-flex h-8 items-center rounded-lg bg-button px-3 text-xs font-semibold text-white hover:bg-[#FF6A42]"
-                  >
-                    {messages.fitMarket.visitShort}
+                ) : (
+                  <Link href={item.href} className={cardClassName}>
+                    {cardBody}
                   </Link>
-                  )
-                ) : null}
-              </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="text-base font-bold leading-6 text-ink">
-                  {item.name}
-                </h3>
-                <p className="text-xs leading-[18px] text-title">{item.subtitle}</p>
-              </div>
-            </article>
-            </TiltCard>
-          ))}
+                )}
+              </TiltCard>
+            );
+          })}
         </Stagger>
       </Container>
     </section>

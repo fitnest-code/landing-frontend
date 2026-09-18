@@ -1,121 +1,67 @@
-"use client";
-
-import { cn } from "@/lib/utils";
-import { useI18n } from "@/lib/i18n/provider";
-
-export type SubscriptionTierName = "Bronze" | "Silver" | "Gold" | "Platinum";
-
-interface TierStyle {
-  name: SubscriptionTierName;
-  gradient: string;
-  textColor: string;
-}
-
-const TIER_STYLES: Record<SubscriptionTierName, TierStyle> = {
-  Gold: {
-    name: "Gold",
-    gradient:
-      "linear-gradient(128deg, rgba(231, 183, 95, 0) 0%, rgba(235, 190.50, 103, 0.50) 50%, #A88B5B 100%)",
-    textColor: "#724E09",
-  },
-  Silver: {
-    name: "Silver",
-    gradient:
-      "linear-gradient(128deg, rgba(229, 232, 236, 0) 0%, rgba(191, 200, 217, 0.70) 67%, #9BAAC7 100%)",
-    textColor: "#14234B",
-  },
-  Platinum: {
-    name: "Platinum",
-    gradient:
-      "linear-gradient(180deg, #9F9F9F 0%, #545454 40%, #5B5B5D 55%, #8E8E8E 100%)",
-    textColor: "#FFFFFF",
-  },
-  Bronze: {
-    name: "Bronze",
-    gradient:
-      "linear-gradient(128deg, rgba(216, 166, 115, 0) 0%, rgba(216, 166, 115, 0.70) 67%, #D8A673 100%)",
-    textColor: "#FFFFFF",
-  },
-};
+import MembershipBadge, {
+  MEMBERSHIP_DISCOUNTS,
+  MEMBERSHIP_LABELS,
+  type MembershipTier,
+} from "@/features/home/components/MembershipBadge";
 
 const parsePercent = (value: string) => {
   const match = value.match(/\d+/);
   return match ? match[0] : "";
 };
 
-const detectTier = (value: string, index: number): SubscriptionTierName => {
+export const detectStoreMembershipTier = (
+  value: string,
+  index = 0,
+): MembershipTier => {
   const lower = value.toLowerCase();
-  if (lower.includes("platinum")) return "Platinum";
-  if (lower.includes("gold")) return "Gold";
-  if (lower.includes("silver")) return "Silver";
-  if (lower.includes("bronze")) return "Bronze";
+  if (lower.includes("platinum")) return "platinum";
+  if (lower.includes("gold")) return "gold";
+  if (lower.includes("silver")) return "silver";
+  if (lower.includes("bronze")) return "bronze";
 
   const percent = Number(parsePercent(value));
   if (!Number.isNaN(percent) && percent > 0) {
-    if (percent >= 15) return "Platinum";
-    if (percent >= 10) return "Gold";
-    if (percent >= 5) return "Silver";
-    return "Bronze";
+    if (percent >= 15) return "platinum";
+    if (percent >= 10) return "gold";
+    if (percent >= 5) return "silver";
+    return "bronze";
   }
 
-  const fallbackTiers: SubscriptionTierName[] = ["Gold", "Silver", "Platinum", "Bronze"];
-  return fallbackTiers[index % fallbackTiers.length];
+  const fallback: MembershipTier[] = ["gold", "silver", "platinum", "bronze"];
+  return fallback[index % fallback.length];
 };
+
+export const storeDiscountLabel = (value: string, index = 0) => {
+  const tier = detectStoreMembershipTier(value, index);
+  const parsed = parsePercent(value);
+  const percent = parsed ? `${parsed} %` : MEMBERSHIP_DISCOUNTS[tier];
+  return `${MEMBERSHIP_LABELS[tier]} ${percent}`;
+};
+
+const primaryDiscount = (discounts: string[]) =>
+  discounts.reduce((best, current) => {
+    const bestPercent = Number(parsePercent(best) || 0);
+    const currentPercent = Number(parsePercent(current) || 0);
+    return currentPercent > bestPercent ? current : best;
+  });
 
 type DiscountBadgesProps = {
   discounts: string[];
-  className?: string;
 };
 
-export const DEFAULT_TIER_PERCENT: Record<SubscriptionTierName, string> = {
-  Bronze: "5",
-  Silver: "5",
-  Gold: "10",
-  Platinum: "15",
-};
-
-const DiscountBadges = ({ discounts, className }: DiscountBadgesProps) => {
-  const { t } = useI18n();
+const DiscountBadges = ({ discounts }: DiscountBadgesProps) => {
   if (!discounts || discounts.length === 0) return null;
 
-  return (
-    <div className={cn("flex shrink-0 flex-wrap items-center gap-1.5", className)}>
-      {discounts.slice(0, 2).map((discount, index) => {
-        const tier = detectTier(discount, index);
-        const style = TIER_STYLES[tier];
-        const parsed = parsePercent(discount);
-        const percent = parsed || DEFAULT_TIER_PERCENT[tier];
-        const label = t.fitMarket.discountHint
-          .replace("{tier}", tier)
-          .replace("{n}", percent);
+  const discount = primaryDiscount(discounts);
+  const tier = detectStoreMembershipTier(discount);
+  const parsed = parsePercent(discount);
 
-        return (
-          <div
-            key={`${discount}-${index}`}
-            data-property-1={percent || tier}
-            style={{
-              background: style.gradient,
-            }}
-            className="inline-flex max-w-[220px] shrink-0 items-center gap-1.5 rounded-[32px] px-3 py-1.5"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
-              <path
-                d="M5 16l7-10 7 10H5z"
-                stroke={style.textColor}
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span
-              style={{ color: style.textColor }}
-              className="text-left text-[11px] font-bold leading-4"
-            >
-              {label}
-            </span>
-          </div>
-        );
-      })}
-    </div>
+  return (
+    <MembershipBadge
+      tier={tier}
+      showDiscount
+      discountLabel={parsed ? `${parsed} %` : MEMBERSHIP_DISCOUNTS[tier]}
+    />
   );
 };
 

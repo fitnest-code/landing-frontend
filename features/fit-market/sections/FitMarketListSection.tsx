@@ -1,13 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
-import type { LandingStore } from "@/lib/api/landing";
+import {
+  LANDING_STORES_PAGE_SIZE,
+  getLandingStoresPage,
+  type LandingListFilters,
+  type LandingStore,
+} from "@/lib/api/landing";
 import FitMarketCard from "../components/FitMarketCard";
 import FiltersSection, { type StoresFiltersValue } from "./FiltersSection";
 import { Stagger } from "@/components/animation";
-
-const PAGE_SIZE = 9;
 
 const emptyFilters: StoresFiltersValue = {
   query: "",
@@ -21,49 +24,125 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
     (a, b) => a.localeCompare(b, "az"),
   );
 
-type FitMarketListSectionProps = {
-  stores: LandingStore[];
+const toApiFilters = (filters: StoresFiltersValue): LandingListFilters => ({
+  q: filters.query.trim() || undefined,
+  city: filters.city || undefined,
+  category: filters.category || undefined,
+  membership: filters.membership || undefined,
+});
+
+const mergeById = (current: LandingStore[], incoming: LandingStore[]) => {
+  const seen = new Set(current.map((store) => store.storeId));
+  const next = [...current];
+  for (const store of incoming) {
+    if (seen.has(store.storeId)) continue;
+    seen.add(store.storeId);
+    next.push(store);
+  }
+  return next;
 };
 
-const FitMarketListSection = ({ stores }: FitMarketListSectionProps) => {
-  const { t } = useI18n();
-  const [filters, setFilters] = useState<StoresFiltersValue>(emptyFilters);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+type FitMarketListSectionProps = {
+  stores: LandingStore[];
+  total: number;
+  page: number;
+  pageSize?: number;
+  cities?: string[];
+  categories?: string[];
+  memberships?: string[];
+};
 
-  const cities = useMemo(() => uniqueSorted(stores.map((store) => store.city)), [stores]);
+const FitMarketListSection = ({
+  stores: initialStores,
+  total: initialTotal,
+  page: initialPage,
+  pageSize = LANDING_STORES_PAGE_SIZE,
+  cities: citiesFromApi,
+  categories: categoriesFromApi,
+  memberships: membershipsFromApi,
+}: FitMarketListSectionProps) => {
+  const { t, locale } = useI18n();
+  const [filters, setFilters] = useState<StoresFiltersValue>(emptyFilters);
+  const [debouncedQuery, setDebouncedQuery] = useState(filters.query);
+  const [items, setItems] = useState(initialStores);
+  const [page, setPage] = useState(initialPage);
+  const [total, setTotal] = useState(initialTotal);
+  const [loading, setLoading] = useState(false);
+  const skipFirstFetch = useRef(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedQuery(filters.query), 350);
+    return () => window.clearTimeout(timer);
+  }, [filters.query]);
+
+  useEffect(() => {
+    const apiFilters = toApiFilters({ ...filters, query: debouncedQuery });
+    if (skipFirstFetch.current) {
+      skipFirstFetch.current = false;
+      if (!apiFilters.q && !apiFilters.city && !apiFilters.category && !apiFilters.membership) {
+        return;
+      }
+    }
+
+    let cancelled = false;
+    setLoading(true);
+    getLandingStoresPage(locale, 1, pageSize, apiFilters)
+      .then((data) => {
+        if (cancelled) return;
+        setItems(data.items);
+        setPage(data.page);
+        setTotal(data.total);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery, filters.city, filters.category, filters.membership, locale, pageSize]);
+
+  const cities = useMemo(
+    () =>
+      citiesFromApi && citiesFromApi.length > 0
+        ? citiesFromApi
+        : uniqueSorted(items.map((store) => store.city)),
+    [citiesFromApi, items],
+  );
   const categories = useMemo(
-    () => uniqueSorted(stores.map((store) => store.category)),
-    [stores],
+    () =>
+      categoriesFromApi && categoriesFromApi.length > 0
+        ? categoriesFromApi
+        : uniqueSorted(items.map((store) => store.category)),
+    [categoriesFromApi, items],
   );
   const memberships = useMemo(
-    () => uniqueSorted(stores.flatMap((store) => store.discounts ?? [])),
-    [stores],
+    () =>
+      membershipsFromApi && membershipsFromApi.length > 0
+        ? membershipsFromApi
+        : uniqueSorted(items.flatMap((store) => store.discounts ?? [])),
+    [items, membershipsFromApi],
   );
 
-  const filtered = useMemo(() => {
-    const query = filters.query.trim().toLocaleLowerCase("az");
-    return stores.filter((store) => {
-      if (filters.city && store.city !== filters.city) return false;
-      if (filters.category && store.category !== filters.category) return false;
-      if (filters.membership && !(store.discounts ?? []).includes(filters.membership)) {
-        return false;
-      }
-      if (!query) return true;
-      const haystack = [
-        store.name,
-        store.city,
-        store.addressText,
-        store.category,
-        store.phone,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLocaleLowerCase("az");
-      return haystack.includes(query);
-    });
-  }, [filters, stores]);
+  const hasMore = page * pageSize < total;
 
-  const visible = filtered.slice(0, visibleCount);
+  const loadMore = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const data = await getLandingStoresPage(
+        locale,
+        page + 1,
+        pageSize,
+        toApiFilters({ ...filters, query: debouncedQuery }),
+      );
+      setItems((current) => mergeById(current, data.items));
+      setPage(data.page);
+      setTotal(data.total);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center gap-10">
@@ -73,33 +152,29 @@ const FitMarketListSection = ({ stores }: FitMarketListSectionProps) => {
           cities={cities}
           categories={categories}
           memberships={memberships}
-          onChange={(next) => {
-            setFilters(next);
-            setVisibleCount(PAGE_SIZE);
-          }}
-          onReset={() => {
-            setFilters(emptyFilters);
-            setVisibleCount(PAGE_SIZE);
-          }}
+          onChange={setFilters}
+          onReset={() => setFilters(emptyFilters)}
         />
 
         <Stagger
-          key={`${filters.city}-${filters.category}-${filters.membership}-${filters.query}`}
+          key={`${filters.city}-${filters.category}-${filters.membership}-${debouncedQuery}`}
           className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
           variant="rise"
           delay={0.06}
+          whenInView={false}
         >
-          {visible.map((store) => (
+          {items.map((store) => (
             <FitMarketCard key={store.storeId} store={store} />
           ))}
         </Stagger>
       </div>
 
-      {visibleCount < filtered.length ? (
+      {hasMore ? (
         <button
           type="button"
-          onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-          className="inline-flex h-12 min-w-[194px] items-center justify-center rounded-[32px] border border-border-muted bg-surface px-4 text-base font-semibold leading-6 text-ink"
+          disabled={loading}
+          onClick={loadMore}
+          className="inline-flex h-12 min-w-[194px] cursor-pointer items-center justify-center rounded-[32px] border border-border-muted bg-surface px-4 text-base font-semibold leading-6 text-ink transition-colors hover:border-cyan hover:text-turquoise disabled:cursor-wait disabled:opacity-70"
         >
           {t.centers.loadMore}
         </button>
