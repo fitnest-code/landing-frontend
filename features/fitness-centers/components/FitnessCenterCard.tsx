@@ -5,13 +5,14 @@ import MembershipBadge, {
   type MembershipTier,
 } from "@/features/home/components/MembershipBadge";
 import RemoteImage from "@/components/common/RemoteImage";
-import { gymImageSrc } from "@/lib/api/landing";
+import { gymImageSrc, type LandingCategoryItem } from "@/lib/api/landing";
 
 export type FitnessCenterCardProps = {
   name: string;
   location: string;
   image: string;
   category: string;
+  categoryItems?: LandingCategoryItem[];
   membership: MembershipTier;
   href: string;
 };
@@ -21,6 +22,7 @@ const FitnessCenterCard = ({
   location,
   image,
   category,
+  categoryItems = [],
   membership,
   href,
 }: FitnessCenterCardProps) => {
@@ -47,7 +49,20 @@ const FitnessCenterCard = ({
             <MembershipBadge tier={membership} showDiscount={false} />
           </div>
           <p className="min-h-[20px] text-sm font-bold leading-5 text-turquoise">
-            {category || "\u00A0"}
+            {categoryItems.length > 0 ? (
+              <span className="flex flex-wrap items-center gap-2">
+                {categoryItems.map((item) => (
+                  <span key={item.name} className="inline-flex items-center gap-1.5">
+                    {item.iconUrl ? (
+                      <img src={item.iconUrl} alt="" className="size-5 object-contain" />
+                    ) : null}
+                    {item.name}
+                  </span>
+                ))}
+              </span>
+            ) : (
+              category || "\u00A0"
+            )}
           </p>
         </div>
       </div>

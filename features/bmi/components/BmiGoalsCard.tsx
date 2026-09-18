@@ -121,6 +121,36 @@ const BmiGoalsCard = ({
     setStatus("error");
   };
 
+  if (status === "success") {
+    return (
+      <div className="relative flex w-full flex-col items-center gap-6 rounded-xl border border-border-muted bg-surface p-8 text-center md:p-12">
+        <div className="flex size-16 items-center justify-center rounded-full bg-cyan/15 text-turquoise">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path
+              d="M20 6L9 17l-5-5"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h2 className="text-[28px] font-semibold leading-10 text-ink">
+            {t.bmi.contactSuccessTitle}
+          </h2>
+          <p className="text-base leading-6 text-title">{t.bmi.contactSuccess}</p>
+        </div>
+        <Link
+          href={addLocaleToPathname("/", locale)}
+          className="inline-flex h-11 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white hover:bg-[#FF6A42]"
+        >
+          {t.bmi.contactSuccessHome}
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex w-full flex-col gap-8 rounded-xl border border-border-muted bg-surface p-6">
       <div className="flex flex-col gap-1">
@@ -247,9 +277,6 @@ const BmiGoalsCard = ({
             </p>
           ))}
         </div>
-      ) : null}
-      {status === "success" ? (
-        <p className="text-sm leading-5 text-turquoise">{t.bmi.contactSuccess}</p>
       ) : null}
       {status === "error" ? (
         <p className="text-sm leading-5 text-energy">{t.bmi.contactError}</p>

@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { partnerFormSchema } from "@/schemas/schemas";
-import { submitLandingContactMessage } from "@/lib/api/landing";
+import { submitLandingPartnerApplication } from "@/lib/api/landing";
+import { apiClient } from "@/lib/api";
 import { useI18n } from "@/lib/i18n/provider";
+import {
+  PHONE_PREFIX,
+  formatFullPhone,
+  isValidPhone,
+  normalizePhoneInput,
+} from "@/features/bmi/lib/bmi-utils";
 import PartnerThemeIcon from "./PartnerThemeIcon";
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
@@ -19,6 +26,9 @@ const PartnerForm = () => {
   const copy = t.partner;
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [activityOpen, setActivityOpen] = useState(false);
+  const [customActivity, setCustomActivity] = useState("");
+  const [extraActivities, setExtraActivities] = useState<string[]>([]);
+  const [apiCategories, setApiCategories] = useState<string[]>([]);
   const activityRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
 
@@ -34,6 +44,19 @@ const PartnerForm = () => {
   });
 
   useEffect(() => {
+    let cancelled = false;
+    apiClient
+      .get<{ categories?: string[] }>("/public/landing/gyms/filters")
+      .then(({ data }) => {
+        if (!cancelled) setApiCategories(data.categories ?? []);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     if (!activityOpen) return;
     const onPointerDown = (event: MouseEvent) => {
       if (!activityRef.current?.contains(event.target as Node)) {
@@ -44,33 +67,64 @@ const PartnerForm = () => {
     return () => window.removeEventListener("mousedown", onPointerDown);
   }, [activityOpen]);
 
-  const selectedActivity = copy.activityOptions.find(
+  const activityOptions = useMemo(() => {
+    const fromCopy = copy.activityOptions;
+    const seen = new Set(fromCopy.map((option) => option.label.toLocaleLowerCase("az")));
+    const extras = [
+      ...apiCategories,
+      ...extraActivities,
+    ]
+      .map((label) => label.trim())
+      .filter(Boolean)
+      .filter((label) => {
+        const key = label.toLocaleLowerCase("az");
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .map((label) => ({ value: label, label }));
+    return [...fromCopy, ...extras];
+  }, [apiCategories, copy.activityOptions, extraActivities]);
+
+  const selectedActivity = activityOptions.find(
     (option) => option.value === form.watch("activity"),
   );
 
   async function onSubmit(values: PartnerFormValues) {
     setStatus("idle");
+    const localPhone = normalizePhoneInput(values.phone);
+    if (!isValidPhone(localPhone)) {
+      form.setError("phone", { message: t.bmi.phoneError });
+      return;
+    }
     const activityLabel =
-      copy.activityOptions.find((option) => option.value === values.activity)?.label ??
+      activityOptions.find((option) => option.value === values.activity)?.label ??
       values.activity;
-    const message = [
-      `Gym: ${values.gymName.trim()}`,
-      `Phone: ${values.phone.trim()}`,
-      `Activity: ${activityLabel}`,
-    ].join("\n");
-
-    const ok = await submitLandingContactMessage({
-      name: values.contactName,
+    const ok = await submitLandingPartnerApplication({
+      gymName: values.gymName,
+      contactName: values.contactName,
+      phone: formatFullPhone(localPhone),
       email: values.email,
-      topic: "partnership",
-      message,
+      activity: activityLabel,
     });
     if (ok) {
       form.reset();
+      setCustomActivity("");
       setStatus("success");
       return;
     }
     setStatus("error");
+  }
+
+  function addCustomActivity() {
+    const label = customActivity.trim();
+    if (label.length < 2) return;
+    setExtraActivities((current) =>
+      current.includes(label) ? current : [...current, label],
+    );
+    form.setValue("activity", label, { shouldValidate: true });
+    setCustomActivity("");
+    setActivityOpen(false);
   }
 
   return (
@@ -116,13 +170,22 @@ const PartnerForm = () => {
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1">
-            <input
-              {...form.register("phone")}
-              type="tel"
-              autoComplete="tel"
-              placeholder={copy.phone}
-              className={fieldClass}
-            />
+            <div className={`${fieldClass} flex items-center gap-2`}>
+              <span className="shrink-0 text-[#94979C] dark:text-[#A6A6A6]">{PHONE_PREFIX}</span>
+              <input
+                value={form.watch("phone")}
+                onChange={(event) =>
+                  form.setValue("phone", normalizePhoneInput(event.target.value), {
+                    shouldValidate: true,
+                  })
+                }
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder={t.bmi.phonePlaceholder}
+                className="w-full bg-transparent outline-none"
+              />
+            </div>
             {form.formState.errors.phone ? (
               <span className="text-sm text-energy">{form.formState.errors.phone.message}</span>
             ) : null}
@@ -161,28 +224,45 @@ const PartnerForm = () => {
             />
           </button>
           {activityOpen ? (
-            <ul
+            <div
               id={menuId}
               role="listbox"
               className="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border border-border-muted bg-surface py-1 shadow-[0px_8px_24px_rgba(1,23,41,0.12)]"
             >
-              {copy.activityOptions.map((option) => (
-                <li key={option.value}>
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={form.watch("activity") === option.value}
-                    className="flex w-full px-4 py-2.5 text-left text-base text-ink hover:bg-page"
-                    onClick={() => {
-                      form.setValue("activity", option.value, { shouldValidate: true });
-                      setActivityOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
+              <ul className="max-h-56 overflow-y-auto py-1">
+                {activityOptions.map((option) => (
+                  <li key={option.value}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={form.watch("activity") === option.value}
+                      className="flex w-full px-4 py-2.5 text-left text-base text-ink hover:bg-page"
+                      onClick={() => {
+                        form.setValue("activity", option.value, { shouldValidate: true });
+                        setActivityOpen(false);
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex gap-2 border-t border-border-muted p-2">
+                <input
+                  value={customActivity}
+                  onChange={(event) => setCustomActivity(event.target.value)}
+                  placeholder={copy.customActivity}
+                  className="h-10 min-w-0 flex-1 rounded-lg border border-border-muted bg-page px-3 text-sm outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={addCustomActivity}
+                  className="h-10 shrink-0 rounded-lg bg-button px-3 text-sm font-semibold text-white"
+                >
+                  {copy.addActivity}
+                </button>
+              </div>
+            </div>
           ) : null}
           {form.formState.errors.activity ? (
             <span className="mt-1 block text-sm text-energy">

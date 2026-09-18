@@ -86,10 +86,10 @@ const PhoneScreensCarousel = ({
             key={SCREENS[index]}
             src={SCREENS[index]}
             alt={alt}
-            className="absolute inset-0 h-full w-full object-cover"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            className="absolute inset-0 h-full w-full origin-top object-contain object-top max-md:scale-[0.86]"
+            initial={{ x: "-28%", opacity: 0.4 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "28%", opacity: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           />
         </AnimatePresence>

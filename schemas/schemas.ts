@@ -40,8 +40,12 @@ export const partnerFormSchema = z.object({
     .max(40, { message: "Telefon nömrəsi çox uzundur" }),
   email: z
     .string()
-    .min(1, { message: "Email ünvanı tələb olunur" })
-    .email({ message: "Düzgün email ünvanı daxil edin" }),
+    .trim()
+    .optional()
+    .or(z.literal(""))
+    .refine((value) => !value || z.string().email().safeParse(value).success, {
+      message: "Düzgün email ünvanı daxil edin",
+    }),
   activity: z.string().min(1, { message: "Fəaliyyət növü seçin" }),
 });
 

@@ -50,6 +50,7 @@ const GymsSection = async () => {
                 location={gym.location || gym.city || "—"}
                 image={gym.coverImageUrl || ""}
                 category={gym.category || ""}
+                categoryItems={gym.categoryItems}
                 membership={toTier(gym.membership)}
                 href={addLocaleToPathname(`/fitness-centers/${gym.gymId}`, locale)}
               />

@@ -1,4 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n/provider";
 
 export type SubscriptionTierName = "Bronze" | "Silver" | "Gold" | "Platinum";
 
@@ -72,6 +75,7 @@ export const DEFAULT_TIER_PERCENT: Record<SubscriptionTierName, string> = {
 };
 
 const DiscountBadges = ({ discounts, className }: DiscountBadgesProps) => {
+  const { t } = useI18n();
   if (!discounts || discounts.length === 0) return null;
 
   return (
@@ -81,7 +85,9 @@ const DiscountBadges = ({ discounts, className }: DiscountBadgesProps) => {
         const style = TIER_STYLES[tier];
         const parsed = parsePercent(discount);
         const percent = parsed || DEFAULT_TIER_PERCENT[tier];
-        const label = `${tier} ${percent} %`;
+        const label = t.fitMarket.discountHint
+          .replace("{tier}", tier)
+          .replace("{n}", percent);
 
         return (
           <div
@@ -90,11 +96,19 @@ const DiscountBadges = ({ discounts, className }: DiscountBadgesProps) => {
             style={{
               background: style.gradient,
             }}
-            className="inline-flex shrink-0 items-center justify-center rounded-[32px] px-3 py-1.5"
+            className="inline-flex max-w-[220px] shrink-0 items-center gap-1.5 rounded-[32px] px-3 py-1.5"
           >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+              <path
+                d="M5 16l7-10 7 10H5z"
+                stroke={style.textColor}
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
+            </svg>
             <span
               style={{ color: style.textColor }}
-              className="whitespace-nowrap text-xs font-bold leading-4"
+              className="text-left text-[11px] font-bold leading-4"
             >
               {label}
             </span>

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
+import { AZ_CITIES, cityMatches } from "@/lib/constants/az-cities";
 import type { LandingGym } from "@/lib/api/landing";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
 import FitnessCenterCard from "../components/FitnessCenterCard";
@@ -69,13 +70,7 @@ const FitnessCentersListSection = ({
     setVisibleCount(PAGE_SIZE);
   }, [initialMembership]);
 
-  const cities = useMemo(
-    () =>
-      citiesFromApi && citiesFromApi.length > 0
-        ? [...citiesFromApi].sort((a, b) => a.localeCompare(b, "az"))
-        : uniqueSorted(gyms.map((gym) => gym.city)),
-    [citiesFromApi, gyms],
-  );
+  const cities = useMemo(() => [...AZ_CITIES], []);
   const categories = useMemo(
     () =>
       categoriesFromApi && categoriesFromApi.length > 0
@@ -86,7 +81,7 @@ const FitnessCentersListSection = ({
   const filtered = useMemo(() => {
     const query = filters.query.trim().toLocaleLowerCase("az");
     return gyms.filter((gym) => {
-      if (filters.city && gym.city !== filters.city) return false;
+      if (filters.city && !cityMatches(gym.city, filters.city)) return false;
       if (filters.category) {
         const names =
           gym.categories.length > 0
@@ -137,6 +132,7 @@ const FitnessCentersListSection = ({
             location={gym.location || gym.city || "—"}
             image={gym.coverImageUrl || ""}
             category={gym.category || ""}
+            categoryItems={gym.categoryItems}
             membership={toTier(gym.membership)}
             href={addLocaleToPathname(`/fitness-centers/${gym.gymId}`, locale)}
           />

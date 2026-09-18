@@ -9,6 +9,11 @@ export type LandingStats = {
   packageCount: number;
 };
 
+export type LandingCategoryItem = {
+  name: string;
+  iconUrl: string | null;
+};
+
 export type LandingGym = {
   gymId: string;
   name: string;
@@ -18,6 +23,7 @@ export type LandingGym = {
   phone: string | null;
   category: string | null;
   categories: string[];
+  categoryItems?: LandingCategoryItem[];
   membership: MembershipTier;
 };
 
@@ -29,6 +35,7 @@ export type LandingGymDetail = LandingGym & {
   accessMemberships: MembershipTier[];
   description: string | null;
   amenities: string[];
+  note?: string | null;
   categories: string[];
 };
 
@@ -50,6 +57,7 @@ export type LandingStore = {
   phone: string | null;
   workHoursText: string | null;
   email?: string | null;
+  socialUrl?: string | null;
 };
 
 export type LandingContact = {
@@ -159,10 +167,20 @@ const emptyGymsPage = (
 });
 
 function mapGymCard(gym: LandingGym): LandingGym {
-  const categories = gym.categories?.filter(Boolean) ?? [];
+  const categoryItems = (gym.categoryItems ?? [])
+    .filter((item) => item?.name)
+    .map((item) => ({
+      name: item.name,
+      iconUrl: item.iconUrl ? gymImageSrc(item.iconUrl) : null,
+    }));
+  const categories =
+    categoryItems.length > 0
+      ? categoryItems.map((item) => item.name)
+      : gym.categories?.filter(Boolean) ?? [];
   return {
     ...gym,
     coverImageUrl: gymImageSrc(gym.coverImageUrl),
+    categoryItems,
     categories,
     category:
       categories.length > 0 ? categories.join(" & ") : (gym.category ?? null),
@@ -273,7 +291,12 @@ export async function getLandingGymServer(
       workHours: data.workHours ?? [],
       accessMemberships: data.accessMemberships ?? [],
       amenities: data.amenities ?? [],
+      note: data.note ?? null,
       categories: data.categories ?? [],
+      categoryItems: (data.categoryItems ?? []).map((item) => ({
+        name: item.name,
+        iconUrl: item.iconUrl ? gymImageSrc(item.iconUrl) : null,
+      })),
       description: data.description ?? null,
       category:
         data.categories && data.categories.length > 0
@@ -381,6 +404,27 @@ export async function getLandingContactServer(): Promise<LandingContact> {
     };
   } catch {
     return { email: null, phone: null };
+  }
+}
+
+export async function submitLandingPartnerApplication(input: {
+  gymName: string;
+  contactName: string;
+  phone: string;
+  email?: string;
+  activity: string;
+}): Promise<boolean> {
+  try {
+    await apiClient.post(`${LANDING}/partner-applications`, {
+      gymName: input.gymName.trim(),
+      contactName: input.contactName.trim(),
+      phone: input.phone.trim(),
+      email: input.email?.trim() || undefined,
+      activity: input.activity.trim(),
+    });
+    return true;
+  } catch {
+    return false;
   }
 }
 

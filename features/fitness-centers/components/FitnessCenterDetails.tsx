@@ -69,12 +69,16 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
   const t = messages.centers;
   const address = [gym.location, gym.city].filter(Boolean).join(", ");
   const hours = gym.workHours.length > 0 ? gym.workHours : [];
+  const categoryItems = gym.categoryItems?.filter((item) => item.name) ?? [];
   const categoryLabel =
-    gym.categories.length > 0
-      ? gym.categories.join(" & ")
-      : gym.category?.trim() || "";
+    categoryItems.length > 0
+      ? categoryItems.map((item) => item.name).join(" & ")
+      : gym.categories.length > 0
+        ? gym.categories.join(" & ")
+        : gym.category?.trim() || "";
   const amenities = gym.amenities.length > 0 ? gym.amenities.join(" • ") : "";
   const description = gym.description?.trim() || "";
+  const note = gym.note?.trim() || "";
   const tiers = accessTiers(gym);
   const lowestTier = MEMBERSHIP_LABELS[tiers[0] ?? toTier(gym.membership)];
   const accessHint = (
@@ -149,7 +153,18 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
                 className="dark:!bg-platinum dark:!bg-none"
               />
             </div>
-            {categoryLabel ? (
+            {categoryItems.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-3">
+                {categoryItems.map((item) => (
+                  <span key={item.name} className="inline-flex items-center gap-2 text-2xl font-bold leading-9 text-turquoise">
+                    {item.iconUrl ? (
+                      <img src={item.iconUrl} alt="" className="size-8 object-contain" />
+                    ) : null}
+                    {item.name}
+                  </span>
+                ))}
+              </div>
+            ) : categoryLabel ? (
               <p className="text-2xl font-bold leading-9 text-turquoise">
                 {categoryLabel}
               </p>
@@ -186,6 +201,12 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
                         <p className="text-base font-medium leading-6 text-ink">
                           {amenities}
                         </p>
+                      </div>
+                    ) : null}
+                    {note ? (
+                      <div className="rounded-xl border border-border-muted bg-page px-4 py-3">
+                        <p className="text-sm font-bold leading-5 text-turquoise">{t.note}</p>
+                        <p className="mt-1 text-base font-medium leading-6 text-ink">{note}</p>
                       </div>
                     ) : null}
                   </div>

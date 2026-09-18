@@ -43,59 +43,49 @@ const HeroSection = async () => {
             </p>
           </div>
 
-          <div className="flex flex-col items-start gap-8">
-            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <div className="size-[72px] overflow-hidden rounded-sm border border-border-muted bg-surface p-1.5 dark:bg-page sm:size-[80px]">
+          <div className="flex w-full flex-col items-start gap-8">
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col items-start gap-3">
+                <div className="size-[112px] overflow-hidden rounded-sm border border-border-muted bg-surface p-2 dark:bg-page sm:size-[128px]">
                   <img
                     src="/icons/home/app-qr.svg"
                     alt=""
-                    width={68}
-                    height={68}
+                    width={112}
+                    height={112}
                     className="size-full object-contain dark:hidden"
                   />
                   <img
                     src="/icons/home/app-qr-dark.svg"
                     alt=""
-                    width={68}
-                    height={68}
+                    width={112}
+                    height={112}
                     className="hidden size-full object-contain dark:block"
                   />
                 </div>
-                <div className="flex min-w-0 flex-col gap-0.5">
-                  <p className="text-sm font-bold leading-5 text-ink sm:text-base sm:leading-6">
-                    {t.qrDownloadTitle}
-                  </p>
+                <StoreBadges />
+              </div>
+              <div className="flex flex-col items-start gap-3 sm:items-end">
+                <Link
+                  href={`${homePath}#how-it-works`}
+                  className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-lg bg-button px-4 text-base font-bold text-white transition-colors hover:bg-[#FF6A42]"
+                >
+                  {messages.nav.howItWorks}
+                  <img
+                    src="/icons/home/arrow-right.svg"
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="brightness-0 invert"
+                  />
+                </Link>
+                <div className="flex flex-col gap-0.5 sm:text-right">
                   <p className="text-sm font-medium leading-5 text-title">
-                    {t.qrDownloadSubtitle}
+                    {t.packageTiers}
+                  </p>
+                  <p className="text-sm font-bold leading-5 text-ink">
+                    {t.packageLevelsLabel}
                   </p>
                 </div>
-              </div>
-              <Link
-                href={`${homePath}#how-it-works`}
-                className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-lg bg-button px-4 text-base font-bold text-white transition-colors hover:bg-[#FF6A42]"
-              >
-                {messages.nav.howItWorks}
-                <img
-                  src="/icons/home/arrow-right.svg"
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="brightness-0 invert"
-                />
-              </Link>
-            </div>
-
-            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <StoreBadges />
-              <div className="hidden h-[34px] w-0.5 bg-border-muted sm:block" />
-              <div className="flex flex-col gap-0.5">
-                <p className="text-sm font-medium leading-5 text-title">
-                  {t.packageTiers}
-                </p>
-                <p className="text-sm font-bold leading-5 text-ink">
-                  {t.packageLevelsLabel}
-                </p>
               </div>
             </div>
           </div>

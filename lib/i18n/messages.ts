@@ -208,6 +208,8 @@ export type Messages = {
     workHours: string;
     map: string;
     visit: string;
+    visitShort: string;
+    discountHint: string;
   };
   centers: {
     eyebrow: string;
@@ -228,6 +230,7 @@ export type Messages = {
     aboutGym: string;
     aboutText: string;
     amenities: string;
+    note: string;
     equipment: string;
     equipmentText: string;
     coaches: string;
@@ -336,6 +339,8 @@ export type Messages = {
     email: string;
     activity: string;
     activityOptions: { value: string; label: string }[];
+    addActivity: string;
+    customActivity: string;
     submit: string;
     sending: string;
     success: string;
@@ -412,6 +417,8 @@ export type Messages = {
     consent: string;
     contactCta: string;
     contactSuccess: string;
+    contactSuccessTitle: string;
+    contactSuccessHome: string;
     contactError: string;
     contactSending: string;
     privacy: string;
@@ -852,6 +859,8 @@ const az: Messages = {
     workHours: "İş saatları",
     map: "Xəritə",
     visit: "Keçid et",
+    visitShort: "Keçid",
+    discountHint: "{tier} abunəlik ilə {n}% endirim qazan",
   },
   centers: {
     eyebrow: "Fitness mərkəzləri",
@@ -870,10 +879,11 @@ const az: Messages = {
     detailsSubtitle: "Daha güclü, sağlam və enerjili olmaq üçün ideal məkan.",
     previousImage: "Əvvəlki şəkil",
     nextImage: "Növbəti şəkil",
-    aboutGym: "Zal haqqında",
+    aboutGym: "Haqqında",
     aboutText:
       "ProFit Club geniş məşq zonaları, yenilənmiş avadanlıqlar və rahat mühit ilə həm yeni başlayanlar, həm də peşəkar idmançılar üçün ideal fitness məkanıdır.",
     amenities: "İmkanlar",
+    note: "Qeyd",
     equipment: "Avadanlıqlar",
     equipmentText:
       "Kardio trenajorları • Funksional zona • Squat rack • Dumbbell/barbell • Kabel trenajorları • Stretching sahəsi",
@@ -1041,6 +1051,8 @@ const az: Messages = {
     phone: "+994-xx xxx xx xx",
     email: "E-poçt",
     activity: "Fəaliyyət növü",
+    addActivity: "Əlavə",
+    customActivity: "Digər fəaliyyət növü",
     activityOptions: [
       { value: "fitness", label: "Fitness" },
       { value: "yoga", label: "Yoga / pilates" },
@@ -1177,6 +1189,8 @@ const az: Messages = {
       "Məlumatlarımın müraciətim üzrə istifadə edilməsinə və FitNest komandasının mənimlə əlaqə saxlamasına razıyam.",
     contactCta: "Mənimlə əlaqə saxlayın",
     contactSuccess: "Müraciətiniz qəbul olundu. Tezliklə sizinlə əlaqə saxlayacağıq.",
+    contactSuccessTitle: "Müraciətiniz qəbul olundu",
+    contactSuccessHome: "Ana səhifəyə qayıt",
     contactError: "Müraciət göndərilmədi. Bir az sonra yenidən cəhd edin.",
     contactSending: "Göndərilir...",
     privacy: "Məxfilik siyasəti",
@@ -1656,6 +1670,8 @@ const en: Messages = {
     workHours: "Working hours",
     map: "Map",
     visit: "Visit",
+    visitShort: "Go",
+    discountHint: "Get {n}% off with {tier} membership",
   },
   centers: {
     ...az.centers,
@@ -1676,10 +1692,11 @@ const en: Messages = {
       "An ideal place to become stronger, healthier, and more energetic.",
     previousImage: "Previous image",
     nextImage: "Next image",
-    aboutGym: "About gym",
+    aboutGym: "About",
     aboutText:
       "ProFit Club offers wide workout zones, modern equipment, and a comfortable environment for all levels.",
     amenities: "Amenities",
+    note: "Note",
     equipment: "Equipment",
     equipmentText:
       "Cardio machines • Functional zone • Squat rack • Dumbbells/barbells • Cable machines • Stretching area",
@@ -1847,6 +1864,8 @@ const en: Messages = {
     phone: "+994-xx xxx xx xx",
     email: "Email",
     activity: "Activity type",
+    addActivity: "Add",
+    customActivity: "Other activity",
     activityOptions: [
       { value: "fitness", label: "Fitness" },
       { value: "yoga", label: "Yoga / pilates" },
@@ -1982,6 +2001,8 @@ const en: Messages = {
       "I agree that my data may be used for this request and that the FitNest team may contact me.",
     contactCta: "Contact me",
     contactSuccess: "Your request was received. We will contact you soon.",
+    contactSuccessTitle: "Your request was received",
+    contactSuccessHome: "Back to home",
     contactError: "The request could not be sent. Please try again later.",
     contactSending: "Sending...",
     privacy: "Privacy policy",
@@ -2447,6 +2468,8 @@ const ru: Messages = {
     workHours: "Часы работы",
     map: "Карта",
     visit: "Перейти",
+    visitShort: "Перейти",
+    discountHint: "Скидка {n}% с подпиской {tier}",
   },
   centers: {
     ...en.centers,
@@ -2470,6 +2493,7 @@ const ru: Messages = {
     aboutText:
       "ProFit Club предлагает просторные зоны, современное оборудование и комфортную атмосферу для любого уровня.",
     amenities: "Возможности",
+    note: "Примечание",
     equipment: "Оборудование",
     equipmentText:
       "Кардио-тренажеры • Функциональная зона • Стойка для приседа • Гантели/штанги • Кабельные тренажеры • Зона растяжки",
@@ -2637,6 +2661,8 @@ const ru: Messages = {
     phone: "+994-xx xxx xx xx",
     email: "Эл. почта",
     activity: "Тип активности",
+    addActivity: "Добавить",
+    customActivity: "Другой вид деятельности",
     activityOptions: [
       { value: "fitness", label: "Фитнес" },
       { value: "yoga", label: "Йога / пилатес" },
@@ -2773,6 +2799,8 @@ const ru: Messages = {
       "Я согласен(на), что мои данные будут использованы по этой заявке и команда FitNest может со мной связаться.",
     contactCta: "Свяжитесь со мной",
     contactSuccess: "Заявка получена. Мы скоро свяжемся с вами.",
+    contactSuccessTitle: "Заявка принята",
+    contactSuccessHome: "На главную",
     contactError: "Не удалось отправить заявку. Попробуйте позже.",
     contactSending: "Отправка...",
     privacy: "Политика конфиденциальности",

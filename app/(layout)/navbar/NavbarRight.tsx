@@ -15,7 +15,6 @@ import AzerbaijanFlag from "@/public/images/AzerbaijanFlag.svg";
 import EnglishFlag from "@/public/images/EnglishFlag.svg";
 import RussianFlag from "@/public/images/RussianFlag.svg";
 import ThemeToggle from "./ThemeToggle";
-import DownloadAppButton from "./DownloadAppButton";
 import { cn } from "@/lib/utils";
 
 const LOCALE_ORDER = ["az", "en", "ru"] as const;
@@ -115,7 +114,6 @@ const NavbarRight = () => {
         </Select>
       </div>
 
-      <DownloadAppButton />
     </div>
   );
 };

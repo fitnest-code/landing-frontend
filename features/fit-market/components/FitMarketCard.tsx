@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
 import RemoteImage from "@/components/common/RemoteImage";
 import { storeImageSrc, type LandingStore } from "@/lib/api/landing";
@@ -12,18 +10,16 @@ type FitMarketCardProps = {
 };
 
 const FitMarketCard = ({ store }: FitMarketCardProps) => {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const address = [store.city, store.addressText].filter(Boolean).join(", ");
   const description = store.category || t.fitMarket.detailsDescription;
   const workHours = store.workHoursText
     ? `${t.fitMarket.workHours}: ${store.workHoursText}`
     : null;
+  const visitUrl = store.socialUrl?.trim() || null;
 
   return (
-    <Link
-      href={addLocaleToPathname(`/fit-market/${store.storeId}`, locale)}
-      className="group flex h-full min-w-0 flex-col justify-between gap-6 rounded-[32px] border border-border-muted bg-surface p-5 transition-colors duration-200 hover:border-cyan hover:bg-page hover:shadow-[0px_24px_50px_rgba(0,157,166,0.16)]"
-    >
+    <article className="group flex h-full min-w-0 flex-col justify-between gap-6 rounded-[32px] border border-border-muted bg-surface p-5">
       <div className="flex flex-col gap-6">
         <div className="relative h-[250px] overflow-hidden rounded-3xl">
           <RemoteImage
@@ -31,15 +27,25 @@ const FitMarketCard = ({ store }: FitMarketCardProps) => {
             fallback="/images/first.png"
             alt={store.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 410px"
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[168px] rounded-b-3xl bg-[linear-gradient(180deg,rgba(24,23,26,0)_0%,black_100%)]" />
+          {visitUrl ? (
+            <a
+              href={visitUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute right-3 top-3 z-10 inline-flex h-9 items-center rounded-lg bg-button px-3 text-sm font-semibold text-white hover:bg-[#FF6A42]"
+            >
+              {t.fitMarket.visitShort}
+            </a>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-start justify-between gap-2">
-            <h3 className="text-xl font-semibold leading-[30px] text-turquoise transition-colors group-hover:text-ink">
+            <h3 className="text-xl font-semibold leading-[30px] text-turquoise">
               {store.name}
             </h3>
             <DiscountBadges discounts={store.discounts ?? []} />
@@ -88,7 +94,7 @@ const FitMarketCard = ({ store }: FitMarketCardProps) => {
           </span>
         ) : null}
       </div>
-    </Link>
+    </article>
   );
 };
 
