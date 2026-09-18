@@ -11,7 +11,6 @@ import type { SubscriptionPackage } from "@/features/offers/api/types";
 import { formatManat, monthlyPrice } from "@/features/offers/lib/price";
 import { cn } from "@/lib/utils";
 import { Stagger } from "@/features/home/components/Reveal";
-import TiltCard from "@/features/home/components/TiltCard";
 
 export const PLAN_DURATIONS = [1, 3, 6, 12] as const;
 export type PlanDuration = (typeof PLAN_DURATIONS)[number];
@@ -92,7 +91,6 @@ const PlanPicker = ({
         original: originalPerMonth,
         savings,
         features: featuresFromOption(option, defaultFeatures),
-        mostPopular: tier === "platinum",
       };
     });
   }, [packages, duration, t.home.planFeatures]);
@@ -142,14 +140,10 @@ const PlanPicker = ({
         delay={0.1}
       >
         {plans.map((plan) => (
-          <TiltCard key={plan.tier} intensity={8} className="h-full">
-            <article className="group relative flex h-full min-w-0 flex-col items-start gap-7 rounded-2xl bg-[#F4F8FA] p-5 outline outline-1 outline-offset-[-1px] outline-transparent transition-all hover:bg-white hover:outline-[#00DBDB] sm:p-7 dark:bg-page dark:outline-border-muted dark:hover:bg-page dark:hover:outline-cyan">
-              {plan.mostPopular ? (
-                <span className="absolute -top-3 right-4 whitespace-nowrap rounded-full bg-turquoise px-[18px] py-[5px] text-xs font-semibold leading-[18px] text-white">
-                  {t.home.mostPopular}
-                </span>
-              ) : null}
-
+          <article
+            key={plan.tier}
+            className="group relative flex h-full min-w-0 flex-col items-start gap-7 rounded-2xl bg-[#F4F8FA] p-5 outline outline-1 outline-offset-[-1px] outline-transparent transition-all hover:bg-white hover:outline-[#00DBDB] sm:p-7 dark:bg-page dark:outline-border-muted dark:hover:bg-page dark:hover:outline-cyan"
+          >
               <div className="flex w-full flex-col gap-3">
                 <MembershipBadge tier={plan.tier} showDiscount={false} />
                 <div className="flex w-full items-start justify-between gap-3">
@@ -228,7 +222,7 @@ const PlanPicker = ({
                     `/fitness-centers?membership=${plan.tier}`,
                     locale,
                   )}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-base font-semibold text-[#00A4A4] transition-colors hover:bg-[#E6FBFB]"
+                  className="relative z-10 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-base font-semibold text-[#00A4A4] transition-colors hover:bg-[#E6FBFB]"
                 >
                   {t.offers.includedGyms}
                   <img
@@ -241,13 +235,12 @@ const PlanPicker = ({
                 </Link>
                 <Link
                   href={hrefFor(plan.tier)}
-                  className="inline-flex h-12 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white transition-colors hover:bg-[#FF6A42]"
+                  className="relative z-10 inline-flex h-12 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white transition-colors hover:bg-[#FF6A42]"
                 >
                   {t.home.selectPackage}
                 </Link>
               </div>
             </article>
-          </TiltCard>
         ))}
       </Stagger>
     </div>

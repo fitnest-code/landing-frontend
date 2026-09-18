@@ -63,7 +63,7 @@ const FitnessGallery = ({
               type="button"
               onClick={() => swiperInstance?.slidePrev()}
               aria-label={previousLabel}
-              className="absolute left-4 top-1/2 z-10 flex h-[58px] w-7 -translate-y-1/2 items-center justify-center rounded-[43px] bg-white"
+              className="absolute left-4 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 shadow-[0_2px_10px_rgba(1,23,41,0.18)]"
             >
               <img
                 src="/icons/gym-details/chevron-left.svg"
@@ -77,7 +77,7 @@ const FitnessGallery = ({
               type="button"
               onClick={() => swiperInstance?.slideNext()}
               aria-label={nextLabel}
-              className="absolute right-4 top-1/2 z-10 flex h-[58px] w-7 -translate-y-1/2 items-center justify-center rounded-[43px] bg-white"
+              className="absolute right-4 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 shadow-[0_2px_10px_rgba(1,23,41,0.18)]"
             >
               <img
                 src="/icons/gym-details/chevron-right.svg"

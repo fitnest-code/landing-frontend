@@ -17,6 +17,7 @@ const FilterSelect = ({
   onChange,
 }: FilterSelectProps) => {
   const [open, setOpen] = useState(false);
+  const [openUp, setOpenUp] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
 
@@ -38,7 +39,13 @@ const FilterSelect = ({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={menuId}
-        onClick={() => setOpen((current) => !current)}
+        onClick={() => {
+          if (!open && rootRef.current) {
+            const rect = rootRef.current.getBoundingClientRect();
+            setOpenUp(window.innerHeight - rect.bottom < 280);
+          }
+          setOpen((current) => !current);
+        }}
         className="inline-flex h-12 items-center gap-3 rounded-[32px] border border-[#90A1B9] bg-surface px-4 text-base font-semibold leading-6 text-ink"
       >
         <span>{selected?.label ?? label}</span>
@@ -54,7 +61,9 @@ const FilterSelect = ({
         <ul
           id={menuId}
           role="listbox"
-          className="absolute z-20 mt-2 max-h-64 min-w-full overflow-auto rounded-2xl border border-border-muted bg-surface py-1 shadow-[0px_8px_24px_rgba(1,23,41,0.12)]"
+          className={`absolute z-[80] max-h-64 min-w-full overflow-auto rounded-2xl border border-border-muted bg-surface py-1 shadow-[0px_8px_24px_rgba(1,23,41,0.12)] ${
+            openUp ? "bottom-full mb-2" : "mt-2"
+          }`}
         >
           {options.map((option) => (
             <li key={option.value}>

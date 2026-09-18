@@ -13,12 +13,13 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
   const t = messages.partner;
 
   return (
-    <div className="overflow-x-clip bg-page text-ink">
-      <section className="relative overflow-hidden bg-brand-navy-800 dark:bg-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-[137px] -top-[401px] h-[523px] w-[668px] rounded-full bg-[linear-gradient(180deg,rgba(4,34,86,0.61)_0%,rgba(0,106,133,0.38)_55%,rgba(0,163,179,0.01)_100%)] blur-[150px]"
-        />
+    <div className="bg-page text-ink">
+      <section className="relative bg-brand-navy-800 dark:bg-white">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div
+            className="absolute -left-[137px] -top-[401px] h-[523px] w-[668px] rounded-full bg-[linear-gradient(180deg,rgba(4,34,86,0.61)_0%,rgba(0,106,133,0.38)_55%,rgba(0,163,179,0.01)_100%)] blur-[150px]"
+          />
+        </div>
         <Container className="relative py-16 md:py-20">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
             <Reveal variant="blur" duration={0.8} className="flex w-full max-w-[515px] flex-col gap-10">
@@ -38,7 +39,7 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
                 {t.heroCta}
               </a>
             </Reveal>
-            <Reveal variant="right" duration={0.8} delay={0.15} className="w-full max-w-[684px]">
+            <Reveal variant="right" duration={0.8} delay={0.15} className="relative z-10 w-full max-w-[684px] overflow-visible">
               <PartnerForm />
             </Reveal>
           </div>

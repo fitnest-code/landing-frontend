@@ -45,7 +45,7 @@ const BmiGoalsCard = ({
     initialGoals,
     initialLocale,
   });
-  const [goalId, setGoalId] = useState<string | null>(null);
+  const [goalIds, setGoalIds] = useState<string[]>([]);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -87,7 +87,7 @@ const BmiGoalsCard = ({
   const phoneValid = isValidPhone(phone);
   const emailValid = isValidOptionalEmail(email);
   const isFormValid =
-    Boolean(goalId) &&
+    goalIds.length > 0 &&
     phoneValid &&
     emailValid &&
     consent &&
@@ -95,22 +95,22 @@ const BmiGoalsCard = ({
     bmiCalculated;
   const formErrors = [
     !metricsValid || !bmiCalculated ? t.bmi.metricsError : null,
-    !goalId ? t.bmi.goalError : null,
+    goalIds.length === 0 ? t.bmi.goalError : null,
     !consent ? t.bmi.consentError : null,
   ].filter((message): message is string => Boolean(message));
 
   const handleSubmit = async () => {
     setShowErrors(true);
-    if (!isFormValid || submitting || !goalId) return;
+    if (!isFormValid || submitting || goalIds.length === 0) return;
 
-    const selectedGoal = goals.find((goal) => goal.id === goalId);
+    const selectedGoals = goals.filter((goal) => goalIds.includes(goal.id));
     setSubmitting(true);
     setStatus("idle");
     const ok = await submitBmiLead({
       phone: formatFullPhone(phone),
       email: email.trim() || undefined,
-      goalCode: selectedGoal?.id ?? goalId,
-      goalTitle: selectedGoal?.title ?? goalId,
+      goalCode: selectedGoals.map((goal) => goal.id).join(","),
+      goalTitle: selectedGoals.map((goal) => goal.title).join(", "),
       heightCm,
       weightKg,
       age: Number.isFinite(ageValue) ? ageValue : undefined,
@@ -120,7 +120,7 @@ const BmiGoalsCard = ({
     setSubmitting(false);
 
     if (ok) {
-      setGoalId(null);
+      setGoalIds([]);
       setPhone("");
       setEmail("");
       setConsent(false);
@@ -179,12 +179,18 @@ const BmiGoalsCard = ({
               />
             ))
           : goals.map((goal) => {
-              const selected = goalId === goal.id;
+              const selected = goalIds.includes(goal.id);
               return (
                 <button
                   key={goal.id}
                   type="button"
-                  onClick={() => setGoalId(goal.id)}
+                  onClick={() =>
+                    setGoalIds((current) =>
+                      current.includes(goal.id)
+                        ? current.filter((id) => id !== goal.id)
+                        : [...current, goal.id],
+                    )
+                  }
                   className={`relative flex w-full cursor-pointer flex-col items-start gap-2 rounded-3xl border px-4 py-3 pr-12 text-left transition-colors ${
                     selected
                       ? "border-turquoise bg-cyan/10"

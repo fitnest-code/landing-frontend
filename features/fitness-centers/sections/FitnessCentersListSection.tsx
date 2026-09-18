@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
-import { AZ_CITIES, cityMatches } from "@/lib/constants/az-cities";
+import { cityMatches } from "@/lib/constants/az-cities";
 import type { LandingGym } from "@/lib/api/landing";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
 import FitnessCenterCard from "../components/FitnessCenterCard";
@@ -38,6 +38,34 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
     (a, b) => a.localeCompare(b, "az"),
   );
 
+const isOtherCategory = (name: string) => {
+  const normalized = name.trim().toLocaleLowerCase("az").replaceAll("ə", "e");
+  return normalized === "diger" || normalized === "other" || normalized === "другое";
+};
+
+const sortCategoriesByGymCount = (names: string[], gyms: LandingGym[]) => {
+  const counts = new Map<string, number>();
+  for (const gym of gyms) {
+    const values =
+      gym.categories.length > 0
+        ? gym.categories
+        : gym.category
+          ? [gym.category]
+          : [];
+    for (const name of new Set(values.map((value) => value.trim()).filter(Boolean))) {
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+  }
+  return [...names].sort((left, right) => {
+    if (isOtherCategory(left) !== isOtherCategory(right)) {
+      return isOtherCategory(left) ? 1 : -1;
+    }
+    const diff = (counts.get(right) ?? 0) - (counts.get(left) ?? 0);
+    if (diff !== 0) return diff;
+    return left.localeCompare(right, "az");
+  });
+};
+
 type FitnessCentersListSectionProps = {
   gyms: LandingGym[];
   cities?: string[];
@@ -70,14 +98,23 @@ const FitnessCentersListSection = ({
     setVisibleCount(PAGE_SIZE);
   }, [initialMembership]);
 
-  const cities = useMemo(() => [...AZ_CITIES], []);
-  const categories = useMemo(
-    () =>
+  const cities = useMemo(() => {
+    const fromGyms = uniqueSorted(gyms.map((gym) => gym.city));
+    if (citiesFromApi && citiesFromApi.length > 0) {
+      const existing = citiesFromApi.filter((city) =>
+        gyms.some((gym) => cityMatches(gym.city, city)),
+      );
+      if (existing.length > 0) return existing;
+    }
+    return fromGyms;
+  }, [citiesFromApi, gyms]);
+  const categories = useMemo(() => {
+    const names =
       categoriesFromApi && categoriesFromApi.length > 0
-        ? [...categoriesFromApi].sort((a, b) => a.localeCompare(b, "az"))
-        : uniqueSorted(gyms.flatMap((gym) => gym.categories)),
-    [categoriesFromApi, gyms],
-  );
+        ? categoriesFromApi
+        : uniqueSorted(gyms.flatMap((gym) => gym.categories));
+    return sortCategoriesByGymCount(names, gyms);
+  }, [categoriesFromApi, gyms]);
   const filtered = useMemo(() => {
     const query = filters.query.trim().toLocaleLowerCase("az");
     return gyms.filter((gym) => {

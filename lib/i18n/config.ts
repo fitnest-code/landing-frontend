@@ -25,6 +25,8 @@ export const stripLocaleFromPathname = (pathname: string): string => {
 };
 
 export const addLocaleToPathname = (pathname: string, locale: Locale): string => {
-  const stripped = stripLocaleFromPathname(pathname || "/");
-  return stripped === "/" ? `/${locale}` : `/${locale}${stripped}`;
+  const [path, query] = (pathname || "/").split("?");
+  const stripped = stripLocaleFromPathname(path);
+  const localized = stripped === "/" ? `/${locale}` : `/${locale}${stripped}`;
+  return query ? `${localized}?${query}` : localized;
 };

@@ -78,10 +78,10 @@ const DownloadAppModal = ({ isOpen, onClose }: DownloadAppModalProps) => {
                 id="download-modal-title"
                 className="text-base font-bold leading-6 text-[#011729] sm:text-sm sm:leading-5 dark:text-white"
               >
-                QR ilə endir
+                QR-kodu oxut
               </span>
               <span className="text-sm font-medium leading-5 text-[#557C9F] dark:text-[#8FB1C6]">
-                Kameranı tut, tətbiqə keç
+                Kamerayla skan et, tətbiqə keç
               </span>
             </div>
           </div>

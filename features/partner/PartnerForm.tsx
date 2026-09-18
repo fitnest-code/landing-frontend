@@ -131,7 +131,7 @@ const PartnerForm = () => {
     <form
       id="partner-apply"
       onSubmit={form.handleSubmit(onSubmit)}
-      className="flex w-full max-w-[684px] flex-col gap-7 rounded-2xl border border-border-muted bg-page p-7"
+      className="flex w-full max-w-[684px] flex-col gap-7 overflow-visible rounded-2xl border border-border-muted bg-page p-7"
     >
       <div className="flex flex-col items-center gap-1 text-center">
         <h2 className="font-manrope text-xl font-extrabold leading-[30px] text-ink">
@@ -227,7 +227,7 @@ const PartnerForm = () => {
             <div
               id={menuId}
               role="listbox"
-              className="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border border-border-muted bg-surface py-1 shadow-[0px_8px_24px_rgba(1,23,41,0.12)]"
+              className="absolute z-[80] mt-2 w-full overflow-hidden rounded-xl border border-border-muted bg-surface py-1 shadow-[0px_8px_24px_rgba(1,23,41,0.12)]"
             >
               <ul className="max-h-56 overflow-y-auto py-1">
                 {activityOptions.map((option) => (

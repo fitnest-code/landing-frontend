@@ -1,11 +1,9 @@
 export function monthlyPrice(total: number, durationMonths: number): number {
   if (!Number.isFinite(total)) return 0;
-  if (!durationMonths || durationMonths <= 0) return total;
-  return total / durationMonths;
+  if (!durationMonths || durationMonths <= 0) return Math.round(total);
+  return Math.round(total / durationMonths);
 }
 
 export function formatManat(value: number): string {
-  const rounded = Math.round(value * 100) / 100;
-  if (Number.isInteger(rounded)) return String(rounded);
-  return rounded.toFixed(2);
+  return String(Math.round(value));
 }

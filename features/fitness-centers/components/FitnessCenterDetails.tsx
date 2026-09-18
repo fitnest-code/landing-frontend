@@ -171,17 +171,15 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-stretch">
-            <div className="min-w-0 flex-1">
-              <FitnessGallery
+          <div className="flex flex-col gap-10">
+            <FitnessGallery
                 images={gym.galleryImageUrls}
                 name={name}
                 previousLabel={t.previousImage}
                 nextLabel={t.nextImage}
               />
-            </div>
 
-            <div className="flex min-w-0 flex-1 flex-col justify-between gap-10">
+            <div className="flex min-w-0 flex-col justify-between gap-10">
               <div className="flex flex-col gap-10">
                 <div className="flex flex-col gap-5">
                   <h2 className="text-[36px] font-semibold leading-[52px] text-ink">
