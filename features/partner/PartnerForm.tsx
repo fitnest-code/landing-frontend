@@ -7,6 +7,7 @@ import * as z from "zod";
 import { partnerFormSchema } from "@/schemas/schemas";
 import { submitLandingPartnerApplication } from "@/lib/api/landing";
 import { apiClient } from "@/lib/api";
+import { FormError, FormSuccess, withPhone } from "@/components/common/FormFeedback";
 import { useI18n } from "@/lib/i18n/provider";
 import {
   PHONE_PREFIX,
@@ -125,6 +126,17 @@ const PartnerForm = () => {
     form.setValue("activity", label, { shouldValidate: true });
     setCustomActivity("");
     setActivityOpen(false);
+  }
+
+  if (status === "success") {
+    return (
+      <div
+        id="partner-apply"
+        className="w-full max-w-[684px] overflow-visible rounded-2xl border border-border-muted bg-page"
+      >
+        <FormSuccess title={copy.successTitle} body={withPhone(copy.success)} />
+      </div>
+    );
   }
 
   return (
@@ -272,13 +284,6 @@ const PartnerForm = () => {
         </div>
       </div>
 
-      {status === "success" ? (
-        <p className="text-sm leading-5 text-turquoise">{copy.success}</p>
-      ) : null}
-      {status === "error" ? (
-        <p className="text-sm leading-5 text-energy">{copy.error}</p>
-      ) : null}
-
       <button
         type="submit"
         disabled={form.formState.isSubmitting}
@@ -286,6 +291,9 @@ const PartnerForm = () => {
       >
         {form.formState.isSubmitting ? copy.sending : copy.submit}
       </button>
+      {status === "error" ? (
+        <FormError title={copy.errorTitle} body={copy.error} />
+      ) : null}
     </form>
   );
 };

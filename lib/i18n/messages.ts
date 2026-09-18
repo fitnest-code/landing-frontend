@@ -280,7 +280,9 @@ export type Messages = {
     message: string;
     send: string;
     sending: string;
+    successTitle: string;
     success: string;
+    errorTitle: string;
     error: string;
   };
   corporate: {
@@ -303,7 +305,9 @@ export type Messages = {
     notes: string;
     submit: string;
     sending: string;
+    successTitle: string;
     success: string;
+    errorTitle: string;
     error: string;
     benefitsTitle: string;
     benefitsSubtitle: string;
@@ -343,7 +347,9 @@ export type Messages = {
     customActivity: string;
     submit: string;
     sending: string;
+    successTitle: string;
     success: string;
+    errorTitle: string;
     error: string;
   };
   about: {
@@ -420,7 +426,7 @@ export type Messages = {
     contactCta: string;
     contactSuccess: string;
     contactSuccessTitle: string;
-    contactSuccessHome: string;
+    contactErrorTitle: string;
     contactError: string;
     contactSending: string;
     privacy: string;
@@ -946,8 +952,10 @@ const az: Messages = {
     message: "“Mesajını bura yaz...”",
     send: "Göndər",
     sending: "Göndərilir...",
-    success: "Mesajın göndərildi. Tezliklə cavab verəcəyik.",
-    error: "Mesaj göndərilmədi. Bir az sonra yenidən cəhd et.",
+    successTitle: "Mesajınız qəbul edildi!",
+    success: "Komandamız tezliklə {phone} nömrəsi ilə sizinlə əlaqə saxlayacaq.",
+    errorTitle: "Mesaj qeydə alınmadı.",
+    error: "Xahiş edirik yenidən cəhd edəsiniz",
   },
   corporate: {
     eyebrow: "Korporativ",
@@ -975,8 +983,10 @@ const az: Messages = {
     notes: "Sualınız və ya əlavə qeydləriniz....",
     submit: "Təklif alın",
     sending: "Göndərilir...",
-    success: "Müraciətiniz göndərildi. Tezliklə əlaqə saxlayacağıq.",
-    error: "Müraciət göndərilmədi. Bir az sonra yenidən cəhd et.",
+    successTitle: "Müraciətiniz qəbul edildi!",
+    success: "Komandamız tezliklə {phone} nömrəsi ilə sizinlə əlaqə saxlayacaq.",
+    errorTitle: "Müraciət qeydə alınmadı.",
+    error: "Xahiş edirik yenidən cəhd edəsiniz",
     benefitsTitle: "Şirkətinizə nə qazandırır?",
     benefitsSubtitle: "Auditoriyası olan hər kəs - platformadan asılı olmayaraq",
     benefits: [
@@ -1065,8 +1075,10 @@ const az: Messages = {
     ],
     submit: "Müraciət göndər",
     sending: "Göndərilir...",
-    success: "Müraciətiniz göndərildi. Tezliklə əlaqə saxlayacağıq.",
-    error: "Müraciət göndərilmədi. Bir az sonra yenidən cəhd et.",
+    successTitle: "Müraciətiniz qəbul edildi!",
+    success: "Komandamız tezliklə {phone} nömrəsi ilə sizinlə əlaqə saxlayacaq.",
+    errorTitle: "Müraciət qeydə alınmadı.",
+    error: "Xahiş edirik yenidən cəhd edəsiniz",
   },
   about: {
     eyebrow: "Haqqımızda",
@@ -1193,10 +1205,10 @@ const az: Messages = {
     consent:
       "Məlumatlarımın müraciətim üzrə istifadə edilməsinə və FitNest komandasının mənimlə əlaqə saxlamasına razıyam.",
     contactCta: "Mənimlə əlaqə saxlayın",
-    contactSuccess: "Müraciətiniz qəbul olundu. Tezliklə sizinlə əlaqə saxlayacağıq.",
-    contactSuccessTitle: "Müraciətiniz qəbul olundu",
-    contactSuccessHome: "Ana səhifəyə qayıt",
-    contactError: "Müraciət göndərilmədi. Bir az sonra yenidən cəhd edin.",
+    contactSuccess: "Komandamız tezliklə {phone} nömrəsi ilə sizinlə əlaqə saxlayacaq.",
+    contactSuccessTitle: "Müraciətiniz qəbul edildi!",
+    contactErrorTitle: "Müraciət qeydə alınmadı.",
+    contactError: "Xahiş edirik yenidən cəhd edəsiniz",
     contactSending: "Göndərilir...",
     privacy: "Məxfilik siyasəti",
     phoneError: "Düzgün mobil nömrə daxil edin",
@@ -1762,8 +1774,10 @@ const en: Messages = {
     message: "“Write your message here...”",
     send: "Send",
     sending: "Sending...",
-    success: "Your message was sent. We'll get back to you soon.",
-    error: "Couldn't send the message. Please try again shortly.",
+    successTitle: "Your message was accepted!",
+    success: "Our team will contact you shortly at {phone}.",
+    errorTitle: "The message was not saved.",
+    error: "Please try again",
   },
   corporate: {
     eyebrow: "Corporate",
@@ -1791,8 +1805,10 @@ const en: Messages = {
     notes: "Your question or additional notes....",
     submit: "Get an offer",
     sending: "Sending...",
-    success: "Your request was sent. We'll be in touch soon.",
-    error: "Couldn't send the request. Please try again shortly.",
+    successTitle: "Your request was accepted!",
+    success: "Our team will contact you shortly at {phone}.",
+    errorTitle: "The request was not saved.",
+    error: "Please try again",
     benefitsTitle: "What does your company gain?",
     benefitsSubtitle: "Anyone with an audience — regardless of platform",
     benefits: [
@@ -1881,8 +1897,10 @@ const en: Messages = {
     ],
     submit: "Send application",
     sending: "Sending...",
-    success: "Your request was sent. We'll be in touch soon.",
-    error: "Couldn't send the request. Please try again shortly.",
+    successTitle: "Your request was accepted!",
+    success: "Our team will contact you shortly at {phone}.",
+    errorTitle: "The request was not saved.",
+    error: "Please try again",
   },
   about: {
     eyebrow: "About us",
@@ -2008,10 +2026,10 @@ const en: Messages = {
     consent:
       "I agree that my data may be used for this request and that the FitNest team may contact me.",
     contactCta: "Contact me",
-    contactSuccess: "Your request was received. We will contact you soon.",
-    contactSuccessTitle: "Your request was received",
-    contactSuccessHome: "Back to home",
-    contactError: "The request could not be sent. Please try again later.",
+    contactSuccess: "Our team will contact you shortly at {phone}.",
+    contactSuccessTitle: "Your request was accepted!",
+    contactErrorTitle: "The request was not saved.",
+    contactError: "Please try again",
     contactSending: "Sending...",
     privacy: "Privacy policy",
     phoneError: "Enter a valid mobile number",
@@ -2562,8 +2580,10 @@ const ru: Messages = {
     message: "“Напишите сообщение здесь...”",
     send: "Отправить",
     sending: "Отправка...",
-    success: "Сообщение отправлено. Мы скоро ответим.",
-    error: "Не удалось отправить сообщение. Попробуйте ещё раз чуть позже.",
+    successTitle: "Ваше сообщение принято!",
+    success: "Наша команда скоро свяжется с вами по номеру {phone}.",
+    errorTitle: "Сообщение не было сохранено.",
+    error: "Пожалуйста, попробуйте ещё раз",
   },
   corporate: {
     eyebrow: "Корпоративным",
@@ -2591,8 +2611,10 @@ const ru: Messages = {
     notes: "Ваш вопрос или дополнительные заметки....",
     submit: "Получить предложение",
     sending: "Отправка...",
-    success: "Заявка отправлена. Мы скоро свяжемся.",
-    error: "Не удалось отправить заявку. Попробуйте ещё раз чуть позже.",
+    successTitle: "Ваша заявка принята!",
+    success: "Наша команда скоро свяжется с вами по номеру {phone}.",
+    errorTitle: "Заявка не была сохранена.",
+    error: "Пожалуйста, попробуйте ещё раз",
     benefitsTitle: "Что это даёт вашей компании?",
     benefitsSubtitle: "Для любой аудитории — независимо от платформы",
     benefits: [
@@ -2681,8 +2703,10 @@ const ru: Messages = {
     ],
     submit: "Отправить заявку",
     sending: "Отправка...",
-    success: "Заявка отправлена. Мы скоро свяжемся.",
-    error: "Не удалось отправить заявку. Попробуйте ещё раз чуть позже.",
+    successTitle: "Ваша заявка принята!",
+    success: "Наша команда скоро свяжется с вами по номеру {phone}.",
+    errorTitle: "Заявка не была сохранена.",
+    error: "Пожалуйста, попробуйте ещё раз",
   },
   about: {
     eyebrow: "О нас",
@@ -2809,10 +2833,10 @@ const ru: Messages = {
     consent:
       "Я согласен(на), что мои данные будут использованы по этой заявке и команда FitNest может со мной связаться.",
     contactCta: "Свяжитесь со мной",
-    contactSuccess: "Заявка получена. Мы скоро свяжемся с вами.",
-    contactSuccessTitle: "Заявка принята",
-    contactSuccessHome: "На главную",
-    contactError: "Не удалось отправить заявку. Попробуйте позже.",
+    contactSuccess: "Наша команда скоро свяжется с вами по номеру {phone}.",
+    contactSuccessTitle: "Ваша заявка принята!",
+    contactErrorTitle: "Заявка не была сохранена.",
+    contactError: "Пожалуйста, попробуйте ещё раз",
     contactSending: "Отправка...",
     privacy: "Политика конфиденциальности",
     phoneError: "Введите корректный мобильный номер",

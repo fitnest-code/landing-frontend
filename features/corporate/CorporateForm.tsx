@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { corporateFormSchema } from "@/schemas/schemas";
 import { submitLandingContactMessage } from "@/lib/api/landing";
+import { FormError, FormSuccess, withPhone } from "@/components/common/FormFeedback";
 import { useI18n } from "@/lib/i18n/provider";
 import ContactThemeIcon from "@/features/contact/ContactThemeIcon";
 import HomeArrow from "@/features/home/components/HomeArrow";
@@ -74,6 +75,17 @@ const CorporateForm = () => {
       return;
     }
     setStatus("error");
+  }
+
+  if (status === "success") {
+    return (
+      <div
+        id="corporate-offer"
+        className="w-full max-w-[684px] rounded-2xl border border-border-muted bg-page"
+      >
+        <FormSuccess title={copy.successTitle} body={withPhone(copy.success)} />
+      </div>
+    );
   }
 
   return (
@@ -211,13 +223,6 @@ const CorporateForm = () => {
         </label>
       </div>
 
-      {status === "success" ? (
-        <p className="text-sm leading-5 text-turquoise">{copy.success}</p>
-      ) : null}
-      {status === "error" ? (
-        <p className="text-sm leading-5 text-energy">{copy.error}</p>
-      ) : null}
-
       <button
         type="submit"
         disabled={form.formState.isSubmitting}
@@ -226,6 +231,9 @@ const CorporateForm = () => {
         {form.formState.isSubmitting ? copy.sending : copy.submit}
         <HomeArrow className="size-6 transition-transform duration-300 group-hover:translate-x-1" />
       </button>
+      {status === "error" ? (
+        <FormError title={copy.errorTitle} body={copy.error} />
+      ) : null}
     </form>
   );
 };

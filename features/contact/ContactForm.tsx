@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { contactFormSchema } from "@/schemas/schemas";
 import { submitLandingContactMessage } from "@/lib/api/landing";
+import { FormError, FormSuccess, withPhone } from "@/components/common/FormFeedback";
 import { useI18n } from "@/lib/i18n/provider";
 import ContactThemeIcon from "./ContactThemeIcon";
 
@@ -53,6 +54,17 @@ const ContactForm = () => {
       return;
     }
     setStatus("error");
+  }
+
+  if (status === "success") {
+    return (
+      <div className="w-full max-w-[684px] rounded-2xl border border-border-muted bg-page">
+        <FormSuccess
+          title={t.contact.successTitle}
+          body={withPhone(t.contact.success)}
+        />
+      </div>
+    );
   }
 
   return (
@@ -164,13 +176,6 @@ const ContactForm = () => {
         </label>
       </div>
 
-      {status === "success" ? (
-        <p className="text-sm leading-5 text-turquoise">{t.contact.success}</p>
-      ) : null}
-      {status === "error" ? (
-        <p className="text-sm leading-5 text-energy">{t.contact.error}</p>
-      ) : null}
-
       <button
         type="submit"
         disabled={form.formState.isSubmitting}
@@ -178,6 +183,9 @@ const ContactForm = () => {
       >
         {form.formState.isSubmitting ? t.contact.sending : t.contact.send}
       </button>
+      {status === "error" ? (
+        <FormError title={t.contact.errorTitle} body={t.contact.error} />
+      ) : null}
     </form>
   );
 };

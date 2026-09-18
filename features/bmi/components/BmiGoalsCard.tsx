@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { submitBmiLead } from "../api/bmi-request";
 import { addLocaleToPathname } from "@/lib/i18n/config";
+import { FormError, FormSuccess, withPhone } from "@/components/common/FormFeedback";
 import { useI18n } from "@/lib/i18n/provider";
 import type { GoalItem } from "../api/types";
 import { useGoals } from "../hooks/use-goals";
@@ -133,31 +134,10 @@ const BmiGoalsCard = ({
 
   if (status === "success") {
     return (
-      <div className="relative flex w-full flex-col items-center gap-6 rounded-xl border border-border-muted bg-surface p-8 text-center md:p-12">
-        <div className="flex size-16 items-center justify-center rounded-full bg-cyan/15 text-turquoise">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path
-              d="M20 6L9 17l-5-5"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <div className="flex flex-col gap-2">
-          <h2 className="text-[28px] font-semibold leading-10 text-ink">
-            {t.bmi.contactSuccessTitle}
-          </h2>
-          <p className="text-base leading-6 text-title">{t.bmi.contactSuccess}</p>
-        </div>
-        <Link
-          href={addLocaleToPathname("/", locale)}
-          className="inline-flex h-11 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white hover:bg-[#FF6A42]"
-        >
-          {t.bmi.contactSuccessHome}
-        </Link>
-      </div>
+      <FormSuccess
+        title={t.bmi.contactSuccessTitle}
+        body={withPhone(t.bmi.contactSuccess)}
+      />
     );
   }
 
@@ -301,7 +281,16 @@ const BmiGoalsCard = ({
               className="size-4"
             />
           </span>
-          <span className="text-xs leading-[18px] text-ink">{t.bmi.consent}</span>
+          <span className="text-xs leading-[18px] text-ink">
+            {t.bmi.consent}{" "}
+            <Link
+              href={addLocaleToPathname("/privacy", locale)}
+              onClick={(event) => event.stopPropagation()}
+              className="font-medium text-turquoise underline"
+            >
+              {t.bmi.privacy}
+            </Link>
+          </span>
         </button>
       </div>
 
@@ -314,26 +303,18 @@ const BmiGoalsCard = ({
           ))}
         </div>
       ) : null}
-      {status === "error" ? (
-        <p className="text-sm leading-5 text-energy">{t.bmi.contactError}</p>
-      ) : null}
 
-      <div className="flex flex-col gap-3">
-        <Link
-          href={addLocaleToPathname("/privacy", locale)}
-          className="w-fit text-xs font-medium leading-[18px] text-turquoise underline"
-        >
-          {t.bmi.privacy}
-        </Link>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={submitting}
-          className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-button px-4 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#FF6A42] hover:text-white hover:shadow-[0_8px_20px_rgba(20,35,75,0.25)] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-[#011729] dark:hover:text-white dark:hover:shadow-[0_8px_20px_rgba(0,219,219,0.25)]"
-        >
-          {submitting ? t.bmi.contactSending : t.bmi.contactCta}
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={handleSubmit}
+        disabled={submitting}
+        className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-button px-4 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#FF6A42] hover:text-white hover:shadow-[0_8px_20px_rgba(20,35,75,0.25)] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-[#011729] dark:hover:text-white dark:hover:shadow-[0_8px_20px_rgba(0,219,219,0.25)]"
+      >
+        {submitting ? t.bmi.contactSending : t.bmi.contactCta}
+      </button>
+      {status === "error" ? (
+        <FormError title={t.bmi.contactErrorTitle} body={t.bmi.contactError} />
+      ) : null}
     </div>
   );
 };
