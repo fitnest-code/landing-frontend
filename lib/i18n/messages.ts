@@ -888,7 +888,7 @@ const az: Messages = {
     detailsSubtitle: "Daha güclü, sağlam və enerjili olmaq üçün ideal məkan.",
     previousImage: "Əvvəlki şəkil",
     nextImage: "Növbəti şəkil",
-    aboutGym: "Haqqında",
+    aboutGym: "Zal haqqında",
     aboutText:
       "ProFit Club geniş məşq zonaları, yenilənmiş avadanlıqlar və rahat mühit ilə həm yeni başlayanlar, həm də peşəkar idmançılar üçün ideal fitness məkanıdır.",
     amenities: "İmkanlar",
@@ -1710,7 +1710,7 @@ const en: Messages = {
       "An ideal place to become stronger, healthier, and more energetic.",
     previousImage: "Previous image",
     nextImage: "Next image",
-    aboutGym: "About",
+    aboutGym: "About the gym",
     aboutText:
       "ProFit Club offers wide workout zones, modern equipment, and a comfortable environment for all levels.",
     amenities: "Amenities",

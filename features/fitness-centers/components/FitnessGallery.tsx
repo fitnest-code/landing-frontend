@@ -40,7 +40,7 @@ const FitnessGallery = ({
           modules={[Navigation]}
           onSwiper={setSwiperInstance}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-          className="h-[260px] w-full md:h-[520px]"
+          className="h-[260px] w-full lg:h-[360px]"
         >
           {slides.map((img, index) => (
             <SwiperSlide key={`${img}-${index}`}>
@@ -63,7 +63,7 @@ const FitnessGallery = ({
               type="button"
               onClick={() => swiperInstance?.slidePrev()}
               aria-label={previousLabel}
-              className="absolute left-4 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 shadow-[0_2px_10px_rgba(1,23,41,0.18)]"
+              className="absolute left-4 top-1/2 z-10 flex h-[58px] w-7 -translate-y-1/2 items-center justify-center rounded-[43px] bg-white"
             >
               <img
                 src="/icons/gym-details/chevron-left.svg"
@@ -77,7 +77,7 @@ const FitnessGallery = ({
               type="button"
               onClick={() => swiperInstance?.slideNext()}
               aria-label={nextLabel}
-              className="absolute right-4 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 shadow-[0_2px_10px_rgba(1,23,41,0.18)]"
+              className="absolute right-4 top-1/2 z-10 flex h-[58px] w-7 -translate-y-1/2 items-center justify-center rounded-[43px] bg-white"
             >
               <img
                 src="/icons/gym-details/chevron-right.svg"
@@ -91,28 +91,30 @@ const FitnessGallery = ({
         ) : null}
       </div>
 
-      <div className="flex gap-6 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {slides.map((image, index) => (
-          <button
-            key={`thumb-${image}-${index}`}
-            type="button"
-            onClick={() => swiperInstance?.slideTo(index)}
-            className={`relative h-[110px] w-[160px] shrink-0 overflow-hidden rounded-xl md:h-[185px] md:w-[302px] ${
-              activeIndex === index
-                ? "ring-2 ring-turquoise"
-                : "opacity-80 hover:opacity-100"
-            }`}
-          >
-            <RemoteImage
-              src={image}
-              alt={`${name} thumbnail ${index + 1}`}
-              fill
-              className="object-cover"
-              sizes="302px"
-            />
-          </button>
-        ))}
-      </div>
+      {slides.length > 1 ? (
+        <div className="grid grid-cols-2 gap-4">
+          {slides.slice(0, 2).map((image, index) => (
+            <button
+              key={`thumb-${image}-${index}`}
+              type="button"
+              onClick={() => swiperInstance?.slideTo(index)}
+              className={`relative h-[110px] w-full overflow-hidden rounded-xl md:h-[140px] ${
+                activeIndex === index
+                  ? "ring-2 ring-turquoise"
+                  : "opacity-80 hover:opacity-100"
+              }`}
+            >
+              <RemoteImage
+                src={image}
+                alt={`${name} thumbnail ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="302px"
+              />
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };

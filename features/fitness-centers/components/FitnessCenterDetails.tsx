@@ -39,7 +39,7 @@ const ThemeIcon = ({
   name,
   size = 16,
 }: {
-  name: "call" | "location" | "clock";
+  name: "location" | "clock";
   size?: number;
 }) => (
   <>
@@ -106,7 +106,6 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
       streetAddress: gym.location ?? "",
       addressCountry: "AZ",
     },
-    telephone: gym.phone ?? undefined,
   };
 
   return (
@@ -171,15 +170,17 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-10">
-            <FitnessGallery
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-stretch">
+            <div className="min-w-0 flex-1">
+              <FitnessGallery
                 images={gym.galleryImageUrls}
                 name={name}
                 previousLabel={t.previousImage}
                 nextLabel={t.nextImage}
               />
+            </div>
 
-            <div className="flex min-w-0 flex-col justify-between gap-10">
+            <div className="flex min-w-0 flex-1 flex-col justify-between gap-10">
               <div className="flex flex-col gap-10">
                 <div className="flex flex-col gap-5">
                   <h2 className="text-[36px] font-semibold leading-[52px] text-ink">
@@ -211,27 +212,16 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
                 </div>
 
                 <div className="flex flex-col gap-6 border-t border-[#557C9F] pb-2 pt-5 dark:border-[#174663] md:flex-row md:items-start md:justify-between">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-start gap-1">
-                      <ThemeIcon name="call" />
-                      <span className="text-sm font-normal leading-5 text-turquoise">
-                        {t.contact} :
-                      </span>
-                      <span className="text-xs font-medium leading-[18px] text-desc-2">
-                        {gym.phone || "—"}
-                      </span>
-                    </div>
-                    <div className="flex max-w-[227px] items-start gap-1">
-                      <ThemeIcon name="location" />
-                      <span className="text-sm font-normal leading-5 text-turquoise">
-                        {t.address}:
-                      </span>
-                      <span className="text-xs font-medium leading-[18px] text-desc-2">
-                        {address || "—"}
-                      </span>
-                    </div>
+                  <div className="flex min-w-0 items-start gap-1">
+                    <ThemeIcon name="location" />
+                    <span className="text-sm font-normal leading-5 text-turquoise">
+                      {t.address}:
+                    </span>
+                    <span className="text-xs font-medium leading-[18px] text-desc-2">
+                      {address || "—"}
+                    </span>
                   </div>
-                  <div className="flex items-start gap-1">
+                  <div className="flex shrink-0 items-start gap-1">
                     <ThemeIcon name="clock" size={14} />
                     <span className="w-[70px] text-center text-sm font-normal leading-5 text-turquoise">
                       {t.workHoursTitle}:
