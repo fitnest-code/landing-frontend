@@ -6,7 +6,8 @@ import icon from "@/public/Logo.png";
 import { QueryProvider } from "@/lib/providers/query-provider";
 import { ThemeProvider } from "@/lib/providers/theme-provider";
 import { createAbsoluteUrl, SITE_NAME, SITE_URL } from "@/lib/seo";
-import { defaultLocale } from "@/lib/i18n/config";
+import { defaultLocale, normalizeLocale } from "@/lib/i18n/config";
+import { headers } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext", "cyrillic"],
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | FitNest",
   },
   description:
-    "FitNest ilə Bakı və ətrafında fitnes mərkəzlərini tap, abunəlik planı seç və sağlam həyat tərzini davamlı et.",
+    "FitNest ilə Bakı və Azərbaycanda idman zalları, fitness mərkəzləri və bir abunəliklə QR giriş.",
   icons: {
     icon: icon.src,
     apple: icon.src,
@@ -47,6 +48,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+  const locale = normalizeLocale(
+    headerList.get("x-fitnest-locale") ?? defaultLocale,
+  );
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -68,11 +74,16 @@ export default async function RootLayout({
     name: SITE_NAME,
     url: createAbsoluteUrl("/"),
     inLanguage: ["az", "en", "ru"],
+    potentialAction: {
+      "@type": "SearchAction",
+      target: createAbsoluteUrl(`/${locale}/fitness-centers?q={search_term_string}`),
+      "query-input": "required name=search_term_string",
+    },
   };
 
   return (
     <html
-      lang={defaultLocale}
+      lang={locale}
       suppressHydrationWarning
       className={manrope.variable}
     >

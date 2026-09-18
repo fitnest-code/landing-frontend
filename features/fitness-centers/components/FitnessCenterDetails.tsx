@@ -6,6 +6,7 @@ import MembershipBadge, {
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { getLandingGymServer, type LandingGymDetail } from "@/lib/api/landing";
 import { getMessages } from "@/lib/i18n/server";
+import { createAbsoluteUrl, getLocalizedUrl } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FitnessGallery from "./FitnessGallery";
@@ -98,14 +99,32 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
 
   const gymSchema = {
     "@context": "https://schema.org",
-    "@type": "SportsActivityLocation",
+    "@type": ["HealthClub", "SportsActivityLocation"],
     name,
+    url: getLocalizedUrl(`/fitness-centers/${slug}`, locale),
+    image: gym.coverImageUrl ? createAbsoluteUrl(gym.coverImageUrl) : undefined,
+    description: description || undefined,
     address: {
       "@type": "PostalAddress",
       addressLocality: gym.city ?? "Baku",
       streetAddress: gym.location ?? "",
       addressCountry: "AZ",
     },
+    geo: hasCoords
+      ? {
+          "@type": "GeoCoordinates",
+          latitude: gym.latitude,
+          longitude: gym.longitude,
+        }
+      : undefined,
+    openingHours: hours.length > 0 ? hours : undefined,
+    amenityFeature:
+      gym.amenities.length > 0
+        ? gym.amenities.map((item) => ({
+            "@type": "LocationFeatureSpecification",
+            name: item,
+          }))
+        : undefined,
   };
 
   return (

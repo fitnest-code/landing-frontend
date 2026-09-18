@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getLandingGymsServer, getLandingStoresServer } from "@/lib/api/landing";
+import { getLandingGymsPageServer } from "@/lib/api/landing";
 import { newsArticles } from "@/features/news/data";
 import { locales } from "@/lib/i18n/config";
 import { createAbsoluteUrl } from "@/lib/seo";
@@ -27,6 +27,13 @@ const staticRoutes = [
 const toLocalizedPath = (path: string, locale: (typeof locales)[number]) =>
   path === "/" ? `/${locale}` : `/${locale}${path}`;
 
+const routePriority = (path: string) => {
+  if (path === "/") return 1;
+  if (path === "/fitness-centers" || path === "/offers") return 0.9;
+  if (path.startsWith("/fitness-centers/")) return 0.8;
+  return 0.7;
+};
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
   const routeSet = new Set<string>(staticRoutes);
@@ -35,18 +42,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    const gyms = await getLandingGymsServer("az", 1, 50);
-    for (const gym of gyms) {
-      routeSet.add(`/fitness-centers/${gym.gymId}`);
+    const pageSize = 50;
+    const first = await getLandingGymsPageServer("az", 1, pageSize);
+    const gyms = [...first.items];
+    const totalPages = Math.max(1, Math.ceil((first.total || gyms.length) / pageSize));
+    for (let page = 2; page <= totalPages && page <= 40; page += 1) {
+      const next = await getLandingGymsPageServer("az", page, pageSize);
+      gyms.push(...next.items);
     }
-  } catch {
-    // Ignore upstream errors and return static sitemap routes.
-  }
-
-  try {
-    const stores = await getLandingStoresServer("az", 1, 50);
-    for (const store of stores) {
-      routeSet.add(`/fit-market/${store.storeId}`);
+    const seen = new Set<string>();
+    for (const gym of gyms) {
+      if (seen.has(gym.gymId)) continue;
+      seen.add(gym.gymId);
+      routeSet.add(`/fitness-centers/${gym.gymId}`);
     }
   } catch {
     // Ignore upstream errors and return static sitemap routes.
@@ -59,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: createAbsoluteUrl(toLocalizedPath(path, locale)),
         lastModified,
         changeFrequency: path === "/" ? "weekly" : "daily",
-        priority: path === "/" ? 1 : 0.7,
+        priority: routePriority(path),
       });
     }
   }

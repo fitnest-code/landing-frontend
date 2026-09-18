@@ -31,6 +31,7 @@ export function proxy(request: NextRequest) {
   }
 
   const response = NextResponse.next();
+  response.headers.set("x-fitnest-locale", localeFromPath);
 
   response.cookies.set(localeCookieName, localeFromPath, {
     path: "/",

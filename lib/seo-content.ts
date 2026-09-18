@@ -31,42 +31,49 @@ type SeoPageKey =
 const seoContent: Record<SeoPageKey, Record<Locale, LocalizedSeoContent>> = {
   home: {
     az: {
-      title: "FitNest - Sağlam Həyata Başla",
+      title: "FitNest — Bakı idman zalları, bir abunə ilə fitness mərkəzləri",
       description:
-        "Fitnes mərkəzləri, abunəlik planları və sağlamlıq xidmətlərini bir platformada kəşf et.",
-      keywords: ["FitNest", "fitness", "idman zalları", "abunəlik planları", "sağlam həyat"],
+        "Bakı və Azərbaycanda idman zalları, hovuzlar, yoqa və pilates. Bir FitNest abunəliyi ilə QR giriş — paketi seç və yaxın zalı tap.",
+      keywords: [
+        "FitNest",
+        "idman zalı",
+        "Bakı gym",
+        "fitness mərkəzi",
+        "abunəlik",
+        "idman zalları",
+      ],
     },
     en: {
-      title: "FitNest - Start a Healthier Life",
+      title: "FitNest — Baku gyms and fitness centers, one subscription",
       description:
-        "Discover fitness centers, subscription plans, and wellness services on one platform.",
-      keywords: ["FitNest", "fitness", "gym memberships", "subscription plans", "wellness"],
+        "Gyms, pools, yoga and pilates in Baku and Azerbaijan. One FitNest plan, QR access — choose a package and find a gym nearby.",
+      keywords: ["FitNest", "Baku gym", "fitness center", "gym subscription", "wellness"],
     },
     ru: {
-      title: "FitNest - Начни здоровую жизнь",
+      title: "FitNest — спортзалы Баку и фитнес-центры по одной подписке",
       description:
-        "Откройте фитнес-центры, тарифы подписки и wellness-сервисы на одной платформе.",
-      keywords: ["FitNest", "фитнес", "спортзал", "подписка", "здоровый образ жизни"],
+        "Залы, бассейны, йога и пилатес в Баку и Азербайджане. Одна подписка FitNest, вход по QR — выберите тариф и найдите зал рядом.",
+      keywords: ["FitNest", "спортзал Баку", "фитнес-центр", "фитнес подписка"],
     },
   },
   offers: {
     az: {
-      title: "Abunəlik Planları",
+      title: "FitNest abunəlik planları — idman zalı üzvlüyü",
       description:
-        "Məqsədinə uyğun aylıq və çoxaylıq FitNest abunəlik paketlərini müqayisə et və ən uyğun planı seç.",
-      keywords: ["abunəlik", "fitness plan", "idman zalı üzvlüyü", "FitNest offers"],
+        "Bronze, Silver, Gold və Platinum paketlərini müqayisə et. Bir abunə ilə Bakı idman zallarına QR giriş — 1, 3, 6 və 12 aylıq.",
+      keywords: ["abunəlik", "idman zalı üzvlüyü", "fitness plan", "FitNest paket"],
     },
     en: {
-      title: "Subscription Plans",
+      title: "FitNest subscription plans — gym membership",
       description:
-        "Compare monthly and long-term FitNest subscription packages and choose the right plan for your goals.",
-      keywords: ["subscription", "fitness plans", "gym membership", "FitNest offers"],
+        "Compare Bronze, Silver, Gold and Platinum. One subscription, QR access to Baku gyms — 1, 3, 6 or 12 months.",
+      keywords: ["gym membership", "fitness subscription", "FitNest plans"],
     },
     ru: {
-      title: "Тарифы подписки",
+      title: "Тарифы FitNest — абонемент в спортзал",
       description:
-        "Сравните месячные и долгосрочные пакеты FitNest и выберите план под свои цели.",
-      keywords: ["подписка", "фитнес тариф", "абонемент", "FitNest offers"],
+        "Сравните Bronze, Silver, Gold и Platinum. Одна подписка, QR-вход в залы Баку — 1, 3, 6 или 12 месяцев.",
+      keywords: ["абонемент", "фитнес подписка", "тариф FitNest"],
     },
   },
   bmi: {
@@ -148,39 +155,42 @@ const seoContent: Record<SeoPageKey, Record<Locale, LocalizedSeoContent>> = {
   },
   about: {
     az: {
-      title: "Haqqımızda",
+      title: "Haqqımızda — FitNest fitness abunəlik platforması",
       description:
-        "FitNest — bir abunə ilə yüzlərlə fitness mərkəzinə çıxış. Azərbaycanın fitness və sağlam həyat ekosistemini qururuq.",
-      keywords: ["Haqqımızda", "FitNest", "fitness ekosistemi", "missiya"],
+        "FitNest bir abunə ilə Bakı və Azərbaycanda idman zallarına çıxış verir. QR giriş, çevik paketlər, yüzlərlə fitness mərkəzi.",
+      keywords: ["Haqqımızda", "FitNest", "fitness abunəlik", "idman zalı Bakı"],
     },
     en: {
-      title: "About us",
+      title: "About FitNest — gym subscription in Azerbaijan",
       description:
-        "FitNest gives access to hundreds of fitness centers with one subscription. We are building Azerbaijan's fitness and healthy living ecosystem.",
-      keywords: ["About us", "FitNest", "fitness ecosystem", "mission"],
+        "FitNest opens gyms across Baku and Azerbaijan with one plan. QR check-in, flexible packages, hundreds of fitness centers.",
+      keywords: ["About us", "FitNest", "gym subscription", "Baku gyms"],
     },
     ru: {
-      title: "О нас",
+      title: "О FitNest — фитнес-подписка в Азербайджане",
       description:
-        "FitNest даёт доступ к сотням фитнес-центров по одной подписке. Мы строим фитнес-экосистему и здоровый образ жизни Азербайджана.",
-      keywords: ["О нас", "FitNest", "фитнес-экосистема", "миссия"],
+        "FitNest открывает залы в Баку и Азербайджане по одной подписке. QR-вход, гибкие тарифы, сотни фитнес-центров.",
+      keywords: ["О нас", "FitNest", "фитнес-подписка", "спортзалы Баку"],
     },
   },
   faq: {
     az: {
-      title: "FAQ",
-      description: "FitNest platforması, abunəlik və xidmətlər barədə ən çox verilən suallara cavablar.",
-      keywords: ["FAQ", "tez-tez verilən suallar", "FitNest"],
+      title: "FAQ — FitNest abunəlik və idman zalları",
+      description:
+        "FitNest necə işləyir, abunəlik paketləri, Bakı idman zalları və QR giriş haqqında tez-tez verilən suallar.",
+      keywords: ["FAQ", "FitNest suallar", "idman zalı abunəlik", "QR giriş"],
     },
     en: {
-      title: "FAQ",
-      description: "Answers to the most frequently asked questions about FitNest, subscriptions, and services.",
-      keywords: ["FAQ", "frequently asked questions", "FitNest"],
+      title: "FAQ — FitNest plans, gyms and QR access",
+      description:
+        "How FitNest works, subscription plans, Baku gyms, and QR check-in — frequently asked questions.",
+      keywords: ["FAQ", "FitNest questions", "gym subscription", "QR check-in"],
     },
     ru: {
-      title: "FAQ",
-      description: "Ответы на часто задаваемые вопросы о FitNest, подписках и сервисах.",
-      keywords: ["FAQ", "частые вопросы", "FitNest"],
+      title: "FAQ — подписка FitNest, залы и QR-вход",
+      description:
+        "Как работает FitNest, тарифы, залы Баку и QR-вход — часто задаваемые вопросы.",
+      keywords: ["FAQ", "вопросы FitNest", "фитнес подписка", "QR вход"],
     },
   },
   news: {
@@ -240,19 +250,22 @@ const seoContent: Record<SeoPageKey, Record<Locale, LocalizedSeoContent>> = {
   },
   fitnessCenters: {
     az: {
-      title: "Fitness Mərkəzləri",
-      description: "Sənə yaxın fitness mərkəzlərini tap, müqayisə et və uyğun zalı seç.",
-      keywords: ["fitness centers", "idman zalları", "Bakı gym", "FitNest"],
+      title: "Bakı və Azərbaycanda idman zalları | FitNest",
+      description:
+        "Bakı və ölkə üzrə fitness mərkəzləri, hovuzlar, yoqa və pilates. Bir abunəliklə QR giriş — yaxın zalı tap və müqayisə et.",
+      keywords: ["idman zalları", "Bakı gym", "fitness mərkəzləri", "FitNest zallar"],
     },
     en: {
-      title: "Fitness Centers",
-      description: "Find nearby fitness centers, compare options, and choose the gym that fits you.",
-      keywords: ["fitness centers", "gyms", "Baku gym", "FitNest"],
+      title: "Gyms and fitness centers in Baku | FitNest",
+      description:
+        "Gyms, pools, yoga and pilates studios in Baku and Azerbaijan. One subscription, QR access — find a gym near you.",
+      keywords: ["Baku gyms", "fitness centers", "Azerbaijan gym", "FitNest"],
     },
     ru: {
-      title: "Фитнес-центры",
-      description: "Найдите ближайшие фитнес-центры, сравните варианты и выберите подходящий зал.",
-      keywords: ["фитнес-центры", "спортзал", "Баку", "FitNest"],
+      title: "Спортзалы и фитнес-центры в Баку | FitNest",
+      description:
+        "Залы, бассейны, студии йоги и пилатеса в Баку и Азербайджане. Одна подписка, вход по QR — найдите зал рядом.",
+      keywords: ["спортзалы Баку", "фитнес-центры", "Азербайджан", "FitNest"],
     },
   },
   privacy: {
