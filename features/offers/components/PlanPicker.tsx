@@ -103,7 +103,8 @@ const PlanPicker = ({
   return (
     <div className="flex flex-col items-center">
       <Stagger
-        className="grid w-full max-w-[640px] grid-cols-4 gap-1 pt-8 sm:gap-4"
+        className="grid w-full max-w-[640px] grid-cols-4 gap-1 overflow-visible pt-8 sm:gap-4"
+        itemClassName="h-full min-w-0 overflow-visible"
         variant="scale"
         delay={0.06}
       >
@@ -111,9 +112,9 @@ const PlanPicker = ({
           const active = duration === month;
           const isYear = month === 12;
           return (
-            <div key={month} className="relative min-w-0 cursor-pointer">
+            <div key={month} className="relative min-w-0 overflow-visible cursor-pointer">
               {isYear ? (
-                <span className="absolute top-0 right-0 z-10 translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-energy px-2.5 py-[3px] text-[10px] font-semibold leading-[14px] text-white">
+                <span className="pointer-events-none absolute top-0 right-0 z-10 -translate-y-1/2 whitespace-nowrap rounded-full bg-energy px-1.5 py-[3px] text-[9px] font-semibold leading-[14px] text-white sm:px-2.5 sm:text-[10px] lg:translate-x-1/2">
                   {t.home.bestValue}
                 </span>
               ) : null}
