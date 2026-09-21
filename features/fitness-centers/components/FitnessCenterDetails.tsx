@@ -68,7 +68,7 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
 
   const name = gym.name;
   const t = messages.centers;
-  const address = [gym.location, gym.city].filter(Boolean).join(", ");
+  const address = [gym.location, gym.rayon, gym.city].filter(Boolean).join(", ");
   const hours = gym.workHours.length > 0 ? gym.workHours : [];
   const categoryItems = gym.categoryItems?.filter((item) => item.name) ?? [];
   const categoryLabel =

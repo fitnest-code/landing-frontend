@@ -86,7 +86,7 @@ const FitMarketDetails = async ({ slug }: FitMarketDetailsProps) => {
               <MapPin className="size-4" /> {messages.fitMarket.address}
             </p>
             <p className="text-xs font-medium text-white">
-              {[store.addressText, store.city].filter(Boolean).join(", ") || "—"}
+              {[store.addressText, store.rayon, store.city].filter(Boolean).join(", ") || "—"}
             </p>
           </div>
         </div>
