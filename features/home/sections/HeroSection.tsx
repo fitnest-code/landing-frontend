@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getMessages } from "@/lib/i18n/server";
 import { addLocaleToPathname } from "@/lib/i18n/config";
-import StoreBadges from "../components/StoreBadges";
 import Reveal from "../components/Reveal";
 import TiltCard from "../components/TiltCard";
 import PhoneScreensCarousel from "../components/PhoneScreensCarousel";
@@ -30,7 +29,7 @@ const HeroSection = async () => {
             <h1 className="relative font-manrope text-[28px] font-extrabold leading-[1.15] text-heading sm:text-[32px] md:text-[40px] md:leading-[1.2] lg:text-[58px] lg:leading-[61.48px]">
               <span className="block">
                 {t.heroLine1Before}{" "}
-                <span className="text-turquoise">{t.heroLine1Accent}</span>
+                <span className="text-turquoise">{t.heroLine1Accent}.</span>
               </span>
               <span className="block">{t.heroLine2}</span>
               <span className="relative inline-block pb-3">
@@ -43,52 +42,19 @@ const HeroSection = async () => {
             </p>
           </div>
 
-          <div className="flex w-full flex-col items-start gap-8">
-            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex flex-col items-start gap-3">
-                <div className="size-[112px] overflow-hidden rounded-sm border border-border-muted bg-surface p-2 dark:bg-page sm:size-[128px]">
-                  <img
-                    src="/icons/home/app-qr.svg"
-                    alt=""
-                    width={112}
-                    height={112}
-                    className="size-full object-contain dark:hidden"
-                  />
-                  <img
-                    src="/icons/home/app-qr-dark.svg"
-                    alt=""
-                    width={112}
-                    height={112}
-                    className="hidden size-full object-contain dark:block"
-                  />
-                </div>
-                <StoreBadges />
-              </div>
-              <div className="flex flex-col items-start gap-3 sm:items-end">
-                <Link
-                  href={`${homePath}#how-it-works`}
-                  className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-lg bg-button px-4 text-base font-bold text-white transition-colors hover:bg-[#FF6A42]"
-                >
-                  {messages.nav.howItWorks}
-                  <img
-                    src="/icons/home/arrow-right.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                    className="brightness-0 invert"
-                  />
-                </Link>
-                <div className="flex flex-col gap-0.5 sm:text-right">
-                  <p className="text-sm font-medium leading-5 text-title">
-                    {t.packageTiers}
-                  </p>
-                  <p className="text-sm font-bold leading-5 text-ink">
-                    {t.packageLevelsLabel}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Link
+            href={`${homePath}#how-it-works`}
+            className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-lg bg-button px-4 text-base font-bold text-white transition-colors hover:bg-[#FF6A42]"
+          >
+            {messages.nav.howItWorks}
+            <img
+              src="/icons/home/arrow-right.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="brightness-0 invert"
+            />
+          </Link>
         </div>
         </Reveal>
 
