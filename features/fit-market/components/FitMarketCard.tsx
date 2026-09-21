@@ -12,7 +12,7 @@ type FitMarketCardProps = {
 
 const FitMarketCard = ({ store }: FitMarketCardProps) => {
   const { t } = useI18n();
-  const address = [store.city, store.addressText].filter(Boolean).join(", ");
+  const address = [store.addressText, store.rayon, store.city].filter(Boolean).join(", ");
   const description = store.category || t.fitMarket.detailsDescription;
   const workHours = store.workHoursText
     ? `${t.fitMarket.workHours}: ${store.workHoursText}`

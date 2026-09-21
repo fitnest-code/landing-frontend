@@ -20,6 +20,7 @@ export type LandingGym = {
   coverImageUrl: string | null;
   location: string | null;
   city: string | null;
+  rayon: string | null;
   phone: string | null;
   category: string | null;
   categories: string[];
@@ -41,12 +42,14 @@ export type LandingGymDetail = LandingGym & {
 
 export type LandingGymFilters = {
   cities: string[];
+  rayonsByCity?: Record<string, string[]>;
   categories: string[];
   memberships: MembershipTier[];
 };
 
 export type LandingStoreFilters = {
   cities: string[];
+  rayonsByCity?: Record<string, string[]>;
   categories: string[];
   memberships: string[];
 };
@@ -54,6 +57,7 @@ export type LandingStoreFilters = {
 export type LandingListFilters = {
   q?: string;
   city?: string;
+  rayon?: string;
   category?: string;
   membership?: string;
 };
@@ -63,6 +67,7 @@ export type LandingStore = {
   name: string;
   coverImageUrl: string | null;
   city: string | null;
+  rayon: string | null;
   addressText: string | null;
   category: string | null;
   discounts: string[];
@@ -232,6 +237,7 @@ function landingListParams(
     page_size: clampPageSize(pageSize),
     ...(filters?.q?.trim() ? { q: filters.q.trim() } : {}),
     ...(filters?.city?.trim() ? { city: filters.city.trim() } : {}),
+    ...(filters?.rayon?.trim() ? { rayon: filters.rayon.trim() } : {}),
     ...(filters?.category?.trim() ? { category: filters.category.trim() } : {}),
     ...(filters?.membership?.trim() ? { membership: filters.membership.trim() } : {}),
   };

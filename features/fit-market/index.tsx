@@ -25,6 +25,7 @@ const FitMarketPage = async () => {
           page={storesPage.page}
           pageSize={storesPage.pageSize || LANDING_STORES_PAGE_SIZE}
           cities={storeFilters.cities}
+          rayonsByCity={storeFilters.rayonsByCity}
           categories={storeFilters.categories}
           memberships={storeFilters.memberships}
         />

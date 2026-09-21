@@ -31,6 +31,7 @@ const FitnessCentersPage = async () => {
             page={gymsPage.page}
             pageSize={gymsPage.pageSize || LANDING_GYMS_PAGE_SIZE}
             cities={gymFilters.cities}
+            rayonsByCity={gymFilters.rayonsByCity}
             categories={gymFilters.categories}
           />
         </Suspense>

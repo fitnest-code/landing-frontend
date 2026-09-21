@@ -217,6 +217,7 @@ export type Messages = {
     heroDescription: string;
     searchPlace: string;
     cityDistrict: string;
+    rayon: string;
     trainingTypes: string;
     membership: string;
     loadMore: string;
@@ -878,6 +879,7 @@ const az: Messages = {
       "Zallar, hovuzlar, yoqa, pilates studiyaları, boks klubları. Paket səviyyəsinə görə filtrlə, sənə yaxınını tap.",
     searchPlace: "Məkan axtar",
     cityDistrict: "Şəhər",
+    rayon: "Rayon",
     trainingTypes: "Kateqoriya",
     membership: "Abunəlik",
     loadMore: "Daha çox",
@@ -1699,6 +1701,7 @@ const en: Messages = {
       "Gyms, pools, yoga and pilates studios, boxing clubs. Filter by package and find one near you.",
     searchPlace: "Search location",
     cityDistrict: "City",
+    rayon: "District",
     trainingTypes: "Category",
     membership: "Membership",
     loadMore: "Load more",
@@ -2506,6 +2509,7 @@ const ru: Messages = {
       "Залы, бассейны, студии йоги и пилатеса, бокс-клубы. Фильтруйте по пакету и найдите ближайший.",
     searchPlace: "Поиск места",
     cityDistrict: "Город",
+    rayon: "Район",
     trainingTypes: "Категория",
     membership: "Подписка",
     loadMore: "Ещё",

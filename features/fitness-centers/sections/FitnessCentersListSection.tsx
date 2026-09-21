@@ -11,6 +11,7 @@ import {
   type LandingListFilters,
 } from "@/lib/api/landing";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
+import { BAKI_RAYONS, isBakiCity } from "@/lib/constants/az-cities";
 import FitnessCenterCard from "../components/FitnessCenterCard";
 import FiltersSection, { type GymsFiltersValue } from "./FiltersSection";
 import { Stagger } from "@/components/animation";
@@ -20,6 +21,7 @@ const MEMBERSHIP_VALUES = new Set(["bronze", "silver", "gold", "platinum"]);
 const emptyFilters: GymsFiltersValue = {
   query: "",
   city: "",
+  rayon: "",
   category: "",
   membership: "",
 };
@@ -40,9 +42,13 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
     (a, b) => a.localeCompare(b, "az"),
   );
 
+const formatLocation = (gym: LandingGym) =>
+  [gym.location, gym.rayon, gym.city].filter(Boolean).join(", ") || "—";
+
 const toApiFilters = (filters: GymsFiltersValue): LandingListFilters => ({
   q: filters.query.trim() || undefined,
   city: filters.city || undefined,
+  rayon: filters.rayon || undefined,
   category: filters.category || undefined,
   membership: filters.membership || undefined,
 });
@@ -64,6 +70,7 @@ type FitnessCentersListSectionProps = {
   page: number;
   pageSize?: number;
   cities?: string[];
+  rayonsByCity?: Record<string, string[]>;
   categories?: string[];
 };
 
@@ -73,6 +80,7 @@ const FitnessCentersListSection = ({
   page: initialPage,
   pageSize = LANDING_GYMS_PAGE_SIZE,
   cities: citiesFromApi,
+  rayonsByCity: rayonsByCityFromApi,
   categories: categoriesFromApi,
 }: FitnessCentersListSectionProps) => {
   const { t, locale } = useI18n();
@@ -109,7 +117,7 @@ const FitnessCentersListSection = ({
     const apiFilters = toApiFilters({ ...filters, query: debouncedQuery });
     if (skipFirstFetch.current) {
       skipFirstFetch.current = false;
-      if (!apiFilters.q && !apiFilters.city && !apiFilters.category && !apiFilters.membership) {
+      if (!apiFilters.q && !apiFilters.city && !apiFilters.rayon && !apiFilters.category && !apiFilters.membership) {
         return;
       }
     }
@@ -130,7 +138,7 @@ const FitnessCentersListSection = ({
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, filters.city, filters.category, filters.membership, locale, pageSize]);
+  }, [debouncedQuery, filters.city, filters.rayon, filters.category, filters.membership, locale, pageSize]);
 
   const cities = useMemo(
     () =>
@@ -139,6 +147,12 @@ const FitnessCentersListSection = ({
         : uniqueSorted(items.map((gym) => gym.city)),
     [citiesFromApi, items],
   );
+  const rayons = useMemo(() => {
+    if (!isBakiCity(filters.city)) return [];
+    const fromApi = rayonsByCityFromApi?.["Bakı"] || rayonsByCityFromApi?.[filters.city];
+    if (fromApi && fromApi.length > 0) return fromApi;
+    return [...BAKI_RAYONS];
+  }, [filters.city, rayonsByCityFromApi]);
   const categories = useMemo(
     () =>
       categoriesFromApi && categoriesFromApi.length > 0
@@ -172,13 +186,14 @@ const FitnessCentersListSection = ({
       <FiltersSection
         value={filters}
         cities={cities}
+        rayons={rayons}
         categories={categories}
         onChange={setFilters}
         onReset={() => setFilters(emptyFilters)}
       />
 
       <Stagger
-        key={`${filters.city}-${filters.category}-${filters.membership}-${debouncedQuery}`}
+        key={`${filters.city}-${filters.rayon}-${filters.category}-${filters.membership}-${debouncedQuery}`}
         className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
         variant="rise"
         delay={0.06}
@@ -188,7 +203,7 @@ const FitnessCentersListSection = ({
           <FitnessCenterCard
             key={gym.gymId}
             name={gym.name}
-            location={gym.location || gym.city || "—"}
+            location={formatLocation(gym)}
             image={gym.coverImageUrl || ""}
             category={gym.category || ""}
             categoryItems={gym.categoryItems}

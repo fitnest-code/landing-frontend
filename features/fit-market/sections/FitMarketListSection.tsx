@@ -8,6 +8,7 @@ import {
   type LandingListFilters,
   type LandingStore,
 } from "@/lib/api/landing";
+import { BAKI_RAYONS, isBakiCity } from "@/lib/constants/az-cities";
 import FitMarketCard from "../components/FitMarketCard";
 import FiltersSection, { type StoresFiltersValue } from "./FiltersSection";
 import { Stagger } from "@/components/animation";
@@ -15,6 +16,7 @@ import { Stagger } from "@/components/animation";
 const emptyFilters: StoresFiltersValue = {
   query: "",
   city: "",
+  rayon: "",
   category: "",
   membership: "",
 };
@@ -27,6 +29,7 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
 const toApiFilters = (filters: StoresFiltersValue): LandingListFilters => ({
   q: filters.query.trim() || undefined,
   city: filters.city || undefined,
+  rayon: filters.rayon || undefined,
   category: filters.category || undefined,
   membership: filters.membership || undefined,
 });
@@ -48,6 +51,7 @@ type FitMarketListSectionProps = {
   page: number;
   pageSize?: number;
   cities?: string[];
+  rayonsByCity?: Record<string, string[]>;
   categories?: string[];
   memberships?: string[];
 };
@@ -58,6 +62,7 @@ const FitMarketListSection = ({
   page: initialPage,
   pageSize = LANDING_STORES_PAGE_SIZE,
   cities: citiesFromApi,
+  rayonsByCity: rayonsByCityFromApi,
   categories: categoriesFromApi,
   memberships: membershipsFromApi,
 }: FitMarketListSectionProps) => {
@@ -79,7 +84,7 @@ const FitMarketListSection = ({
     const apiFilters = toApiFilters({ ...filters, query: debouncedQuery });
     if (skipFirstFetch.current) {
       skipFirstFetch.current = false;
-      if (!apiFilters.q && !apiFilters.city && !apiFilters.category && !apiFilters.membership) {
+      if (!apiFilters.q && !apiFilters.city && !apiFilters.rayon && !apiFilters.category && !apiFilters.membership) {
         return;
       }
     }
@@ -100,7 +105,7 @@ const FitMarketListSection = ({
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, filters.city, filters.category, filters.membership, locale, pageSize]);
+  }, [debouncedQuery, filters.city, filters.rayon, filters.category, filters.membership, locale, pageSize]);
 
   const cities = useMemo(
     () =>
@@ -109,6 +114,12 @@ const FitMarketListSection = ({
         : uniqueSorted(items.map((store) => store.city)),
     [citiesFromApi, items],
   );
+  const rayons = useMemo(() => {
+    if (!isBakiCity(filters.city)) return [];
+    const fromApi = rayonsByCityFromApi?.["Bakı"] || rayonsByCityFromApi?.[filters.city];
+    if (fromApi && fromApi.length > 0) return fromApi;
+    return [...BAKI_RAYONS];
+  }, [filters.city, rayonsByCityFromApi]);
   const categories = useMemo(
     () =>
       categoriesFromApi && categoriesFromApi.length > 0
@@ -150,6 +161,7 @@ const FitMarketListSection = ({
         <FiltersSection
           value={filters}
           cities={cities}
+          rayons={rayons}
           categories={categories}
           memberships={memberships}
           onChange={setFilters}
@@ -157,7 +169,7 @@ const FitMarketListSection = ({
         />
 
         <Stagger
-          key={`${filters.city}-${filters.category}-${filters.membership}-${debouncedQuery}`}
+          key={`${filters.city}-${filters.rayon}-${filters.category}-${filters.membership}-${debouncedQuery}`}
           className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
           variant="rise"
           delay={0.06}

@@ -93,6 +93,7 @@ const FilterSelect = ({
 export type StoresFiltersValue = {
   query: string;
   city: string;
+  rayon: string;
   category: string;
   membership: string;
 };
@@ -100,6 +101,7 @@ export type StoresFiltersValue = {
 type FiltersSectionProps = {
   value: StoresFiltersValue;
   cities: string[];
+  rayons: string[];
   categories: string[];
   memberships: string[];
   onChange: (value: StoresFiltersValue) => void;
@@ -109,6 +111,7 @@ type FiltersSectionProps = {
 const FiltersSection = ({
   value,
   cities,
+  rayons,
   categories,
   memberships,
   onChange,
@@ -139,12 +142,23 @@ const FiltersSection = ({
         <FilterSelect
           label={t.centers.cityDistrict}
           value={value.city}
-          onChange={(city) => onChange({ ...value, city })}
+          onChange={(city) => onChange({ ...value, city, rayon: "" })}
           options={[
             { value: "", label: t.centers.cityDistrict },
             ...cities.map((city) => ({ value: city, label: city })),
           ]}
         />
+        {rayons.length > 0 ? (
+          <FilterSelect
+            label={t.centers.rayon}
+            value={value.rayon}
+            onChange={(rayon) => onChange({ ...value, rayon })}
+            options={[
+              { value: "", label: t.centers.rayon },
+              ...rayons.map((rayon) => ({ value: rayon, label: rayon })),
+            ]}
+          />
+        ) : null}
         <FilterSelect
           label={t.centers.trainingTypes}
           value={value.category}
