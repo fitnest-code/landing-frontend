@@ -8,6 +8,16 @@ import { ThemeProvider } from "@/lib/providers/theme-provider";
 import { createAbsoluteUrl, SITE_NAME, SITE_URL } from "@/lib/seo";
 import { defaultLocale, normalizeLocale } from "@/lib/i18n/config";
 import { headers } from "next/headers";
+import {
+  GoogleTagManagerNoscript,
+  SiteAnalytics,
+  YandexMetrikaNoscript,
+} from "@/components/analytics/site-analytics";
+import { YandexPageHits } from "@/components/analytics/yandex-page-hits";
+import {
+  GOOGLE_SITE_VERIFICATION,
+  YANDEX_VERIFICATION,
+} from "@/components/analytics/constants";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext", "cyrillic"],
@@ -40,6 +50,10 @@ export const metadata: Metadata = {
     email: false,
     address: false,
     telephone: false,
+  },
+  verification: {
+    google: GOOGLE_SITE_VERIFICATION,
+    yandex: YANDEX_VERIFICATION,
   },
 };
 
@@ -90,6 +104,10 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${manrope.variable} ${inter.className} antialiased`}
       >
+        <GoogleTagManagerNoscript />
+        <YandexMetrikaNoscript />
+        <SiteAnalytics />
+        <YandexPageHits />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
