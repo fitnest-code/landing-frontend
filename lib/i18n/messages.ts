@@ -857,9 +857,9 @@ const az: Messages = {
   },
   fitMarket: {
     eyebrow: "FitStore",
-    heroTitle: "İdman üçün lazım olan hər şey",
+    heroTitle: "Abunəliyin sənə daha çox qazandırsın!",
     heroDescription:
-      "İdman üçün geyim, qida, avadanlıq və müxtəlif çeşiddə məhsullar təklif edən mağaza",
+      "Tərəfdaş mağazalarda idman geyimi, qida əlavələri, avadanlıq və digər məhsulları FitNest abunəliyinə uyğun xüsusi endirimlə əldə et. Mağazada aktiv abunəliyini göstər və uyğun endirimdən yararlan.",
     searchPlace: "Axtar.....",
     newBadge: "Yeni",
     cardDetailsAria: "detalına keç",
@@ -876,7 +876,7 @@ const az: Messages = {
     eyebrow: "Fitness mərkəzləri",
     heroTitle: "{n} mərkəz bir abunədə",
     heroDescription:
-      "Zallar, hovuzlar, yoqa, pilates studiyaları, boks klubları. Paket səviyyəsinə görə filtrlə, sənə yaxınını tap.",
+      "Zallar, hovuzlar, yoqa, pilates studiyaları. Paket səviyyəsinə görə filtrlə, sənə yaxınını tap.",
     searchPlace: "Məkan axtar",
     cityDistrict: "Şəhər",
     rayon: "Rayon",
@@ -1677,9 +1677,9 @@ const en: Messages = {
   fitMarket: {
     ...az.fitMarket,
     eyebrow: "FitStore",
-    heroTitle: "Everything you need for sport",
+    heroTitle: "Make your subscription earn you more!",
     heroDescription:
-      "A store with sportswear, nutrition, equipment, and a wide range of products",
+      "Get sportswear, supplements, equipment, and more at partner stores with special discounts based on your FitNest subscription. Show your active subscription in-store and enjoy the matching discount.",
     searchPlace: "Search.....",
     newBadge: "New",
     cardDetailsAria: "open details",
@@ -1698,7 +1698,7 @@ const en: Messages = {
     eyebrow: "Fitness centers",
     heroTitle: "{n} centers in one subscription",
     heroDescription:
-      "Gyms, pools, yoga and pilates studios, boxing clubs. Filter by package and find one near you.",
+      "Gyms, pools, yoga and pilates studios. Filter by package and find one near you.",
     searchPlace: "Search location",
     cityDistrict: "City",
     rayon: "District",
@@ -2485,9 +2485,9 @@ const ru: Messages = {
   fitMarket: {
     ...en.fitMarket,
     eyebrow: "FitStore",
-    heroTitle: "Всё необходимое для спорта",
+    heroTitle: "Пусть подписка приносит тебе больше!",
     heroDescription:
-      "Магазин спортивной одежды, питания, оборудования и широкого ассортимента товаров",
+      "В магазинах-партнёрах покупай спортивную одежду, добавки, оборудование и другие товары со специальными скидками по подписке FitNest. Покажи активную подписку в магазине и получи подходящую скидку.",
     searchPlace: "Поиск.....",
     newBadge: "Новое",
     cardDetailsAria: "к деталям",
@@ -2506,7 +2506,7 @@ const ru: Messages = {
     eyebrow: "Фитнес-центры",
     heroTitle: "{n} центров в одной подписке",
     heroDescription:
-      "Залы, бассейны, студии йоги и пилатеса, бокс-клубы. Фильтруйте по пакету и найдите ближайший.",
+      "Залы, бассейны, студии йоги и пилатеса. Фильтруйте по пакету и найдите ближайший.",
     searchPlace: "Поиск места",
     cityDistrict: "Город",
     rayon: "Район",
