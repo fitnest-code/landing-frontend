@@ -1,8 +1,15 @@
 import { getMessages } from "@/lib/i18n/server";
+import { getLandingStatsServer } from "@/lib/api/landing";
+import { withGymCount } from "@/lib/i18n/with-gym-count";
 import { Reveal } from "@/components/animation";
 
 const OffersActivateBanner = async () => {
-  const { messages } = await getMessages();
+  const { messages, locale } = await getMessages();
+  const stats = await getLandingStatsServer(locale);
+  const ctaDescription = withGymCount(
+    messages.offers.ctaDescription,
+    stats?.gymCount,
+  );
 
   return (
     <section id="activate" className="scroll-mt-28">
@@ -14,7 +21,7 @@ const OffersActivateBanner = async () => {
               {messages.offers.ctaTitle}
             </h2>
             <p className="text-base leading-6 text-desc">
-              {messages.offers.ctaDescription}
+              {ctaDescription}
             </p>
           </div>
           <div className="flex items-center gap-4">

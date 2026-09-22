@@ -497,7 +497,7 @@ const az: Messages = {
   home: {
     heroTitle: "Bir abunə — aktiv həyatın bütün imkanları",
     heroDescription:
-      "FitNest tətbiqini endir, sənə uyğun paketi seç və 139 fitness\nmərkəzinə QR kodla daxil ol. Zallar, hovuzlar, yoqa studiyaları\n— hamısı bir tətbiqdə.",
+      "FitNest tətbiqini endir, sənə uyğun paketi seç və {n} fitness\nmərkəzinə QR kodla daxil ol. Zallar, hovuzlar, yoqa studiyaları\n— hamısı bir tətbiqdə.",
     heroLine1Before: "Bir",
     heroLine1Accent: "abunə",
     heroLine2: "Aktiv həyatın",
@@ -514,7 +514,7 @@ const az: Messages = {
     visitsPerMonth: "12 giriş / ay",
     visitsUsed: "7 giriş istifadə olunub",
     stats: [
-      { value: "139", label: "Fitness mərkəzi\nbir şəbəkədə" },
+      { value: "{n}", label: "Fitness mərkəzi\nbir şəbəkədə" },
       { value: "45", label: "Platinum səviyyəli\npremium məkan" },
       { value: "12", label: "Giriş hər ay,\nistənilən mərkəzə" },
       { value: "4", label: "Paket səviyyəsi\nBronze     Platinum" },
@@ -552,7 +552,7 @@ const az: Messages = {
     ],
     whyRightTitle: "FitNest ilə abunəlik",
     whyRightItems: [
-      "139 fitness mərkəzi",
+      "{n} fitness mərkəzi",
       "Zal, hovuz, yoqa, pilates və daha çox",
       "1, 3, 6 və 12 aylıq çevik seçim",
       "Tətbiqdə sürətli QR giriş",
@@ -614,7 +614,7 @@ const az: Messages = {
     appFeatures: [
       {
         title: "Öz məkanını tap",
-        desc: "139 mərkəz arasından fəaliyyət növünə, məsafəyə və abunəliyinə uyğun seçim et.",
+        desc: "{n} mərkəz arasından fəaliyyət növünə, məsafəyə və abunəliyinə uyğun seçim et.",
       },
       {
         title: "QR-la rahat daxil ol",
@@ -927,7 +927,7 @@ const az: Messages = {
       "Yeni zallar, tətbiq yenilikləri və kommunity tədbirləri — hamısı burada.",
     backToList: "Bütün xəbərlər",
     ctaTitle: "FitNest ilə məşqə başla",
-    ctaDescription: "Bir abunə — 139 fitness mərkəzi.",
+    ctaDescription: "Bir abunə — {n} fitness mərkəzi.",
     ctaButton: "Tətbiqi endir",
   },
   contact: {
@@ -1308,7 +1308,7 @@ const en: Messages = {
     ...az.home,
     heroTitle: "One subscription — every way to live active",
     heroDescription:
-      "Download FitNest, pick a plan, and enter 139 fitness\ncenters with a QR code. Gyms, pools, yoga studios\n— all in one app.",
+      "Download FitNest, pick a plan, and enter {n} fitness\ncenters with a QR code. Gyms, pools, yoga studios\n— all in one app.",
     heroLine1Before: "One",
     heroLine1Accent: "plan",
     heroLine2: "Every way to live",
@@ -1325,7 +1325,7 @@ const en: Messages = {
     visitsPerMonth: "12 visits / month",
     visitsUsed: "7 visits used",
     stats: [
-      { value: "139", label: "Fitness centers\nin one network" },
+      { value: "{n}", label: "Fitness centers\nin one network" },
       { value: "45", label: "Platinum-level\npremium venues" },
       { value: "12", label: "Visits each month,\nany center" },
       { value: "4", label: "Plan levels\nBronze     Platinum" },
@@ -1363,7 +1363,7 @@ const en: Messages = {
     ],
     whyRightTitle: "FitNest subscription",
     whyRightItems: [
-      "139 fitness centers",
+      "{n} fitness centers",
       "Gym, pool, yoga, pilates and more",
       "Flexible 1, 3, 6 and 12 month options",
       "Fast QR check-in in the app",
@@ -1427,7 +1427,7 @@ const en: Messages = {
     appFeatures: [
       {
         title: "Find your place",
-        desc: "Choose among 139 centers by activity type, distance, and membership.",
+        desc: "Choose among {n} centers by activity type, distance, and membership.",
       },
       {
         title: "Easy QR check-in",
@@ -1750,7 +1750,7 @@ const en: Messages = {
       "New gyms, app updates and community events — all in one place.",
     backToList: "All news",
     ctaTitle: "Start training with FitNest",
-    ctaDescription: "One subscription — 139 fitness centers.",
+    ctaDescription: "One subscription — {n} fitness centers.",
     ctaButton: "Download the app",
   },
   contact: {
@@ -2131,7 +2131,7 @@ const ru: Messages = {
     ...en.home,
     heroTitle: "Одна подписка — все возможности активной жизни",
     heroDescription:
-      "Скачайте FitNest, выберите пакет и входите в 139 фитнес-центров\nпо QR-коду. Залы, бассейны, студии йоги — всё в одном приложении.",
+      "Скачайте FitNest, выберите пакет и входите в {n} фитнес-центров\nпо QR-коду. Залы, бассейны, студии йоги — всё в одном приложении.",
     heroLine1Before: "Одна",
     heroLine1Accent: "подписка",
     heroLine2: "Все возможности",
@@ -2148,7 +2148,7 @@ const ru: Messages = {
     visitsPerMonth: "12 визитов / мес",
     visitsUsed: "Использовано 7 визитов",
     stats: [
-      { value: "139", label: "Фитнес-центров\nв одной сети" },
+      { value: "{n}", label: "Фитнес-центров\nв одной сети" },
       { value: "45", label: "Премиум-площадок\nуровня Platinum" },
       { value: "12", label: "Визитов каждый месяц\nв любой центр" },
       { value: "4", label: "Уровня пакетов\nBronze     Platinum" },
@@ -2186,7 +2186,7 @@ const ru: Messages = {
     ],
     whyRightTitle: "Подписка FitNest",
     whyRightItems: [
-      "139 фитнес-центров",
+      "{n} фитнес-центров",
       "Зал, бассейн, йога, пилатес и больше",
       "Гибкий выбор на 1, 3, 6 и 12 месяцев",
       "Быстрый QR-вход в приложении",
@@ -2249,7 +2249,7 @@ const ru: Messages = {
     appFeatures: [
       {
         title: "Найди своё место",
-        desc: "Выбирай среди 139 центров по типу активности, расстоянию и подписке.",
+        desc: "Выбирай среди {n} центров по типу активности, расстоянию и подписке.",
       },
       {
         title: "Удобный вход по QR",
@@ -2557,7 +2557,7 @@ const ru: Messages = {
       "Новые залы, обновления приложения и события сообщества — всё здесь.",
     backToList: "Все новости",
     ctaTitle: "Начни тренироваться с FitNest",
-    ctaDescription: "Одна подписка — 139 фитнес-центров.",
+    ctaDescription: "Одна подписка — {n} фитнес-центров.",
     ctaButton: "Скачать приложение",
   },
   contact: {

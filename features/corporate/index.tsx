@@ -24,7 +24,7 @@ const CorporatePage = async ({ locale }: CorporatePageProps) => {
     getLandingStatsServer(locale),
   ]);
   const t = messages.corporate;
-  const gymCount = stats?.gymCount && stats.gymCount > 0 ? stats.gymCount : 139;
+  const gymCount = stats?.gymCount && stats.gymCount > 0 ? stats.gymCount : 163;
   const gymCountLabel = new Intl.NumberFormat("en-US").format(gymCount);
   const description = t.description.replace("{count}", gymCountLabel);
 
