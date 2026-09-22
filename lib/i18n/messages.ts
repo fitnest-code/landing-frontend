@@ -873,10 +873,10 @@ const az: Messages = {
     discountHint: "{tier} abunəlik ilə {n}% endirim qazan",
   },
   centers: {
-    eyebrow: "Fitness mərkəzləri",
-    heroTitle: "{n} mərkəz bir abunədə",
+    eyebrow: "FitNest mərkəzləri",
+    heroTitle: "{n}+ mərkəz, bir abunə",
     heroDescription:
-      "Zallar, hovuzlar, yoqa, pilates studiyaları. Paket səviyyəsinə görə filtrlə, sənə yaxınını tap.",
+      "Fitness, hovuz, yoqa, pilates və daha çox seçim. Abunəliyinə uyğun məkanları kəşf et və sənə ən yaxın olanı tap.",
     searchPlace: "Məkan axtar",
     cityDistrict: "Şəhər",
     rayon: "Rayon",
@@ -1695,10 +1695,10 @@ const en: Messages = {
   },
   centers: {
     ...az.centers,
-    eyebrow: "Fitness centers",
-    heroTitle: "{n} centers in one subscription",
+    eyebrow: "FitNest centers",
+    heroTitle: "{n}+ centers, one subscription",
     heroDescription:
-      "Gyms, pools, yoga and pilates studios. Filter by package and find one near you.",
+      "Fitness, pools, yoga, pilates, and more. Discover venues that match your plan and find the one nearest to you.",
     searchPlace: "Search location",
     cityDistrict: "City",
     rayon: "District",
@@ -2503,10 +2503,10 @@ const ru: Messages = {
   },
   centers: {
     ...en.centers,
-    eyebrow: "Фитнес-центры",
-    heroTitle: "{n} центров в одной подписке",
+    eyebrow: "Центры FitNest",
+    heroTitle: "{n}+ центров, одна подписка",
     heroDescription:
-      "Залы, бассейны, студии йоги и пилатеса. Фильтруйте по пакету и найдите ближайший.",
+      "Фитнес, бассейн, йога, пилатес и другие варианты. Найдите места под вашу подписку и ближайший к вам.",
     searchPlace: "Поиск места",
     cityDistrict: "Город",
     rayon: "Район",
