@@ -219,8 +219,8 @@ export async function getHomeGymsServer(
   }
 }
 
-export const LANDING_GYMS_PAGE_SIZE = 12;
-export const LANDING_STORES_PAGE_SIZE = 9;
+export const LANDING_GYMS_PAGE_SIZE = 6;
+export const LANDING_STORES_PAGE_SIZE = 6;
 const LANDING_MAX_PAGE_SIZE = 50;
 
 function clampPageSize(pageSize: number) {

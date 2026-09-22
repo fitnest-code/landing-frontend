@@ -24,7 +24,7 @@ const AboutValuesSection = async () => {
         <Stagger className="grid grid-cols-1 items-stretch gap-[22px] sm:grid-cols-2 xl:grid-cols-4">
           {t.values.map((value, index) => (
             <TiltCard key={value.title} maxTilt={6} glare={false} className="h-full">
-              <article className="flex h-full flex-col gap-1.5 rounded-[20px] border border-border-muted bg-page p-6 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,164,164,0.12)]">
+              <article className="flex h-full flex-col gap-1.5 rounded-[20px] border border-border-muted bg-page p-6 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,219,219,0.12)]">
                 <IconBox className="size-[46px] rounded-[13px]">
                   <img
                     src={VALUE_ICONS[index]}

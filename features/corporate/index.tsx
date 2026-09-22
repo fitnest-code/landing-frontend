@@ -45,7 +45,7 @@ const CorporatePage = async ({ locale }: CorporatePageProps) => {
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
             <Reveal variant="blur" duration={0.8} className="flex w-full max-w-[488px] flex-col gap-10">
               <div className="flex flex-col gap-4">
-                <p className="font-manrope text-2xl font-extrabold leading-9 text-cyan dark:text-[#00A4A4]">
+                <p className="font-manrope text-2xl font-extrabold leading-9 text-cyan dark:text-[#00DBDB]">
                   {t.eyebrow}
                 </p>
                 <h1 className="whitespace-pre-line font-manrope text-[32px] font-extrabold leading-[1.3] text-white md:text-[40px] md:leading-[60px] dark:text-[#011729]">
@@ -56,7 +56,7 @@ const CorporatePage = async ({ locale }: CorporatePageProps) => {
               <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
                 {statsItems.map((item, idx) => (
                   <div key={idx} className="flex flex-col">
-                    <p className="font-manrope text-[26px] font-extrabold leading-10 text-cyan dark:text-[#00A4A4]">
+                    <p className="font-manrope text-[26px] font-extrabold leading-10 text-cyan dark:text-[#00DBDB]">
                       {item.value}
                     </p>
                     <p className="text-sm font-semibold leading-5 text-title">{item.label}</p>
@@ -82,7 +82,7 @@ const CorporatePage = async ({ locale }: CorporatePageProps) => {
           <Stagger className="grid w-full grid-cols-1 items-stretch gap-6 md:grid-cols-3">
             {t.benefits.map((benefit, index) => (
               <TiltCard key={benefit.title} maxTilt={6} glare={false} className="h-full">
-                <article className="flex h-full flex-col gap-2 rounded-[20px] border border-border-muted bg-surface p-8 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,164,164,0.12)]">
+                <article className="flex h-full flex-col gap-2 rounded-[20px] border border-border-muted bg-surface p-8 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,219,219,0.12)]">
                   <IconBox className="size-[46px] rounded-[13px]">
                     <img src={BENEFIT_ICONS[index]} alt="" width={22} height={22} />
                   </IconBox>
@@ -136,14 +136,14 @@ const CorporatePage = async ({ locale }: CorporatePageProps) => {
                 </h2>
                 <p className="text-base leading-6 text-desc dark:text-[#10334D]">
                   {t.ctaBefore}
-                  <a href={toMailtoHref(t.ctaEmail)} className="text-cyan dark:text-[#00A4A4]">
+                  <a href={toMailtoHref(t.ctaEmail)} className="text-cyan dark:text-[#00DBDB]">
                     {t.ctaEmail}
                   </a>
                 </p>
               </div>
               <a
                 href="#corporate-offer"
-                className="group inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg bg-cyan px-5 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.03] hover:bg-[#FF6A42] hover:shadow-[0_8px_20px_rgba(0,164,164,0.35)] active:scale-[0.98] dark:text-[#011729]"
+                className="group inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg bg-cyan px-5 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.03] hover:bg-[#FF6A42] hover:shadow-[0_8px_20px_rgba(0,219,219,0.35)] active:scale-[0.98] dark:text-[#011729]"
               >
                 {t.ctaButton}
                 <HomeArrow className="size-6 transition-transform duration-300 group-hover:translate-x-1" />

@@ -161,7 +161,7 @@ const FitnessCentersListSection = ({
     [categoriesFromApi, items],
   );
 
-  const hasMore = page * pageSize < total;
+  const hasMore = items.length < total;
 
   const loadMore = async () => {
     if (loading || !hasMore) return;

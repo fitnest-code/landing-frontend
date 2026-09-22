@@ -223,7 +223,7 @@ const PlanPicker = ({
                     `/fitness-centers?membership=${plan.tier}`,
                     locale,
                   )}
-                  className="relative z-10 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-base font-semibold text-[#00A4A4] transition-colors hover:bg-[#E6FBFB]"
+                  className="relative z-10 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-base font-semibold text-[#00DBDB] transition-colors hover:bg-[#E6FBFB]"
                 >
                   {t.offers.includedGyms}
                   <img

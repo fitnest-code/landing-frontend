@@ -7,7 +7,7 @@ const ENDPOINT = "/public/landing/stores";
 const defaultParams: StoresParams = {
   type: "ALL",
   page: 1,
-  page_size: 10,
+  page_size: 6,
   sort_dir: "desc",
 };
 
@@ -80,7 +80,7 @@ export async function getStoresServerCached(
   try {
     return await getStoresServer(params, locale);
   } catch {
-    return { items: [], total: 0, page: 1, pageSize: params.page_size ?? 10 };
+    return { items: [], total: 0, page: 1, pageSize: params.page_size ?? 6 };
   }
 }
 
