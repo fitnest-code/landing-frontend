@@ -24,7 +24,7 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
             <Reveal variant="blur" duration={0.8} className="flex w-full max-w-[515px] flex-col gap-10">
               <div className="flex flex-col gap-4">
-                <p className="font-manrope text-2xl font-extrabold leading-9 text-cyan dark:text-[#00A4A4]">
+                <p className="font-manrope text-2xl font-extrabold leading-9 text-cyan dark:text-[#00DBDB]">
                   {t.eyebrow}
                 </p>
                 <h1 className="font-manrope text-[32px] font-extrabold leading-[1.3] text-white md:text-[40px] md:leading-[60px] dark:text-[#011729]">
@@ -34,7 +34,7 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
               </div>
               <a
                 href="#partner-apply"
-                className="inline-flex h-11 w-fit items-center justify-center rounded-lg bg-cyan px-5 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.03] hover:bg-[#FF6A42] hover:shadow-[0_8px_20px_rgba(0,164,164,0.35)] active:scale-[0.98] dark:text-[#011729]"
+                className="inline-flex h-11 w-fit items-center justify-center rounded-lg bg-cyan px-5 text-base font-semibold leading-6 text-white transition-all duration-300 hover:scale-[1.03] hover:bg-[#FF6A42] hover:shadow-[0_8px_20px_rgba(0,219,219,0.35)] active:scale-[0.98] dark:text-[#011729]"
               >
                 {t.heroCta}
               </a>
@@ -56,7 +56,7 @@ const PartnerPage = async ({ locale }: PartnerPageProps) => {
           <Stagger className="grid w-full grid-cols-1 items-stretch gap-6 md:grid-cols-3">
             {t.reasons.map((reason) => (
               <TiltCard key={reason.title} maxTilt={6} glare={false} className="h-full">
-                <article className="flex h-full flex-col gap-2 rounded-[20px] border border-border-muted bg-surface p-8 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,164,164,0.12)]">
+                <article className="flex h-full flex-col gap-2 rounded-[20px] border border-border-muted bg-surface p-8 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,219,219,0.12)]">
                   <h3 className="pt-2.5 font-manrope text-lg font-extrabold text-ink">
                     {reason.title}
                   </h3>

@@ -26,7 +26,7 @@ const AppSection = async () => {
       <Container className="relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-12 xl:gap-16">
         <div className="flex w-full max-w-[640px] shrink flex-col gap-5 lg:max-w-[52%]">
           <div className="flex max-w-[640px] flex-col gap-4">
-            <p className="text-lg font-bold leading-7 text-[#00DBDB] dark:text-[#00A4A4]">
+            <p className="text-lg font-bold leading-7 text-[#00DBDB] dark:text-[#00DBDB]">
               {t.appEyebrow}
             </p>
             <h2 className="whitespace-pre-line font-manrope text-[28px] font-extrabold leading-[1.3] text-white sm:text-[32px] md:text-[40px] md:leading-[60px] dark:text-[#011729]">

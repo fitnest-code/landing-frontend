@@ -97,5 +97,5 @@ export const MOCK_STORES_RESPONSE: StoresResponse = {
   items: MOCK_STORES,
   total: 6,
   page: 1,
-  pageSize: 10,
+  pageSize: 6,
 };

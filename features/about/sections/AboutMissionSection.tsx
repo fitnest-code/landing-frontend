@@ -12,7 +12,7 @@ const AboutMissionSection = async () => {
       <Container>
         <Stagger className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-10">
           <TiltCard maxTilt={6} glare={false} className="h-full">
-            <article className="flex h-full flex-col rounded-3xl border border-border-muted bg-surface p-8 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,164,164,0.12)]">
+            <article className="flex h-full flex-col rounded-3xl border border-border-muted bg-surface p-8 transition-shadow hover:shadow-[0px_4px_16px_rgba(0,219,219,0.12)]">
               <IconBox>
                 <img src="/icons/about/mission.svg" alt="" width={22} height={22} />
               </IconBox>

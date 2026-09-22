@@ -69,7 +69,7 @@ const PartnerCalculator = () => {
           <div className="relative h-2 w-full">
             <div className="absolute inset-0 rounded-xl bg-ink" />
             <div
-              className="absolute left-0 top-0 h-full rounded-xl bg-cyan dark:bg-[#00A4A4]"
+              className="absolute left-0 top-0 h-full rounded-xl bg-cyan dark:bg-[#00DBDB]"
               style={{ width: `${percent}%` }}
             />
             <input
@@ -129,7 +129,7 @@ const PartnerCalculator = () => {
           <p className="text-center text-sm font-bold leading-5 text-desc dark:text-[#10334D]">
             {copy.revenueLabel}
           </p>
-          <p className="text-center font-manrope text-[40px] font-extrabold leading-[60px] text-cyan dark:text-[#00A4A4]">
+          <p className="text-center font-manrope text-[40px] font-extrabold leading-[60px] text-cyan dark:text-[#00DBDB]">
             {revenueLabel}
           </p>
         </div>

@@ -135,7 +135,7 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
       />
       <Link
         href={addLocaleToPathname("/fitness-centers", locale)}
-        className="mb-4 inline-flex w-fit items-center gap-2 rounded-lg px-4 py-3 text-base font-semibold leading-6 text-[#00A4A4]"
+        className="mb-4 inline-flex w-fit items-center gap-2 rounded-lg px-4 py-3 text-base font-semibold leading-6 text-[#00DBDB]"
       >
         <svg
           width={24}
@@ -292,7 +292,7 @@ const FitnessCenterDetails = async ({ slug }: FitnessCenterDetailsProps) => {
 
           <div className="flex flex-col gap-6 rounded-2xl bg-brand-navy-800 p-7 dark:bg-brand-navy-200 md:flex-row md:items-center md:justify-between">
             <div className="flex max-w-[539px] flex-col gap-3">
-              <p className="text-base font-bold leading-6 text-cyan dark:text-[#00A4A4]">
+              <p className="text-base font-bold leading-6 text-cyan dark:text-[#00DBDB]">
                 {t.gymAccess}
               </p>
               <div className="flex flex-wrap items-center gap-6">
