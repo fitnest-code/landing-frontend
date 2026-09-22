@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 import Container from "@/components/common/Container";
+import { getLandingStatsServer } from "@/lib/api/landing";
+import { withGymCount } from "@/lib/i18n/with-gym-count";
 import { Stagger } from "../components/Reveal";
 import AppPhonesShowcase, {
   AppStoreRow,
@@ -13,8 +15,13 @@ const FEATURE_ICONS = [
 ] as const;
 
 const AppSection = async () => {
-  const { messages } = await getMessages();
+  const { messages, locale } = await getMessages();
   const t = messages.home;
+  const stats = await getLandingStatsServer(locale);
+  const appFeatures = t.appFeatures.map((feature) => ({
+    ...feature,
+    desc: withGymCount(feature.desc, stats?.gymCount),
+  }));
 
   return (
     <section className="relative overflow-hidden bg-[#011729] py-16 md:py-20 dark:bg-[#F4F7FB]">
@@ -38,7 +45,7 @@ const AppSection = async () => {
           </div>
 
           <Stagger className="flex flex-col gap-[18px]" variant="left" delay={0.08}>
-            {t.appFeatures.map((feature, index) => (
+            {appFeatures.map((feature, index) => (
               <div key={feature.title} className="flex items-center gap-4">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(0,219,219,0.15)]">
                   <img

@@ -22,9 +22,11 @@ const FitnessCentersPage = async () => {
     <div className="bg-page text-ink">
       <FitnessCentersHeroSection
         gymCount={
-          gymsPage.total > 0
-            ? gymsPage.total
-            : stats?.gymCount ?? (gymsPage.items.length || null)
+          stats?.gymCount && stats.gymCount > 0
+            ? stats.gymCount
+            : gymsPage.total > 0
+              ? gymsPage.total
+              : gymsPage.items.length || null
         }
       />
       <Container className="flex flex-col gap-10 pb-16 pt-6 md:pb-24 md:pt-8">

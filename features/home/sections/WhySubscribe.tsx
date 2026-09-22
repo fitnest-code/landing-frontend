@@ -1,11 +1,17 @@
 import { getMessages } from "@/lib/i18n/server";
 import Container from "@/components/common/Container";
+import { getLandingStatsServer } from "@/lib/api/landing";
+import { withGymCount } from "@/lib/i18n/with-gym-count";
 import SectionHeading from "../components/SectionHeading";
 import Reveal from "../components/Reveal";
 
 const WhySubscribe = async () => {
-  const { messages } = await getMessages();
+  const { messages, locale } = await getMessages();
   const t = messages.home;
+  const stats = await getLandingStatsServer(locale);
+  const whyRightItems = t.whyRightItems.map((item) =>
+    withGymCount(item, stats?.gymCount),
+  );
 
   return (
     <section className="overflow-x-clip bg-surface py-16 md:py-20">
@@ -54,7 +60,7 @@ const WhySubscribe = async () => {
                   {t.whyRightTitle}
                 </h3>
                 <ul className="flex flex-1 flex-col gap-4">
-                  {t.whyRightItems.map((item) => (
+                  {whyRightItems.map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <span className="mt-0.5 flex size-[27px] shrink-0 items-center justify-center rounded-full border border-white bg-[rgba(13,24,52,0.2)]">
                         <img

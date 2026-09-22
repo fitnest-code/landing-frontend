@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getMessages } from "@/lib/i18n/server";
 import { addLocaleToPathname } from "@/lib/i18n/config";
+import { getLandingStatsServer } from "@/lib/api/landing";
+import { withGymCount } from "@/lib/i18n/with-gym-count";
 import Reveal from "../components/Reveal";
 import TiltCard from "../components/TiltCard";
 import PhoneScreensCarousel from "../components/PhoneScreensCarousel";
@@ -9,6 +11,8 @@ const HeroSection = async () => {
   const { messages, locale } = await getMessages();
   const t = messages.home;
   const homePath = addLocaleToPathname("/", locale);
+  const stats = await getLandingStatsServer(locale);
+  const heroDescription = withGymCount(t.heroDescription, stats?.gymCount);
 
   return (
     <section className="relative overflow-hidden bg-page">
@@ -38,7 +42,7 @@ const HeroSection = async () => {
               </span>
             </h1>
             <p className="whitespace-pre-line text-base font-normal leading-6 text-title dark:text-ink">
-              {t.heroDescription}
+              {heroDescription}
             </p>
           </div>
 
