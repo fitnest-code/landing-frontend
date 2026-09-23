@@ -311,6 +311,7 @@ export async function getLandingGymFiltersServer(
     );
     return {
       cities: data.cities ?? [],
+      rayonsByCity: data.rayonsByCity ?? {},
       categories: data.categories ?? [],
       memberships: (data.memberships ?? []).filter(
         (value): value is MembershipTier =>
@@ -321,7 +322,7 @@ export async function getLandingGymFiltersServer(
       ),
     };
   } catch {
-    return { cities: [], categories: [], memberships: [] };
+    return { cities: [], rayonsByCity: {}, categories: [], memberships: [] };
   }
 }
 
@@ -465,11 +466,12 @@ export async function getLandingStoreFiltersServer(
     );
     return {
       cities: data.cities ?? [],
+      rayonsByCity: data.rayonsByCity ?? {},
       categories: data.categories ?? [],
       memberships: data.memberships ?? [],
     };
   } catch {
-    return { cities: [], categories: [], memberships: [] };
+    return { cities: [], rayonsByCity: {}, categories: [], memberships: [] };
   }
 }
 

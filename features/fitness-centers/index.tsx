@@ -6,15 +6,30 @@ import {
   getLandingGymsPageServer,
   getLandingGymFiltersServer,
   getLandingStatsServer,
+  type LandingListFilters,
 } from "@/lib/api/landing";
 import FitnessCentersHeroSection from "./sections/FitnessCentersHeroSection";
 import FitnessCentersListSection from "./sections/FitnessCentersListSection";
 
-const FitnessCentersPage = async () => {
+const MEMBERSHIP_VALUES = new Set(["bronze", "silver", "gold", "platinum"]);
+
+type FitnessCentersPageProps = {
+  membership?: string | null;
+};
+
+const FitnessCentersPage = async ({ membership }: FitnessCentersPageProps) => {
   const { locale } = await getMessages();
+  const membershipFilter =
+    membership && MEMBERSHIP_VALUES.has(membership.toLowerCase())
+      ? membership.toLowerCase()
+      : undefined;
+  const listFilters: LandingListFilters | undefined = membershipFilter
+    ? { membership: membershipFilter }
+    : undefined;
+
   const [stats, gymsPage, gymFilters] = await Promise.all([
     getLandingStatsServer(locale),
-    getLandingGymsPageServer(locale, 1, LANDING_GYMS_PAGE_SIZE),
+    getLandingGymsPageServer(locale, 1, LANDING_GYMS_PAGE_SIZE, listFilters),
     getLandingGymFiltersServer(locale),
   ]);
 

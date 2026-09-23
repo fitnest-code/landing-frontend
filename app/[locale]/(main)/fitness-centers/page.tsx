@@ -8,6 +8,7 @@ export const revalidate = 300;
 
 type PageProps = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -24,6 +25,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-export default function LocaleFitnessCentersPage() {
-  return <FitnessCentersPage />;
+export default async function LocaleFitnessCentersPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const raw = params.membership;
+  const membership = Array.isArray(raw) ? raw[0] : raw;
+  return <FitnessCentersPage membership={membership} />;
 }
