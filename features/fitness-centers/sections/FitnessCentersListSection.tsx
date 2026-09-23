@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
 import {
@@ -84,6 +84,8 @@ const FitnessCentersListSection = ({
   categories: categoriesFromApi,
 }: FitnessCentersListSectionProps) => {
   const { t, locale } = useI18n();
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const membershipParam = searchParams.get("membership")?.toLowerCase() ?? "";
   const initialMembership = MEMBERSHIP_VALUES.has(membershipParam)
@@ -101,6 +103,24 @@ const FitnessCentersListSection = ({
   const [loading, setLoading] = useState(false);
   const skipFirstFetch = useRef(true);
 
+  const syncMembershipUrl = (membership: string) => {
+    const current = searchParams.get("membership")?.toLowerCase() ?? "";
+    const nextValue = membership || "";
+    if (current === nextValue) return;
+    const params = new URLSearchParams(searchParams.toString());
+    if (nextValue) params.set("membership", nextValue);
+    else params.delete("membership");
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
+  const updateFilters = (next: GymsFiltersValue) => {
+    setFilters(next);
+    if (next.membership !== filters.membership) {
+      syncMembershipUrl(next.membership);
+    }
+  };
+
   useEffect(() => {
     const timer = window.setTimeout(() => setDebouncedQuery(filters.query), 350);
     return () => window.clearTimeout(timer);
@@ -117,7 +137,13 @@ const FitnessCentersListSection = ({
     const apiFilters = toApiFilters({ ...filters, query: debouncedQuery });
     if (skipFirstFetch.current) {
       skipFirstFetch.current = false;
-      if (!apiFilters.q && !apiFilters.city && !apiFilters.rayon && !apiFilters.category && !apiFilters.membership) {
+      if (
+        !apiFilters.q &&
+        !apiFilters.city &&
+        !apiFilters.rayon &&
+        !apiFilters.category &&
+        !apiFilters.membership
+      ) {
         return;
       }
     }
@@ -138,7 +164,15 @@ const FitnessCentersListSection = ({
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, filters.city, filters.rayon, filters.category, filters.membership, locale, pageSize]);
+  }, [
+    debouncedQuery,
+    filters.city,
+    filters.rayon,
+    filters.category,
+    filters.membership,
+    locale,
+    pageSize,
+  ]);
 
   const cities = useMemo(
     () =>
@@ -149,7 +183,8 @@ const FitnessCentersListSection = ({
   );
   const rayons = useMemo(() => {
     if (!isBakiCity(filters.city)) return [];
-    const fromApi = rayonsByCityFromApi?.["Bakı"] || rayonsByCityFromApi?.[filters.city];
+    const fromApi =
+      rayonsByCityFromApi?.["Bakı"] || rayonsByCityFromApi?.[filters.city];
     if (fromApi && fromApi.length > 0) return fromApi;
     return [...BAKI_RAYONS];
   }, [filters.city, rayonsByCityFromApi]);
@@ -188,8 +223,11 @@ const FitnessCentersListSection = ({
         cities={cities}
         rayons={rayons}
         categories={categories}
-        onChange={setFilters}
-        onReset={() => setFilters(emptyFilters)}
+        onChange={updateFilters}
+        onReset={() => {
+          setFilters(emptyFilters);
+          syncMembershipUrl("");
+        }}
       />
 
       <Stagger
