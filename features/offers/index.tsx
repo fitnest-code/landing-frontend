@@ -45,7 +45,6 @@ const OffersPage = async ({ searchParams }: OffersPageProps) => {
           <PlanPicker
             packages={packages}
             initialDuration={toDuration(selectedMonth)}
-            selectTarget="activate"
           />
         </Container>
       </section>

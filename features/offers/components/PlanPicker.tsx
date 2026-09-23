@@ -53,13 +53,11 @@ const featuresFromOption = (
 type PlanPickerProps = {
   packages: SubscriptionPackage[];
   initialDuration?: PlanDuration;
-  selectTarget?: "offers" | "activate";
 };
 
 const PlanPicker = ({
   packages,
   initialDuration = 1,
-  selectTarget = "offers",
 }: PlanPickerProps) => {
   const { t, locale } = useI18n();
   const [duration, setDuration] = useState<PlanDuration>(initialDuration);
@@ -94,11 +92,6 @@ const PlanPicker = ({
       };
     });
   }, [packages, duration, t.home.planFeatures]);
-
-  const hrefFor = (tier: MembershipTier) => {
-    if (selectTarget === "activate") return "#activate";
-    return addLocaleToPathname(`/offers?type=${tier}&month=${duration}`, locale);
-  };
 
   return (
     <div className="flex flex-col items-center">
@@ -233,12 +226,6 @@ const PlanPicker = ({
                     height={24}
                     className="size-6"
                   />
-                </Link>
-                <Link
-                  href={hrefFor(plan.tier)}
-                  className="relative z-10 inline-flex h-12 items-center justify-center rounded-lg bg-button px-4 text-base font-semibold text-white transition-colors hover:bg-[#FF6A42]"
-                >
-                  {t.home.selectPackage}
                 </Link>
               </div>
             </article>
