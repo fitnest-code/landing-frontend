@@ -8,7 +8,7 @@ import MembershipBadge, {
   type MembershipTier,
 } from "@/features/home/components/MembershipBadge";
 import type { SubscriptionPackage } from "@/features/offers/api/types";
-import { formatManat, monthlyPrice } from "@/features/offers/lib/price";
+import { formatManat } from "@/features/offers/lib/price";
 import { cn } from "@/lib/utils";
 import { Stagger } from "@/features/home/components/Reveal";
 
@@ -73,20 +73,22 @@ const PlanPicker = ({
       const months = option?.duration_months ?? duration;
       const effectiveTotal = option?.price.effective;
       const baseTotal = option?.price.base;
-      const pricePerMonth =
+      // Show the full total price for the selected duration (not per-month),
+      // so switching 1/3/6/12 visibly changes the amount.
+      const price =
         effectiveTotal != null
-          ? monthlyPrice(effectiveTotal, months)
-          : fallbackPlans[tier].price;
-      const originalPerMonth =
+          ? Math.round(effectiveTotal)
+          : fallbackPlans[tier].price * months;
+      const original =
         baseTotal != null
-          ? monthlyPrice(baseTotal, months)
-          : fallbackPlans[tier].original;
-      const savings = Math.max(0, originalPerMonth - pricePerMonth);
+          ? Math.round(baseTotal)
+          : fallbackPlans[tier].original * months;
+      const savings = Math.max(0, original - price);
 
       return {
         tier,
-        price: pricePerMonth,
-        original: originalPerMonth,
+        price,
+        original,
         savings,
         features: featuresFromOption(option, defaultFeatures),
       };
@@ -186,7 +188,6 @@ const PlanPicker = ({
                     </span>
                     <span className="flex items-center gap-1.5 text-sm font-bold leading-5 text-title">
                       <span>₼</span>
-                      <span>/ {t.home.monthShort}</span>
                     </span>
                   </div>
                 </div>
