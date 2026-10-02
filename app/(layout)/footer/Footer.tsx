@@ -84,7 +84,7 @@ const Footer = ({ email, phone }: FooterProps) => {
       label: "YouTube",
     },
     {
-      href: "https://www.tiktok.com/@fitnest.azerbaijan?_r=1&_t=ZS-950g0A0nvjJ",
+      href: "https://www.tiktok.com/@fitnest_azerbaijan",
       icon: tiktokIcon,
       label: "TikTok",
     },
