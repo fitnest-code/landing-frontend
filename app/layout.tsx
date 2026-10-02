@@ -77,7 +77,7 @@ export default async function RootLayout({
       "https://www.instagram.com/fitnest_azerbaijan",
       "https://www.facebook.com/profile.php?id=61584857837005",
       "https://www.linkedin.com/company/fitnest-school",
-      "https://www.tiktok.com/@fitnest.azerbaijan",
+      "https://www.tiktok.com/@fitnest_azerbaijan",
       "https://www.youtube.com/@FitNestAzerbaijan",
     ],
   };
