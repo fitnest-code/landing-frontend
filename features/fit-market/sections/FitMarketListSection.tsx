@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
 import {
   LANDING_STORES_PAGE_SIZE,
@@ -8,6 +8,7 @@ import {
   type LandingListFilters,
   type LandingStore,
 } from "@/lib/api/landing";
+import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import { BAKI_RAYONS, isBakiCity } from "@/lib/constants/az-cities";
 import FitMarketCard from "../components/FitMarketCard";
 import FiltersSection, { type StoresFiltersValue } from "./FiltersSection";
@@ -136,9 +137,11 @@ const FitMarketListSection = ({
   );
 
   const hasMore = items.length < total;
+  const loadingRef = useRef(loading);
+  loadingRef.current = loading;
 
-  const loadMore = async () => {
-    if (loading || !hasMore) return;
+  const loadMore = useCallback(async () => {
+    if (loadingRef.current || items.length >= total) return;
     setLoading(true);
     try {
       const data = await getLandingStoresPage(
@@ -153,7 +156,17 @@ const FitMarketListSection = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    debouncedQuery,
+    filters,
+    items.length,
+    locale,
+    page,
+    pageSize,
+    total,
+  ]);
+
+  const sentinelRef = useInfiniteScroll(loadMore, hasMore && !loading);
 
   return (
     <div className="flex flex-col items-center gap-10">
@@ -182,14 +195,17 @@ const FitMarketListSection = ({
       </div>
 
       {hasMore ? (
-        <button
-          type="button"
-          disabled={loading}
-          onClick={loadMore}
-          className="inline-flex h-12 min-w-[194px] cursor-pointer items-center justify-center rounded-[32px] border border-border-muted bg-surface px-4 text-base font-semibold leading-6 text-ink transition-colors hover:border-cyan hover:text-turquoise disabled:cursor-wait disabled:opacity-70"
+        <div
+          ref={sentinelRef}
+          className="flex min-h-12 w-full items-center justify-center py-2"
+          aria-hidden={!loading}
         >
-          {t.centers.loadMore}
-        </button>
+          {loading ? (
+            <span className="text-sm font-medium text-ink/60">
+              {t.centers.loadMore}…
+            </span>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

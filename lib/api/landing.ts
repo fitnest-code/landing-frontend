@@ -219,8 +219,9 @@ export async function getHomeGymsServer(
   }
 }
 
-export const LANDING_GYMS_PAGE_SIZE = 6;
-export const LANDING_STORES_PAGE_SIZE = 6;
+// Larger chunks so scroll-load feels denser (grid is 3-col → 4 rows per fetch).
+export const LANDING_GYMS_PAGE_SIZE = 12;
+export const LANDING_STORES_PAGE_SIZE = 12;
 const LANDING_MAX_PAGE_SIZE = 50;
 
 function clampPageSize(pageSize: number) {
