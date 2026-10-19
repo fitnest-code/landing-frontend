@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
@@ -10,6 +10,7 @@ import {
   type LandingGym,
   type LandingListFilters,
 } from "@/lib/api/landing";
+import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
 import { BAKI_RAYONS, isBakiCity } from "@/lib/constants/az-cities";
 import FitnessCenterCard from "../components/FitnessCenterCard";
@@ -197,9 +198,11 @@ const FitnessCentersListSection = ({
   );
 
   const hasMore = items.length < total;
+  const loadingRef = useRef(loading);
+  loadingRef.current = loading;
 
-  const loadMore = async () => {
-    if (loading || !hasMore) return;
+  const loadMore = useCallback(async () => {
+    if (loadingRef.current || items.length >= total) return;
     setLoading(true);
     try {
       const data = await getLandingGymsPage(
@@ -214,7 +217,17 @@ const FitnessCentersListSection = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    debouncedQuery,
+    filters,
+    items.length,
+    locale,
+    page,
+    pageSize,
+    total,
+  ]);
+
+  const sentinelRef = useInfiniteScroll(loadMore, hasMore && !loading);
 
   return (
     <div className="flex flex-col gap-10">
@@ -252,15 +265,16 @@ const FitnessCentersListSection = ({
       </Stagger>
 
       {hasMore ? (
-        <div className="flex justify-center">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={loadMore}
-            className="inline-flex h-12 min-w-[194px] cursor-pointer items-center justify-center rounded-[32px] border border-border-muted bg-surface px-4 text-base font-semibold leading-6 text-ink transition-colors hover:border-cyan hover:text-turquoise disabled:cursor-wait disabled:opacity-70"
-          >
-            {t.centers.loadMore}
-          </button>
+        <div
+          ref={sentinelRef}
+          className="flex min-h-12 items-center justify-center py-2"
+          aria-hidden={!loading}
+        >
+          {loading ? (
+            <span className="text-sm font-medium text-ink/60">
+              {t.centers.loadMore}…
+            </span>
+          ) : null}
         </div>
       ) : null}
     </div>
