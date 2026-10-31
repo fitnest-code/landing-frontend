@@ -89,6 +89,13 @@ async function fetchSecrets() {
 }
 
 fetchSecrets().catch((err) => {
-  console.error("Error fetching secrets from Vault:", err.message);
-  process.exit(1);
+  console.error("Error fetching secrets from Vault (landing will continue without them):", err.message);
+  // Do NOT exit(1) — landing-frontend depends on these env vars for API keys.
+  // If VAULT_SECRET_PATH or LANDING_API_KEY are missing, the app degrades gracefully.
+  // Fall back to setting LANDING_API_KEY from process env if available.
+  if (process.env.LANDING_API_KEY) {
+    console.log("Using LANDING_API_KEY from process environment");
+  } else {
+    console.log("Vault secrets unavailable; landing-key header will be omitted from API calls");
+  }
 });

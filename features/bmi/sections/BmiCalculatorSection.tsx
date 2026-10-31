@@ -21,9 +21,11 @@ const BmiCalculatorSection = ({ initialGoals, initialLocale }: BmiCalculatorSect
   const [age, setAge] = useState("");
   const [gender, setGender] = useState<Gender>("female");
 
-  const { mutate, data: bmiData, isPending } = useCalculateBmi();
+  const { mutate, data: bmiData, isPending, isError, error: bmiError } = useCalculateBmi();
 
   const bmiResult = bmiData?.bmi ? Number(bmiData.bmi.toFixed(1)) : null;
+
+  const calculateError = isError ? (bmiError instanceof Error ? bmiError.message : String(bmiError)) : null;
 
   const isFormValid = useMemo(() => {
     const weightValue = Number(weight);
