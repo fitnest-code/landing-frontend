@@ -223,6 +223,21 @@ export type Messages = {
     loadMore: string;
     allOption: string;
     reset: string;
+    filtersTitle: string;
+    filtersSubtitle: string;
+    notSelected: string;
+    membershipPackage: string;
+    membershipPackageHint: string;
+    membershipAllHint: string;
+    showAll: string;
+    workoutTypes: string;
+    forWhom: string;
+    forMale: string;
+    forFemale: string;
+    forMixed: string;
+    clearFilters: string;
+    showResults: string;
+    closeFilters: string;
     listTitle: string;
     listSubtitle: string;
     listEmpty: string;
@@ -889,6 +904,21 @@ const az: Messages = {
     loadMore: "Daha çox",
     allOption: "Hamısı",
     reset: "Sıfırla",
+    filtersTitle: "Filterlər",
+    filtersSubtitle: "Nəticələri dəqiqləşdir",
+    notSelected: "Seçilməyib",
+    membershipPackage: "Abunəlik paketi",
+    membershipPackageHint: "Paketinə daxil olan zallar",
+    membershipAllHint: "Bütün abunəlik paketləri göstərilir",
+    showAll: "Hamısını göstər",
+    workoutTypes: "Məşq növləri",
+    forWhom: "Kim üçün",
+    forMale: "Kişi",
+    forFemale: "Qadın",
+    forMixed: "Qarışıq",
+    clearFilters: "Təmizlə",
+    showResults: "{n} nəticəni göstər",
+    closeFilters: "Bağla",
     listTitle: "BÜTÜN ZALLAR",
     listSubtitle: "Sənə yaxın mərkəzlər",
     listEmpty: "Uyğun mərkəz tapılmadı.",
@@ -1715,6 +1745,21 @@ const en: Messages = {
     loadMore: "Load more",
     allOption: "All",
     reset: "Reset",
+    filtersTitle: "Filters",
+    filtersSubtitle: "Refine results",
+    notSelected: "Not selected",
+    membershipPackage: "Membership package",
+    membershipPackageHint: "Gyms in your plan",
+    membershipAllHint: "All membership packages are shown",
+    showAll: "Show all",
+    workoutTypes: "Workout types",
+    forWhom: "For whom",
+    forMale: "Men",
+    forFemale: "Women",
+    forMixed: "Mixed",
+    clearFilters: "Clear",
+    showResults: "Show {n} results",
+    closeFilters: "Close",
     listTitle: "ALL GYMS",
     listSubtitle: "Centers near you",
     listEmpty: "No matching centers found.",
@@ -2527,6 +2572,21 @@ const ru: Messages = {
     loadMore: "Ещё",
     allOption: "Все",
     reset: "Сброс",
+    filtersTitle: "Фильтры",
+    filtersSubtitle: "Уточните результаты",
+    notSelected: "Не выбрано",
+    membershipPackage: "Пакет подписки",
+    membershipPackageHint: "Залы вашего пакета",
+    membershipAllHint: "Показаны все пакеты",
+    showAll: "Показать все",
+    workoutTypes: "Виды тренировок",
+    forWhom: "Для кого",
+    forMale: "Мужчины",
+    forFemale: "Женщины",
+    forMixed: "Смешанный",
+    clearFilters: "Очистить",
+    showResults: "Показать {n} результатов",
+    closeFilters: "Закрыть",
     listTitle: "ВСЕ ЗАЛЫ",
     listSubtitle: "Центры рядом с вами",
     listEmpty: "Подходящих центров не найдено.",

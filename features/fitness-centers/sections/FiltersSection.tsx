@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
 import { cn } from "@/lib/utils";
+import GymsFilterModal from "../components/GymsFilterModal";
 
 type FilterSelectProps = {
   label: string;
@@ -96,6 +97,8 @@ export type GymsFiltersValue = {
   rayon: string;
   category: string;
   membership: string;
+  /** UI-only (design parity); landing v2 has no gender filter, never sent to the API. */
+  audience?: string;
 };
 
 type FiltersSectionProps = {
@@ -105,6 +108,8 @@ type FiltersSectionProps = {
   categories: string[];
   onChange: (value: GymsFiltersValue) => void;
   onReset: () => void;
+  /** Result count used as the initial label of the modal apply button. */
+  resultTotal?: number;
   /** Compact search + filter toggle used inside the split list panel. */
   compact?: boolean;
 };
@@ -116,10 +121,12 @@ const FiltersSection = ({
   categories,
   onChange,
   onReset,
+  resultTotal,
   compact = false,
 }: FiltersSectionProps) => {
   const { t } = useI18n();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const closeFilters = useCallback(() => setFiltersOpen(false), []);
   const activeFilterCount = [
     value.city,
     value.rayon,
@@ -215,8 +222,9 @@ const FiltersSection = ({
           <button
             type="button"
             aria-expanded={filtersOpen}
-            aria-label={t.centers.membership}
-            onClick={() => setFiltersOpen((open) => !open)}
+            aria-haspopup="dialog"
+            aria-label={t.centers.filtersTitle}
+            onClick={() => setFiltersOpen(true)}
             className={cn(
               "relative flex size-12 shrink-0 items-center justify-center rounded-full border border-[#90A1B9] bg-surface transition-colors",
               (filtersOpen || activeFilterCount > 0) && "border-cyan",
@@ -236,7 +244,16 @@ const FiltersSection = ({
             ) : null}
           </button>
         </div>
-        {filtersOpen ? selects : null}
+        {filtersOpen ? (
+          <GymsFilterModal
+            value={value}
+            cities={cities}
+            categories={categories}
+            resultTotal={resultTotal}
+            onClose={closeFilters}
+            onApply={onChange}
+          />
+        ) : null}
       </div>
     );
   }
