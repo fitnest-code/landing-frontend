@@ -42,6 +42,15 @@ export const serverApiClient = createClient(
 );
 attachLandingKey(serverApiClient);
 
+/** Server-side landing v2 (`/api/v2/public/landing/...`). */
+export const serverApiClientV2 = createClient(
+  (process.env.API_BASE_URL ?? "https://api-dev.fitnest.az/api/v1").replace(
+    /\/api\/v1\/?$/,
+    "/api/v2",
+  ),
+);
+attachLandingKey(serverApiClientV2);
+
 export function localeHeaders(locale?: string): Record<string, string> {
   if (!locale) return {};
   return { "Accept-Language": locale.toUpperCase() };

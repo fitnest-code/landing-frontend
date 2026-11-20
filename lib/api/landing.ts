@@ -327,6 +327,34 @@ export async function getLandingGymFiltersServer(
   }
 }
 
+function mapGymDetail(data: LandingGymDetail): LandingGymDetail {
+  const gallery = uniqueUrls([
+    data.coverImageUrl,
+    ...(data.galleryImageUrls ?? []),
+  ]).map((url) => gymImageSrc(url));
+  return {
+    ...data,
+    coverImageUrl: gymImageSrc(data.coverImageUrl),
+    galleryImageUrls: gallery,
+    workHours: data.workHours ?? [],
+    accessMemberships: data.accessMemberships ?? [],
+    amenities: data.amenities ?? [],
+    note: data.note ?? null,
+    categories: data.categories ?? [],
+    categoryItems: (data.categoryItems ?? []).map((item) => ({
+      name: item.name,
+      iconUrl: item.iconUrl ? gymImageSrc(item.iconUrl) : null,
+    })),
+    description: data.description ?? null,
+    category:
+      data.categories && data.categories.length > 0
+        ? data.categories.join(" & ")
+        : data.category ?? null,
+    latitude: data.latitude ?? null,
+    longitude: data.longitude ?? null,
+  };
+}
+
 export async function getLandingGymServer(
   locale: string,
   gymId: string,
@@ -337,31 +365,23 @@ export async function getLandingGymServer(
       `${LANDING}/gyms/${gymId}`,
       withLocale(locale),
     );
-    const gallery = uniqueUrls([
-      data.coverImageUrl,
-      ...(data.galleryImageUrls ?? []),
-    ]).map((url) => gymImageSrc(url));
-    return {
-      ...data,
-      coverImageUrl: gymImageSrc(data.coverImageUrl),
-      galleryImageUrls: gallery,
-      workHours: data.workHours ?? [],
-      accessMemberships: data.accessMemberships ?? [],
-      amenities: data.amenities ?? [],
-      note: data.note ?? null,
-      categories: data.categories ?? [],
-      categoryItems: (data.categoryItems ?? []).map((item) => ({
-        name: item.name,
-        iconUrl: item.iconUrl ? gymImageSrc(item.iconUrl) : null,
-      })),
-      description: data.description ?? null,
-      category:
-        data.categories && data.categories.length > 0
-          ? data.categories.join(" & ")
-          : data.category ?? null,
-      latitude: data.latitude ?? null,
-      longitude: data.longitude ?? null,
-    };
+    return mapGymDetail(data);
+  } catch {
+    return null;
+  }
+}
+
+export async function getLandingGym(
+  locale: string,
+  gymId: string,
+): Promise<LandingGymDetail | null> {
+  if (!/^[1-9][0-9]{0,17}$/.test(gymId)) return null;
+  try {
+    const { data } = await apiClient.get<LandingGymDetail>(
+      `${LANDING}/gyms/${gymId}`,
+      { headers: localeHeaders(locale) },
+    );
+    return mapGymDetail(data);
   } catch {
     return null;
   }

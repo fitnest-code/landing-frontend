@@ -4,18 +4,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { addLocaleToPathname } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
+import type { LandingListFilters } from "@/lib/api/landing";
 import {
-  LANDING_GYMS_PAGE_SIZE,
-  getLandingGymsPage,
-  type LandingGym,
-  type LandingListFilters,
-} from "@/lib/api/landing";
+  LANDING_GYMS_V2_PAGE_SIZE,
+  getLandingGymsV2Page,
+  type LandingGymV2,
+} from "@/lib/api/landing-v2";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import type { MembershipTier } from "@/features/home/components/MembershipBadge";
 import { BAKI_RAYONS, isBakiCity } from "@/lib/constants/az-cities";
 import FitnessCenterCard from "../components/FitnessCenterCard";
+import FitnessCenterPreview from "../components/FitnessCenterPreview";
+import GymListSkeleton from "../components/GymListSkeleton";
 import FiltersSection, { type GymsFiltersValue } from "./FiltersSection";
-import { Stagger } from "@/components/animation";
 
 const MEMBERSHIP_VALUES = new Set(["bronze", "silver", "gold", "platinum"]);
 
@@ -27,7 +28,9 @@ const emptyFilters: GymsFiltersValue = {
   membership: "",
 };
 
-const toTier = (membership: LandingGym["membership"]): MembershipTier => {
+const toTier = (
+  membership: LandingGymV2["minEntryMembership"],
+): MembershipTier => {
   if (
     membership === "silver" ||
     membership === "gold" ||
@@ -43,7 +46,7 @@ const uniqueSorted = (values: Array<string | null | undefined>) =>
     (a, b) => a.localeCompare(b, "az"),
   );
 
-const formatLocation = (gym: LandingGym) =>
+const formatLocation = (gym: LandingGymV2) =>
   [gym.location, gym.rayon, gym.city].filter(Boolean).join(", ") || "—";
 
 const toApiFilters = (filters: GymsFiltersValue): LandingListFilters => ({
@@ -54,7 +57,7 @@ const toApiFilters = (filters: GymsFiltersValue): LandingListFilters => ({
   membership: filters.membership || undefined,
 });
 
-const mergeById = (current: LandingGym[], incoming: LandingGym[]) => {
+const mergeById = (current: LandingGymV2[], incoming: LandingGymV2[]) => {
   const seen = new Set(current.map((gym) => gym.gymId));
   const next = [...current];
   for (const gym of incoming) {
@@ -66,7 +69,7 @@ const mergeById = (current: LandingGym[], incoming: LandingGym[]) => {
 };
 
 type FitnessCentersListSectionProps = {
-  gyms: LandingGym[];
+  gyms: LandingGymV2[];
   total: number;
   page: number;
   pageSize?: number;
@@ -79,7 +82,7 @@ const FitnessCentersListSection = ({
   gyms: initialGyms,
   total: initialTotal,
   page: initialPage,
-  pageSize = LANDING_GYMS_PAGE_SIZE,
+  pageSize = LANDING_GYMS_V2_PAGE_SIZE,
   cities: citiesFromApi,
   rayonsByCity: rayonsByCityFromApi,
   categories: categoriesFromApi,
@@ -102,6 +105,9 @@ const FitnessCentersListSection = ({
   const [page, setPage] = useState(initialPage);
   const [total, setTotal] = useState(initialTotal);
   const [loading, setLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(
+    initialGyms[0]?.gymId ?? null,
+  );
   const skipFirstFetch = useRef(true);
 
   const syncMembershipUrl = (membership: string) => {
@@ -151,12 +157,13 @@ const FitnessCentersListSection = ({
 
     let cancelled = false;
     setLoading(true);
-    getLandingGymsPage(locale, 1, pageSize, apiFilters)
+    getLandingGymsV2Page(locale, 1, pageSize, apiFilters)
       .then((data) => {
         if (cancelled) return;
         setItems(data.items);
         setPage(data.page);
         setTotal(data.total);
+        setSelectedId(data.items[0]?.gymId ?? null);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -174,6 +181,16 @@ const FitnessCentersListSection = ({
     locale,
     pageSize,
   ]);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      setSelectedId(null);
+      return;
+    }
+    if (!selectedId || !items.some((gym) => gym.gymId === selectedId)) {
+      setSelectedId(items[0].gymId);
+    }
+  }, [items, selectedId]);
 
   const cities = useMemo(
     () =>
@@ -197,6 +214,11 @@ const FitnessCentersListSection = ({
     [categoriesFromApi, items],
   );
 
+  const selectedGym = useMemo(
+    () => items.find((gym) => gym.gymId === selectedId) ?? null,
+    [items, selectedId],
+  );
+
   const hasMore = items.length < total;
   const loadingRef = useRef(loading);
   loadingRef.current = loading;
@@ -205,7 +227,7 @@ const FitnessCentersListSection = ({
     if (loadingRef.current || items.length >= total) return;
     setLoading(true);
     try {
-      const data = await getLandingGymsPage(
+      const data = await getLandingGymsV2Page(
         locale,
         page + 1,
         pageSize,
@@ -228,55 +250,85 @@ const FitnessCentersListSection = ({
   ]);
 
   const sentinelRef = useInfiniteScroll(loadMore, hasMore && !loading);
+  const showListSkeleton = loading && items.length === 0;
 
   return (
-    <div className="flex flex-col gap-10">
-      <FiltersSection
-        value={filters}
-        cities={cities}
-        rayons={rayons}
-        categories={categories}
-        onChange={updateFilters}
-        onReset={() => {
-          setFilters(emptyFilters);
-          syncMembershipUrl("");
-        }}
-      />
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-6">
+      <aside className="flex w-full flex-col overflow-hidden rounded-[22px] border border-[rgba(220,230,235,0.9)] bg-surface lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:w-[628px] lg:shrink-0">
+        <div className="flex flex-col gap-5 overflow-y-auto p-3 sm:p-4">
+          <div className="flex items-start justify-between gap-3 px-3">
+            <div>
+              <p className="text-xl font-bold leading-[30px] text-[#13A9A5]">
+                {t.centers.listTitle}
+              </p>
+              <p className="pt-1 text-base font-normal leading-6 text-[#0B2340] dark:text-ink">
+                {t.centers.listSubtitle}
+              </p>
+            </div>
+          </div>
 
-      <Stagger
-        key={`${filters.city}-${filters.rayon}-${filters.category}-${filters.membership}-${debouncedQuery}`}
-        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        variant="rise"
-        delay={0.06}
-        whenInView={false}
-      >
-        {items.map((gym) => (
-          <FitnessCenterCard
-            key={gym.gymId}
-            name={gym.name}
-            location={formatLocation(gym)}
-            image={gym.coverImageUrl || ""}
-            category={gym.category || ""}
-            categoryItems={gym.categoryItems}
-            membership={toTier(gym.membership)}
-            href={addLocaleToPathname(`/fitness-centers/${gym.gymId}`, locale)}
+          <FiltersSection
+            compact
+            value={filters}
+            cities={cities}
+            rayons={rayons}
+            categories={categories}
+            onChange={updateFilters}
+            onReset={() => {
+              setFilters(emptyFilters);
+              syncMembershipUrl("");
+            }}
           />
-        ))}
-      </Stagger>
 
-      {hasMore ? (
-        <div
-          ref={sentinelRef}
-          className="flex min-h-12 items-center justify-center py-2"
-          aria-hidden={!loading}
-        >
-          {loading ? (
-            <span className="text-sm font-medium text-ink/60">
-              {t.centers.loadMore}…
-            </span>
+          {showListSkeleton ? (
+            <GymListSkeleton />
+          ) : (
+            <div className="flex flex-col gap-2">
+              {items.map((gym) => (
+                <FitnessCenterCard
+                  key={gym.gymId}
+                  variant="list"
+                  name={gym.name}
+                  location={formatLocation(gym)}
+                  image={gym.coverImageUrl || ""}
+                  category={gym.category || ""}
+                  categoryItems={gym.categoryItems}
+                  membership={toTier(gym.minEntryMembership)}
+                  href={addLocaleToPathname(
+                    `/fitness-centers/${gym.gymId}`,
+                    locale,
+                  )}
+                  selected={gym.gymId === selectedId}
+                  onSelect={() => setSelectedId(gym.gymId)}
+                />
+              ))}
+              {items.length === 0 && !loading ? (
+                <p className="px-3 py-8 text-center text-sm text-desc">
+                  {t.centers.listEmpty}
+                </p>
+              ) : null}
+            </div>
+          )}
+
+          {hasMore ? (
+            <div
+              ref={sentinelRef}
+              className="flex min-h-12 items-center justify-center py-2"
+              aria-hidden={!loading}
+            >
+              {loading && items.length > 0 ? (
+                <span className="text-sm font-medium text-ink/60">
+                  {t.centers.loadMore}…
+                </span>
+              ) : null}
+            </div>
           ) : null}
         </div>
-      ) : null}
+      </aside>
+
+      <div className="min-w-0 flex-1">
+        <FitnessCenterPreview gym={selectedGym} />
+      </div>
     </div>
   );
 };
