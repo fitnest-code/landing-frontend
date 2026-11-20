@@ -273,6 +273,7 @@ const FitnessCentersListSection = ({
             cities={cities}
             rayons={rayons}
             categories={categories}
+            resultTotal={total}
             onChange={updateFilters}
             onReset={() => {
               setFilters(emptyFilters);
