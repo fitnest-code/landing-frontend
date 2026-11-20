@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
+import { cn } from "@/lib/utils";
 
 type FilterSelectProps = {
   label: string;
@@ -104,6 +105,8 @@ type FiltersSectionProps = {
   categories: string[];
   onChange: (value: GymsFiltersValue) => void;
   onReset: () => void;
+  /** Compact search + filter toggle used inside the split list panel. */
+  compact?: boolean;
 };
 
 const FiltersSection = ({
@@ -113,8 +116,130 @@ const FiltersSection = ({
   categories,
   onChange,
   onReset,
+  compact = false,
 }: FiltersSectionProps) => {
   const { t } = useI18n();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const activeFilterCount = [
+    value.city,
+    value.rayon,
+    value.category,
+    value.membership,
+  ].filter(Boolean).length;
+
+  const selects = (
+    <div className="flex flex-wrap items-center gap-3">
+      <FilterSelect
+        label={t.centers.cityDistrict}
+        value={value.city}
+        onChange={(city) => onChange({ ...value, city, rayon: "" })}
+        options={[
+          { value: "", label: t.centers.cityDistrict },
+          ...cities.map((city) => ({ value: city, label: city })),
+        ]}
+      />
+      {rayons.length > 0 ? (
+        <FilterSelect
+          label={t.centers.rayon}
+          value={value.rayon}
+          onChange={(rayon) => onChange({ ...value, rayon })}
+          options={[
+            { value: "", label: t.centers.rayon },
+            ...rayons.map((rayon) => ({ value: rayon, label: rayon })),
+          ]}
+        />
+      ) : null}
+      <FilterSelect
+        label={t.centers.trainingTypes}
+        value={value.category}
+        onChange={(category) => onChange({ ...value, category })}
+        options={[
+          { value: "", label: t.centers.trainingTypes },
+          ...categories.map((category) => ({
+            value: category,
+            label: category,
+          })),
+        ]}
+      />
+      <FilterSelect
+        label={t.centers.membership}
+        value={value.membership}
+        onChange={(membership) => onChange({ ...value, membership })}
+        options={[
+          { value: "", label: t.centers.membership },
+          { value: "bronze", label: "Bronze" },
+          { value: "silver", label: "Silver" },
+          { value: "gold", label: "Gold" },
+          { value: "platinum", label: "Platinum" },
+        ]}
+      />
+      <button
+        type="button"
+        onClick={onReset}
+        className="inline-flex h-12 items-center gap-3 rounded-[32px] border border-[#90A1B9] bg-surface px-4 text-base font-semibold leading-6 text-desc"
+      >
+        <img
+          src="/icons/gyms/reset.svg"
+          alt=""
+          width={24}
+          height={24}
+          className="size-6 shrink-0"
+        />
+        {t.centers.reset}
+      </button>
+    </div>
+  );
+
+  if (compact) {
+    return (
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <label className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-[32px] border border-[#90A1B9] bg-surface px-4">
+            <img
+              src="/icons/gyms/search.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="size-6 shrink-0"
+            />
+            <input
+              type="search"
+              value={value.query}
+              onChange={(event) =>
+                onChange({ ...value, query: event.target.value })
+              }
+              placeholder={t.centers.searchPlace}
+              className="h-full w-full bg-transparent text-base font-semibold leading-6 text-ink outline-none placeholder:text-[#A6A9A8]"
+            />
+          </label>
+          <button
+            type="button"
+            aria-expanded={filtersOpen}
+            aria-label={t.centers.membership}
+            onClick={() => setFiltersOpen((open) => !open)}
+            className={cn(
+              "relative flex size-12 shrink-0 items-center justify-center rounded-full border border-[#90A1B9] bg-surface transition-colors",
+              (filtersOpen || activeFilterCount > 0) && "border-cyan",
+            )}
+          >
+            <img
+              src="/icons/gyms/filter.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="size-6 dark:brightness-0 dark:invert"
+            />
+            {activeFilterCount > 0 ? (
+              <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-cyan text-[10px] font-bold text-white">
+                {activeFilterCount}
+              </span>
+            ) : null}
+          </button>
+        </div>
+        {filtersOpen ? selects : null}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3 border-b border-border-muted pb-3 lg:flex-row lg:items-center lg:justify-between">
@@ -134,67 +259,7 @@ const FiltersSection = ({
           className="h-full w-full bg-transparent text-base font-semibold leading-6 text-ink outline-none placeholder:text-[#A6A9A8]"
         />
       </label>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <FilterSelect
-          label={t.centers.cityDistrict}
-          value={value.city}
-          onChange={(city) => onChange({ ...value, city, rayon: "" })}
-          options={[
-            { value: "", label: t.centers.cityDistrict },
-            ...cities.map((city) => ({ value: city, label: city })),
-          ]}
-        />
-        {rayons.length > 0 ? (
-          <FilterSelect
-            label={t.centers.rayon}
-            value={value.rayon}
-            onChange={(rayon) => onChange({ ...value, rayon })}
-            options={[
-              { value: "", label: t.centers.rayon },
-              ...rayons.map((rayon) => ({ value: rayon, label: rayon })),
-            ]}
-          />
-        ) : null}
-        <FilterSelect
-          label={t.centers.trainingTypes}
-          value={value.category}
-          onChange={(category) => onChange({ ...value, category })}
-          options={[
-            { value: "", label: t.centers.trainingTypes },
-            ...categories.map((category) => ({
-              value: category,
-              label: category,
-            })),
-          ]}
-        />
-        <FilterSelect
-          label={t.centers.membership}
-          value={value.membership}
-          onChange={(membership) => onChange({ ...value, membership })}
-          options={[
-            { value: "", label: t.centers.membership },
-            { value: "bronze", label: "Bronze" },
-            { value: "silver", label: "Silver" },
-            { value: "gold", label: "Gold" },
-            { value: "platinum", label: "Platinum" },
-          ]}
-        />
-        <button
-          type="button"
-          onClick={onReset}
-          className="inline-flex h-12 items-center gap-3 rounded-[32px] border border-[#90A1B9] bg-surface px-4 text-base font-semibold leading-6 text-desc"
-        >
-          <img
-            src="/icons/gyms/reset.svg"
-            alt=""
-            width={24}
-            height={24}
-            className="size-6 shrink-0"
-          />
-          {t.centers.reset}
-        </button>
-      </div>
+      {selects}
     </div>
   );
 };

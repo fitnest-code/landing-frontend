@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { LANDING_KEY_HEADER } from "@/lib/api/landing-key";
-import { isAllowedProxyPath, proxyRateLimitKey } from "@/lib/api/proxy-allowlist";
+import {
+  isAllowedProxyPath,
+  proxyRateLimitKey,
+  resolveProxyUpstream,
+} from "@/lib/api/proxy-allowlist";
 import { clientIpFromRequest, consumeRateLimit } from "@/lib/api/proxy-rate-limit";
 
 export const runtime = "nodejs";
@@ -28,8 +32,8 @@ async function proxy(request: Request, segments: string[]) {
 
   const joined = segments.join("/");
   const ip = clientIpFromRequest(request);
-  const { key, limit } = proxyRateLimitKey(method, joined);
-  if (!consumeRateLimit(`${ip}:${key}`, limit)) {
+  const rate = proxyRateLimitKey(method, joined);
+  if (rate && !consumeRateLimit(`${ip}:${rate.key}`, rate.limit)) {
     return NextResponse.json(
       { message: "Too many requests. Please wait a moment." },
       {
@@ -48,7 +52,7 @@ async function proxy(request: Request, segments: string[]) {
   }
 
   const search = new URL(request.url).search;
-  const target = `${apiBase}/${joined}${search}`;
+  const target = resolveProxyUpstream(apiBase, joined, search);
   const headers = new Headers();
   for (const name of FORWARD_HEADERS) {
     const value = request.headers.get(name);

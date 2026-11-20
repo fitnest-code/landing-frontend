@@ -223,6 +223,10 @@ export type Messages = {
     loadMore: string;
     allOption: string;
     reset: string;
+    listTitle: string;
+    listSubtitle: string;
+    listEmpty: string;
+    openDetails: string;
     workHours: string;
     detailsAria: string;
     detailsSubtitle: string;
@@ -873,10 +877,10 @@ const az: Messages = {
     discountHint: "{tier} abunəlik ilə {n}% endirim qazan",
   },
   centers: {
-    eyebrow: "FitNest mərkəzləri",
-    heroTitle: "{n}+ mərkəz, bir abunə",
+    eyebrow: "Fitness mərkəzləri",
+    heroTitle: "{n} mərkəz  bir abunədə",
     heroDescription:
-      "Fitness, hovuz, yoqa, pilates və daha çox seçim. Abunəliyinə uyğun məkanları kəşf et və sənə ən yaxın olanı tap.",
+      "Zallar, hovuzlar, yoqa, pilates studiyaları, boks klubları. Paket səviyyəsinə görə filtrlə, sənə yaxınını tap.",
     searchPlace: "Məkan axtar",
     cityDistrict: "Şəhər",
     rayon: "Rayon",
@@ -885,6 +889,10 @@ const az: Messages = {
     loadMore: "Daha çox",
     allOption: "Hamısı",
     reset: "Sıfırla",
+    listTitle: "BÜTÜN ZALLAR",
+    listSubtitle: "Sənə yaxın mərkəzlər",
+    listEmpty: "Uyğun mərkəz tapılmadı.",
+    openDetails: "Tam detal səhifəsi",
     workHours: "İş saatları",
     detailsAria: "detalları",
     detailsSubtitle: "Daha güclü, sağlam və enerjili olmaq üçün ideal məkan.",
@@ -1695,10 +1703,10 @@ const en: Messages = {
   },
   centers: {
     ...az.centers,
-    eyebrow: "FitNest centers",
-    heroTitle: "{n}+ centers, one subscription",
+    eyebrow: "Fitness centers",
+    heroTitle: "{n} centers in one subscription",
     heroDescription:
-      "Fitness, pools, yoga, pilates, and more. Discover venues that match your plan and find the one nearest to you.",
+      "Gyms, pools, yoga and pilates studios, boxing clubs. Filter by plan level and find what’s near you.",
     searchPlace: "Search location",
     cityDistrict: "City",
     rayon: "District",
@@ -1707,6 +1715,10 @@ const en: Messages = {
     loadMore: "Load more",
     allOption: "All",
     reset: "Reset",
+    listTitle: "ALL GYMS",
+    listSubtitle: "Centers near you",
+    listEmpty: "No matching centers found.",
+    openDetails: "Full details page",
     workHours: "Working hours",
     detailsAria: "details",
     detailsSubtitle:
@@ -2503,10 +2515,10 @@ const ru: Messages = {
   },
   centers: {
     ...en.centers,
-    eyebrow: "Центры FitNest",
-    heroTitle: "{n}+ центров, одна подписка",
+    eyebrow: "Фитнес-центры",
+    heroTitle: "{n} центров в одной подписке",
     heroDescription:
-      "Фитнес, бассейн, йога, пилатес и другие варианты. Найдите места под вашу подписку и ближайший к вам.",
+      "Залы, бассейны, студии йоги и пилатеса, бокс-клубы. Фильтруйте по уровню пакета и найдите ближайший.",
     searchPlace: "Поиск места",
     cityDistrict: "Город",
     rayon: "Район",
@@ -2515,6 +2527,10 @@ const ru: Messages = {
     loadMore: "Ещё",
     allOption: "Все",
     reset: "Сброс",
+    listTitle: "ВСЕ ЗАЛЫ",
+    listSubtitle: "Центры рядом с вами",
+    listEmpty: "Подходящих центров не найдено.",
+    openDetails: "Полная страница",
     workHours: "Часы работы",
     detailsAria: "подробности",
     detailsSubtitle: "Идеальное место, чтобы стать сильнее и энергичнее.",

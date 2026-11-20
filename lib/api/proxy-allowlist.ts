@@ -5,6 +5,8 @@ export function isAllowedProxyPath(segments: string[]): boolean {
   }
 
   const joined = segments.join("/");
+  // Landing v2 public catalog (api/v2/public/landing/...)
+  if (joined.startsWith("v2/public/landing/")) return true;
   if (joined.startsWith("public/landing/")) return true;
   if (joined === "subscription-packages" || joined.startsWith("subscription-packages/")) {
     return true;
@@ -13,8 +15,13 @@ export function isAllowedProxyPath(segments: string[]): boolean {
   return false;
 }
 
-export function proxyRateLimitKey(method: string, joinedPath: string): { key: string; limit: number } {
+export function proxyRateLimitKey(method: string, joinedPath: string): { key: string; limit: number } | null {
   const path = joinedPath.toLowerCase();
+  // Proxy injects the landing key — keep a per-IP cap so random curls at the site edge stay limited.
+  // Gateway still skips RL only when the real landing key is present (SSR / our BFF).
+  if (method === "GET" && path.startsWith("v2/public/landing/")) {
+    return { key: "landing-v2-read", limit: 120 };
+  }
   if (method === "POST" && path.startsWith("public/landing/contact-messages")) {
     return { key: "contact", limit: 8 };
   }
@@ -31,4 +38,17 @@ export function proxyRateLimitKey(method: string, joinedPath: string): { key: st
     return { key: "landing-read", limit: 120 };
   }
   return { key: "other", limit: 60 };
+}
+
+/** Build upstream URL: v1 stays on apiBase; v2 rewrites to /api/v2/... */
+export function resolveProxyUpstream(
+  apiBase: string,
+  joinedPath: string,
+  search: string,
+): string {
+  if (joinedPath.startsWith("v2/")) {
+    const origin = apiBase.replace(/\/api\/v1\/?$/, "");
+    return `${origin}/api/${joinedPath}${search}`;
+  }
+  return `${apiBase}/${joinedPath}${search}`;
 }
