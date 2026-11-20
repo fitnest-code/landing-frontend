@@ -7,6 +7,10 @@ export const CONTACT_PHONE_HREF = "tel:+994708522425";
 export const CONTACT_EMAIL = "fitnestazerbaijan@gmail.com";
 export const CONTACT_EMAIL_HREF = "mailto:fitnestazerbaijan@gmail.com";
 
+/** Shared Əlaqə / link-in-bio WhatsApp line (wa.me digits only). */
+export const WHATSAPP_CONTACT_PHONE = "+994 77 272 15 85";
+export const WHATSAPP_CONTACT_HREF = "https://wa.me/994772721585";
+
 export function toTelHref(phone: string): string {
   const compact = phone.replace(/[^\d+]/g, "");
   return compact ? `tel:${compact}` : CONTACT_PHONE_HREF;
