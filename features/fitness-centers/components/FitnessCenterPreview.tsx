@@ -116,7 +116,8 @@ const FitnessCenterPreview = ({ gym }: FitnessCenterPreviewProps) => {
   }
 
   // Full-panel skeleton until detail arrives — avoids half-filled layout shift.
-  if (loading || !detail) {
+  // Narrow on `resolved` (alias of detail) so TS treats gallery fields as defined below.
+  if (loading || !resolved) {
     return <GymPreviewSkeleton />;
   }
 
