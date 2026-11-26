@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { getLandingGymsV2Page } from "@/lib/api/landing-v2";
 import type { LandingListFilters } from "@/lib/api/landing";
 import { useI18n } from "@/lib/i18n/provider";
@@ -235,12 +236,15 @@ const GymsFilterModal = ({
     { value: "mixed", label: c.forMixed },
   ];
 
-  return (
+  // Portal to body: this modal is mounted inside a sticky/overflow aside, which
+  // creates a stacking context that traps position:fixed and lets gym card
+  // images paint through the overlay (e.g. Delfin logo blow-up).
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="gyms-filter-title"
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
     >
       <div
         onClick={onClose}
@@ -359,7 +363,8 @@ const GymsFilterModal = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 
